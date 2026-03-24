@@ -3,34 +3,29 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.dao.MemberMapper">
-	
+    
+    <resultMap id="MemberResultMap" type="com.project.model.MemberDTO">
+        <result property="phone" column="PHONE" />
+        <result property="pw" column="PW" />
+        <result property="name" column="NAME" />
+        <result property="email" column="EMAIL" />
+        <result property="birth" column="BIRTH" />
+        <result property="gender" column="GENDER" />
+        <result property="memberType" column="MEMBER_TYPE" />
+    </resultMap>
+    
     <insert id="insertSemiMember" parameterType="com.project.model.MemberDTO">
-        INSERT INTO MEMBERS (
-            USER_ID, USER_PW, USER_TYPE
-        ) VALUES (
-            #{userId}, #{userPw}, 'SEMI'
-        )
+        INSERT INTO MEMBERS(PHONE, PW, MEMBER_TYPE)
+        VALUES(#{phone}, #{pw}, 'SEMI')
     </insert>
-
-    <select id="loginCheck" parameterType="com.project.model.MemberDTO" 
-            resultType="com.project.model.MemberDTO">
-        SELECT 
-            USER_ID as userId, 
-            USER_PW as userPw, 
-            USER_NAME as userName, 
-            USER_EMAIL as userEmail, 
-            USER_TYPE as userType
-        FROM MEMBERS
-        WHERE USER_ID = #{userId} AND USER_PW = #{userPw}
+    
+    <insert id="insertMember" parameterType="com.project.model.MemberDTO">
+        INSERT INTO MEMBERS(PHONE, PW, NAME, EMAIL, BIRTH, GENDER, MEMBER_TYPE)
+        VALUES(#{phone}, #{pw}, #{name}, #{email}, #{birth}, #{gender}, 'FULL')
+    </insert>
+    
+    <select id="loginCheck" parameterType="com.project.model.MemberDTO" resultMap="MemberResultMap">
+        SELECT * FROM MEMBERS WHERE PHONE = #{phone} AND PW = #{pw}
     </select>
-
-    <update id="updateToFullMember" parameterType="com.project.model.MemberDTO">
-        UPDATE MEMBERS 
-        SET 
-            USER_NAME = #{userName},
-            USER_EMAIL = #{userEmail},
-            USER_TYPE = 'FULL'
-        WHERE USER_ID = #{userId}
-    </update>
-
+    
 </mapper>

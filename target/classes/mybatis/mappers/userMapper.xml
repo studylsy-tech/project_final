@@ -5,7 +5,7 @@
 PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd"
 >
-<mapper namespace="com.project.dao.MemberMapper">
+<mapper namespace="com.project.dao.userMapper">
 	
 	<resultMap id="MemberResultMap" type="com.project.model.MemberDTO">
 		<result property="phone" column="PHONE" />
