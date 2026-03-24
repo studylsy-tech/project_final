@@ -151,6 +151,11 @@
     <artifactId>spring-jdbc</artifactId>
     <version>${org.springframework-version}</version>
 </dependency>
+<dependency>
+    <groupId>javax.servlet</groupId>
+    <artifactId>jstl</artifactId>
+    <version>1.2</version>
+</dependency>
 	</dependencies>
     <build>
         <plugins>
