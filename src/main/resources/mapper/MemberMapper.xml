@@ -14,12 +14,12 @@
         <result property="memberType" column="MEMBER_TYPE" />
     </resultMap>
     
-    <insert id="insertSemiMember" parameterType="com.project.model.MemberDTO">
+    <insert id="insertSemi" parameterType="com.project.model.MemberDTO">
         INSERT INTO MEMBERS(PHONE, PW, MEMBER_TYPE)
         VALUES(#{phone}, #{pw}, 'SEMI')
     </insert>
     
-    <insert id="insertMember" parameterType="com.project.model.MemberDTO">
+    <insert id="insertFull" parameterType="com.project.model.MemberDTO">
         INSERT INTO MEMBERS(PHONE, PW, NAME, EMAIL, BIRTH, GENDER, MEMBER_TYPE)
         VALUES(#{phone}, #{pw}, #{name}, #{email}, #{birth}, #{gender}, 'FULL')
     </insert>
