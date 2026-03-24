@@ -63,7 +63,7 @@ public class MemberController {
     public String joinSemi(MemberDTO member) {
     member.setMemberType("SEMI"); // 회원 유형 명시
     memberService.registerMember(member);
-    return "redirect:/login";
+    return "redirect:/member/login";
     }
 
     // 정회원 가입
