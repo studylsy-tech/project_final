@@ -5,7 +5,7 @@
     <h2>정회원 가입</h2>
     <p>모든 서비스를 이용하기 위해 상세 정보를 입력해주세요.</p>
     <hr>
-
+  
     <form action="${pageContext.request.contextPath}/member/joinFull" method="post">
         <div class="form-group">
             <label for="phone">휴대폰 번호 (아이디)</label>
