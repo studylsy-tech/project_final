@@ -61,9 +61,9 @@ public class MemberController {
     // 반회원 가입
     @PostMapping("/joinSemi")
     public String joinSemi(MemberDTO member) {
-        member.setMemberType("SEMI"); 
-        memberService.registerMember(member);
-        return "redirect:/"; 
+    member.setMemberType("SEMI"); // 회원 유형 명시
+    memberService.registerMember(member);
+    return "redirect:/login";
     }
 
     // 정회원 가입
