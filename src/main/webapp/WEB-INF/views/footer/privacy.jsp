@@ -50,6 +50,3 @@
         <button onclick="history.back()" class="btn-back">뒤로가기</button>
     </div>
 </div>
-
-<%-- 공통 푸터 포함 --%>
-<jsp:include page="/WEB-INF/views/common/footer.jsp" />
