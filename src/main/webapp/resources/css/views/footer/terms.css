@@ -1,0 +1,80 @@
+@charset "UTF-8";
+/* /resources/css/views/footer/terms.css */
+
+/* 1. 기본 배경 및 폰트 */
+body { 
+    font-family: 'Pretendard', sans-serif; 
+    margin: 0; 
+    padding: 0; 
+    background-color: #f4f7f6; 
+    min-height: 100vh;
+}
+
+/* 2. 링크 스타일 초기화 */
+a { text-decoration: none !important; }
+
+/* 3. 메인 컨테이너 */
+.terms-container { 
+    max-width: 800px;      
+    width: 85%;            
+    margin: 80px auto;     
+    padding: 40px;         
+    background: #ffffff; 
+    border-radius: 12px; 
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+    box-sizing: border-box; 
+    display: block;        
+}
+
+/* 4. 제목 스타일 */
+.terms-title-area {
+    text-align: center;
+}
+
+.terms-container h1 { 
+    color: #2c3e50; 
+    text-align: center;
+    border-bottom: 3px solid #007bff; 
+    display: inline-block; 
+    padding-bottom: 10px; 
+    margin: 0 auto 30px auto; 
+}
+
+/* 5. 약관 텍스트 박스 */
+.terms-box { 
+    height: 400px; 
+    overflow-y: scroll; 
+    border: 1px solid #e1e1e1; 
+    padding: 20px; 
+    background-color: #fafafa; 
+    font-size: 14px; 
+    border-radius: 5px; 
+    text-align: left;
+    line-height: 1.6;
+}
+
+.terms-end-text {
+    margin-top: 50px; 
+    text-align: center; 
+    color: #999;
+}
+
+/* 6. 하단 버튼 */
+.footer-btn { 
+    text-align: center; 
+    margin-top: 30px; 
+}
+
+.btn-home { 
+    display: inline-block;
+    background-color: #2c3e50; 
+    color: white !important; 
+    padding: 12px 30px; 
+    border-radius: 5px; 
+    transition: 0.3s; 
+}
+
+.btn-home:hover {
+    background-color: #34495e;
+    transform: translateY(-2px);
+}

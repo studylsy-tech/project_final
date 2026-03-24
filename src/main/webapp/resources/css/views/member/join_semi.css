@@ -1,0 +1,12 @@
+@charset "UTF-8";
+
+.container {
+    max-width: 500px;
+    margin: 50px auto;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border: none;
+    width: 100%;
+}

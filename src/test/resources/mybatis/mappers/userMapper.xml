@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- classpath:/mybatis/mappers/userMapper.xml -->
+<!-- sql문(xml)에 명시된 결과 또는 파라미터를 java 객체로 매핑 시켜주는 역할 -->
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd"
+>
+<mapper namespace="memberMapper">
+    <insert id="insertSemi" parameterType="member">
+        INSERT INTO MEMBERS(PHONE, PW, MEMBER_TYPE)
+        VALUES(#{phone}, #{pw}, 'SEMI')
+    </insert>
+
+    <insert id="insertFull" parameterType="member">
+        INSERT INTO MEMBERS(PHONE, PW, NAME, EMAIL, BIRTH, GENDER, MEMBER_TYPE)
+        VALUES(#{phone}, #{pw}, #{name}, #{email}, #{birth}, #{gender}, 'FULL')
+    </insert>
+
+    <select id="loginCheck" parameterType="map" resultType="member">
+        SELECT * FROM MEMBERS WHERE PHONE = #{id} AND PW = #{pw}
+    </select>
+</mapper>

@@ -1,0 +1,83 @@
+/* /resources/css/views/common/header.css */
+
+/* body 마진 제거 (필수) */
+body {
+    margin: 0;
+    font-family: 'Pretendard', -apple-system, sans-serif;
+}
+
+/* 헤더 전체 컨테이너 */
+.header-container {
+    background-color: #1a2a44; /* 짙은 남색 */
+    color: white;
+    padding: 0 50px; /* 위아래 패딩은 0, 좌우만 50px */
+    height: 80px; /* 헤더 높이 고정 */
+    display: flex; /* Flexbox 활성화 */
+    justify-content: space-between; /* 로고는 왼쪽, 메뉴는 오른쪽 끝 */
+    align-items: center; /* 세로 중앙 정렬 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* 로고 영역 스타일 */
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo h1 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+.logo a {
+    color: white !important; /* 보라색 링크 강제 제거 */
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.logo a:hover {
+    opacity: 0.8;
+}
+
+/* 네비게이션 메뉴 영역 스타일 */
+.nav-menu {
+    display: flex; /* 메뉴 아이템들도 한 줄로 */
+    align-items: center;
+    gap: 0; /* include되는 파일 내부에 여백이 있을 수 있으므로 0 */
+}
+
+/* include되는 header_guest/user.jsp 내부의 ul, a 태그 스타일 (예측) */
+.nav-menu ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+    gap: 25px; /* 메뉴 간격 */
+}
+
+.nav-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+    transition: color 0.2s;
+}
+
+.nav-menu a:hover {
+    color: #a8b2c1;
+}
+
+/* 회원가입 버튼 스타일 (스크린샷 참고) */
+.nav-menu a.btn-join {
+    background-color: #00897b; /* 초록색 버튼 */
+    color: white;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.nav-menu a.btn-join:hover {
+    background-color: #00796b;
+    color: white;
+}

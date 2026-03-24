@@ -1,0 +1,106 @@
+@charset "UTF-8";
+/* 컨테이너 및 전체 레이아웃 */
+.container {
+    max-width: 550px; /* 폼이 너무 넓게 퍼지지 않도록 제한 */
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05); /* 부드러운 그림자 효과 */
+}
+
+/* 제목 및 설명 스타일 */
+h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+hr {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin-bottom: 30px;
+}
+
+/* 입력 폼 그룹 간격 */
+.form-group {
+    margin-bottom: 20px;
+}
+
+/* 라벨 스타일 */
+.form-group label {
+    display: block;
+    font-weight: 600;
+    color: #444;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+/* 인풋 박스 스타일 커스텀 */
+.form-control {
+    width: 100%;
+    height: 45px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    transition: border-color 0.2s;
+    box-sizing: border-box; /* 패딩이 크기를 키우지 않도록 설정 */
+}
+
+.form-control:focus {
+    border-color: #28a745; /* 강조색(초록) */
+    outline: none;
+    box-shadow: 0 0 5px rgba(40, 167, 69, 0.2);
+}
+
+/* 라디오 버튼 정렬 */
+input[type="radio"] {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+input[type="radio"] + label {
+    font-weight: normal;
+    display: inline-block;
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+/* 버튼 스타일링 */
+.btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+    width: 70%; /* 등록 버튼 비중 높임 */
+}
+
+.btn-success:hover {
+    background-color: #218838;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+    width: 25%;
+    margin-left: 4%;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
