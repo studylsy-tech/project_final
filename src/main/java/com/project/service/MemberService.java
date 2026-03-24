@@ -24,7 +24,7 @@ public class MemberService {
         } // end getMemberType
         
         // TODO 정상 출력 되는지 여부 확인 후 지울 것.
-        //									  반회원									회원 타입
+        //									   반회원									회원 타입
         System.out.println("가입처리 완료 : " + member.getPhone() + " / 타입: " + member.getMemberType());
         
     }
