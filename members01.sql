@@ -7,3 +7,7 @@ CREATE TABLE MEMBERS (
     GENDER      VARCHAR2(10),             -- 성별 (M/F)
     MEMBER_TYPE VARCHAR2(10) DEFAULT 'SEMI' -- 반회원/정회원 구분
 );
+
+
+
+SELECT * FROM MEMBERS;

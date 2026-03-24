@@ -3,7 +3,7 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.dao.MemberMapper">
-
+	
     <insert id="insertSemiMember" parameterType="com.project.model.MemberDTO">
         INSERT INTO MEMBERS (
             USER_ID, USER_PW, USER_TYPE
