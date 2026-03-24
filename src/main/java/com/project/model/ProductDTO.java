@@ -5,10 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor  // 파라미터 없는 기본 생성자
-@AllArgsConstructor // 모든 필드를 포함한 생성자
+@NoArgsConstructor
+@AllArgsConstructor
 public class ProductDTO {
-    private String name;
-    private int price;
-    private String updateStatus;
+    private String prodCode;    
+    private String name;        
+    private int price;         
+    private String updateStatus; 
 }
