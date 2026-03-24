@@ -12,4 +12,5 @@ public class ProductDTO {
     private String name;        
     private int price;         
     private String updateStatus; 
+    private String category; 
 }
