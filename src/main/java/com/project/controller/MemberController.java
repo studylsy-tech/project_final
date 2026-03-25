@@ -31,7 +31,7 @@ public class MemberController {
 
     // 로그인 처리 (POST)
     @PostMapping("/login")
-    public String login(MemberDTO member, javax.servlet.http.HttpSession session) {
+    public String login(MemberDTO member, javax.servlet.http.HttpSession session, org.springframework.ui.Model model) {
     	 // 로그인 로직 수행
     	MemberDTO loginUser = memberService.loginCheck(member);
     	
@@ -43,8 +43,8 @@ public class MemberController {
     		return "redirect:/";
     	}else {
 			// 로그인 실패시
-    		System.out.println("로그인이 실패하였습니다. 정보를 확인해주세요.");
-    		return "member/login";
+    		model.addAttribute("msg", "아이디 또는 비밀번호를 확인해주세요.");
+            return "member/login";
 		}
     
     }
@@ -63,7 +63,7 @@ public class MemberController {
     public String joinSemi(MemberDTO member) {
     member.setMemberType("SEMI"); // 회원 유형 명시
     memberService.registerMember(member);
-    return "redirect:/login";
+    return "redirect:/member/login";
     }
 
     // 정회원 가입
@@ -73,4 +73,14 @@ public class MemberController {
         memberService.registerMember(member);
         return "redirect:/"; 
     }
+    
+    // 로그아웃
+    @GetMapping("/logout")
+    public String logout(javax.servlet.http.HttpSession session) {
+        session.invalidate(); // 로그아웃 시 세션 정보를 완전히 삭제
+        return "redirect:/"; // 메인 페이지로 이동
+    }
+    
+    
+    
 }
