@@ -145,6 +145,13 @@
     <groupId>org.mybatis</groupId>
     <artifactId>mybatis-spring</artifactId>
     <version>2.0.6</version> </dependency>
+    
+    <dependency>
+    <groupId>com.oracle.database.jdbc</groupId>
+    <artifactId>ojdbc11</artifactId>
+    <version>21.1.0.0</version>
+</dependency>
+    
 		        <!-- Spring JDBC (MyBatis-Spring 필수) -->
 <dependency>
     <groupId>org.springframework</groupId>

@@ -14,7 +14,7 @@
 
 <div class="join-container">
     <h2>회원가입</h2>
-    
+     
     <div class="tab-menu">
         <div class="tab-item active" onclick="showForm('semi')">알림만 받기</div>
         <div class="tab-item" onclick="showForm('full')">회원가입</div>

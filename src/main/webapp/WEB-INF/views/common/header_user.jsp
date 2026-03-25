@@ -6,7 +6,7 @@
     <a href="${path}/" class="nav-item">홈</a>
 
     <%-- 2. 사용자 환영 메시지: 로그인한 사용자 이름 출력 [cite: 75] --%>
-    <span class="user-welcome"><strong>${loginUser.name}</strong>님 반갑습니다.</span>
+    <span class="user-welcome"><strong>${not empty loginUser.name ? loginUser.name : loginUser.phone}</strong>님 반갑습니다.</span>
 
     <div class="menu-group">
         <%-- 3. 내 정보: 회원 정보 페이지 이동 및 알림 배지(3개 예시) 표시 [cite: 76, 88] --%>
