@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.dao.ProductMapper">
+
+   <insert id="insertProduct" parameterType="com.project.model.ProductDTO" 
+        useGeneratedKeys="true" keyProperty="prodId" keyColumn="PROD_ID">
+    INSERT INTO Common_Product (
+        PROD_CODE, 
+        SOURCE, 
+        CATEGORY, 
+        PROD_NAME, 
+        PROD_PRICE, 
+        TARGET_PRICE, 
+        CHECK_INTERVAL
+    ) VALUES (
+        #{prodCode, jdbcType=VARCHAR}, 
+        #{source, jdbcType=VARCHAR}, 
+        #{category, jdbcType=VARCHAR}, 
+        #{name, jdbcType=VARCHAR}, 
+        #{price, jdbcType=INTEGER}, 
+        #{targetPrice, jdbcType=INTEGER}, 
+        #{checkInterval, jdbcType=INTEGER}
+    )
+</insert>
+
+<insert id="insertPriceHistory" parameterType="com.project.model.ProductDTO">
+    INSERT INTO PRICE_HISTORY (
+        PROD_ID, 
+        PRICE
+    ) VALUES (
+        #{prodId, jdbcType=INTEGER}, 
+        #{price, jdbcType=INTEGER}
+    )
+</insert>
+<select id="getProductDetail" resultType="com.project.model.ProductDTO">
+    SELECT 
+        PROD_ID as prodId,
+        PROD_NAME as name,
+        PROD_PRICE as price,
+        TARGET_PRICE as targetPrice
+    FROM Common_Product 
+    WHERE PROD_ID = #{prodId}
+</select>
+
+<select id="getPriceHistory" parameterType="int" resultType="map">
+    SELECT PRICE, TO_CHAR(REG_DATE, 'YYYY-MM-DD') as REG_DATE 
+    FROM PRICE_HISTORY 
+    WHERE PROD_ID = #{prodId} 
+    ORDER BY REG_DATE ASC
+</select>
+<select id="findIdByCode" parameterType="string" resultType="java.lang.Integer">
+    SELECT PROD_ID FROM Common_Product WHERE PROD_CODE = #{prodCode}
+</select>
+
+</mapper>
