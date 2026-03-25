@@ -27,7 +27,7 @@
     <select id="loginCheck" parameterType="com.project.model.MemberDTO" resultMap="MemberResultMap">
         SELECT * FROM MEMBERS WHERE PHONE = #{phone} AND PW = #{pw}
     </select>
-    
+  
     <update id="updateMember" parameterType="com.project.model.MemberDTO">
 	    UPDATE MEMBERS 
 	    SET 
@@ -40,4 +40,9 @@
 	        </if>
 	    WHERE PHONE = #{phone}
     </update>
+    
+    
+    
+    
+    
 </mapper>

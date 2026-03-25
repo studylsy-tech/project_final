@@ -18,7 +18,12 @@ VALUES ('01099999999', '12345', '관리자', 'admin@test.com', '1990-01-01', 'M'
 -- 관리자 계정 생성 후 저장
 COMMIT
 
+<<<<<<< HEAD
 
 
 
 
+=======
+-- DB 조회용
+SELECT * FROM MEMBERS;
+>>>>>>> branch 'register' of https://github.com/studylsy-tech/project_final.git
