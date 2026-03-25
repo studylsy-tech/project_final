@@ -11,7 +11,7 @@
     <div class="menu-group">
         <a href="${path}/" class="menu-item">홈</a>
         <a href="${path}/member/login" class="menu-item">로그인</a>
-        <a href="${path}/member/join" class="menu-item join-highlight">회원가입</a>
+        <a href="${path}/member/joinFull" class="menu-item join-highlight">회원가입</a>
         <a href="${path}/board/notice" class="menu-item">공지</a>
         <a href="${path}/board/qna" class="menu-item">QNA</a>
     </div>

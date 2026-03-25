@@ -11,4 +11,4 @@ public class MemberDTO {
     private String birth;     // 생년월일 
     private String gender;    // 성별 
     private String memberType; // 반회원/정회원 구분 
-}
+} 

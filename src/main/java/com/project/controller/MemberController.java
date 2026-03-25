@@ -54,7 +54,6 @@ public class MemberController {
     public String joinPage() {
         // 리턴값은 JSP 파일의 경로입니다. 
         // /WEB-INF/views/member/join.jsp 파일이 있어야 합니다.
-    	
         return "member/join"; 
     }
     
@@ -66,6 +65,12 @@ public class MemberController {
     return "redirect:/member/login";
     }
 
+    // 정회원 가입(GET)
+    @GetMapping("/joinFull")
+    public String joinFull() {
+    	return "member/join_full";
+    }
+    
     // 정회원 가입
     @PostMapping("/joinFull")
     public String joinFull(MemberDTO member) {
@@ -74,11 +79,12 @@ public class MemberController {
         return "redirect:/"; 
     }
     
+    
     // 로그아웃
     @GetMapping("/logout")
     public String logout(javax.servlet.http.HttpSession session) {
         session.invalidate(); // 로그아웃 시 세션 정보를 완전히 삭제
-        return "redirect:/"; // 메인 페이지로 이동
+        return "member/logout"; // 메인 페이지로 이동
     }
     
     

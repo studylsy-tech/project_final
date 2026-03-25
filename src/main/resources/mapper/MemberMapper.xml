@@ -28,4 +28,10 @@
         SELECT * FROM MEMBERS WHERE PHONE = #{phone} AND PW = #{pw}
     </select>
     
+    
+    
+    
+    
+    
+    
 </mapper>
