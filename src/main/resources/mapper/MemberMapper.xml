@@ -28,4 +28,16 @@
         SELECT * FROM MEMBERS WHERE PHONE = #{phone} AND PW = #{pw}
     </select>
     
+    <update id="updateMember" parameterType="com.project.model.MemberDTO">
+	    UPDATE MEMBERS 
+	    SET 
+	        PW = #{pw}
+	        <if test="memberType == 'FULL' or memberType == 'ADMIN'">
+	            , NAME = #{name}
+	            , EMAIL = #{email}
+	            , BIRTH = #{birth}
+	            , GENDER = #{gender}
+	        </if>
+	    WHERE PHONE = #{phone}
+    </update>
 </mapper>

@@ -1,5 +1,7 @@
 package com.project.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +51,6 @@ public class MemberController {
     
     }
     
-    
     @GetMapping("/join")
     public String joinPage() {
         // 리턴값은 JSP 파일의 경로입니다. 
@@ -66,6 +67,11 @@ public class MemberController {
     return "redirect:/member/login";
     }
 
+    @GetMapping("/joinFull") // 얘가 있어야 정상적으로 가입이 가능합니다.
+    public String joinFullPage() {
+        return "member/join_full"; // 회원 유형 명시(정회원)
+    }
+    
     // 정회원 가입
     @PostMapping("/joinFull")
     public String joinFull(MemberDTO member) {
@@ -79,6 +85,55 @@ public class MemberController {
     public String logout(javax.servlet.http.HttpSession session) {
         session.invalidate(); // 로그아웃 시 세션 정보를 완전히 삭제
         return "redirect:/"; // 메인 페이지로 이동
+    }
+    
+    // 내 정보 보기
+    @GetMapping("/info")
+    public String memberInfo(HttpSession session, org.springframework.ui.Model model) {
+        // 세션에서 로그인한 유저 정보 가져오기
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        // 로그인 안 되어 있으면 로그인 페이지로 보내버리기
+        if(loginUser == null) {
+            return "redirect:/member/login";
+        }
+        model.addAttribute("user", loginUser);
+        return "member/info"; 
+    }
+    
+    // 내 정보 수정
+    @GetMapping("/update")
+    public String updateForm(HttpSession session, org.springframework.ui.Model model) {
+        // 세션에서 현재 로그인한 유저 정보 가져오기
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        
+        if (loginUser == null) {
+            return "redirect:/member/login";
+        }
+        
+        // JSP에서 사용할 'user'라는 이름으로 세션 정보를 모델에 담아주는 역할
+        model.addAttribute("user", loginUser);
+        return "member/update"; // => WEB-INF/views/member/update.jsp 실행
+    }
+
+    // 실제 정보 수정 처리 용 (POST)
+    @PostMapping("/update")
+    public String updateMember(MemberDTO member, HttpSession session) {
+    	// 세션에서 기존 로그인 정보 꺼내기
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        
+        // 정보 수정시 회원등급 바뀌는 오류 확인용
+        member.setMemberType(loginUser.getMemberType());
+        
+        // DB 수정 실행 (service 호출)
+        int result = memberService.updateMember(member);
+        
+        if (result > 0) {
+            // DB가 바뀌었으니 세션에 저장된 loginUser 정보도 새 정보로 교체 역할
+            session.setAttribute("loginUser", member); 
+            return "redirect:/member/info"; // 수정 후 정보 확인 페이지로 다시 이동
+        } else {
+        	return "redirect:/member/update"; // 실패 시 다시 정보 수정 란으로(없으면 적절한 곳으로 리다이렉트)
+        }
     }
     
     
