@@ -1,11 +1,12 @@
 # 빌드 결과물
-/target/
+/target/classes/
+MANIFEST.MF
 
 # 이클립스 설정 파일 (팀원간 충돌 방지)
-/.settings/
-/.classpath
-/.project
-/.springBeans
+# /.settings/
+# /.classpath
+# /.project
+# /.springBeans
 
 # 로컬 설정 파일
-*.properties
+# *.properties
