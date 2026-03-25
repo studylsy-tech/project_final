@@ -6,16 +6,12 @@
 <meta charset="UTF-8">
 <title>로그아웃</title>
 <script>
-    alert("로그아웃 되었습니다.");
+    /* alert("로그아웃 되었습니다."); */
     // 로그아웃 후 1초 뒤에 메인으로 이동
-    location.href = "${pageContext.request.contextPath}/"; 
+    location.href = "${pageContext.request.contextPath}/member/login";
 </script>
 </head>
 <body>
-	
-	
-	
-	
 	
 </body>
 </html>

@@ -2,7 +2,7 @@
 ALTER SESSION SET "_ORACLE_SCRIPT" = TRUE;
 
 -- 2. 사용자 생성
-CREATE USER pricedata IDENTIFIED BY 1234;
+CREATE USER pricedata IDENTIFIED BY 12345;
 
 -- 3. 필수 권한 부여
 -- CONNECT: 접속 권한

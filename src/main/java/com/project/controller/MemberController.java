@@ -1,5 +1,7 @@
 package com.project.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -81,11 +83,31 @@ public class MemberController {
     
     
     // 로그아웃
-    @GetMapping("/logout")
+    @RequestMapping("/logout")
     public String logout(javax.servlet.http.HttpSession session) {
         session.invalidate(); // 로그아웃 시 세션 정보를 완전히 삭제
-        return "member/logout"; // 메인 페이지로 이동
+        return "redirect:/member/login"; // 로그아웃 알림창 후 메인으로 이동
     }
+    
+    // 내 정보 보기
+    @GetMapping("/info")
+    public String memberInfo(HttpSession session, org.springframework.ui.Model model) {
+        // 세션에서 로그인한 유저 정보를 가져옴
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        
+        // 만약, 비로그인 상태면 로그인 페이지로 강제 이동
+        if(loginUser == null) {
+            return "redirect:/member/login";
+        }
+        
+        model.addAttribute("user", loginUser);
+        
+        return "member/info"; // 내 정보로 이동
+    }
+    
+    
+    
+    
     
     
     
