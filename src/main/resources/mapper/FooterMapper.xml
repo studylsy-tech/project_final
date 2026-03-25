@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.dao.FooterMapper">
+
+	<insert id="insertInquiry" parameterType="com.project.model.FooterInquiryVO">
+	
+		INSERT INTO footer_inquiry(
+			inquiry_no,
+			user_name,
+			user_email,
+			user_content,
+			status,
+			reg_date
+		)VALUES (
+			seq_inquiry_no.nextval,
+			#{user_name},
+			#{user_email},
+			#{user_content},
+			'대기'
+			SYSDATE
+		)
+		
+	</insert>
+
+</mapper>
