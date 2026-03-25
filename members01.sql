@@ -9,5 +9,5 @@ CREATE TABLE MEMBERS (
 );
 
 
-
+-- DB 조회용
 SELECT * FROM MEMBERS;

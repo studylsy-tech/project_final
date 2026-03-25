@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%-- 상위 header.jsp의 path 변수와 세션의 loginUser 정보를 사용한다고 가정합니다 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="path" value="${pageContext.request.contextPath}" />
+<!-- 위에는 로그아웃 테스트용 => 있어야 잘 작동됨 -->
+
 <div class="user-header">
     <%-- 1. 홈: 메인 페이지 이동 [cite: 75, 83] --%>
     <a href="${path}/" class="nav-item">홈</a>
