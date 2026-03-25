@@ -1,16 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
+<link rel="stylesheet" href="${path}/resources/css/views/member/join_full.css">
 
-<style>
-    .join-container { width: 500px; margin: 50px auto; border: 1px solid #ddd; padding: 30px; border-radius: 10px; }
-    .tab-menu { display: flex; margin-bottom: 20px; border-bottom: 2px solid #eee; }
-    .tab-item { flex: 1; text-align: center; padding: 15px; cursor: pointer; font-weight: bold; color: #999; }
-    .tab-item.active { color: #1a2a44; border-bottom: 2px solid #1a2a44; }
-    
-    /* 처음에는 정회원 폼을 숨김 (기본은 반회원/알림받기) */
-    .form-content { display: none; }
-    .form-content.active { display: block; }
-</style>
 
 <div class="join-container">
     <h2>회원가입</h2>
