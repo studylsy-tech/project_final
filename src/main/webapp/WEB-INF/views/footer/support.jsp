@@ -19,8 +19,8 @@
 
     <div class="support-form">
         <form action="#">
-            <label for="name">성함</label>
-            <input type="text" id="name" placeholder="성함을 입력해주세요.">
+            <label for="user_name">성함</label>
+            <input type="text" id="user_name" placeholder="성함을 입력해주세요.">
 
             <label for="email">답변받을 이메일</label>
             <input type="email" id="email" placeholder="example@email.com">
