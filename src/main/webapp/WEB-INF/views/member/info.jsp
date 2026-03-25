@@ -3,8 +3,18 @@
 <c:set var="path" value="${pageContext.request.contextPath}" />
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <link rel="stylesheet" href="${path}/resources/css/views/member/info.css">
-<h2>내 정보 확인</h2>
-
+<div class="container">
+    <h2>마이페이지</h2>
+    
+    <div class="mypage-tab-container">
+        <div class="mypage-tab active" onclick="location.href='${pageContext.request.contextPath}/member/info'">
+            내 정보 확인
+        </div>
+        <div class="mypage-tab" onclick="location.href='${pageContext.request.contextPath}/member/notification'">
+            알림 설정
+        </div>
+    </div>
+</div>
 <table border="1">
     <tr>
         <th>이름</th>
