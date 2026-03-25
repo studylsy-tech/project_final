@@ -4,24 +4,32 @@
 
 <mapper namespace="com.project.dao.FooterMapper">
 
-	<insert id="insertInquiry" parameterType="com.project.model.FooterInquiryVO">
-	
-		INSERT INTO footer_inquiry(
-			inquiry_no,
-			user_name,
-			user_email,
-			user_content,
-			status,
-			reg_date
-		)VALUES (
-			seq_inquiry_no.nextval,
-			#{user_name},
-			#{user_email},
-			#{user_content},
-			'대기'
-			SYSDATE
-		)
-		
-	</insert>
+    <insert id="insertInquiry" parameterType="com.project.model.FooterInquiryVO">
+        INSERT INTO footer_inquiry (
+            inquiry_no,
+            user_name,
+            user_email,
+            user_content,
+            is_answered,  reg_date
+        ) VALUES (
+            seq_inquiry_no.nextval,
+            #{user_name},
+            #{user_email},
+            #{user_content},
+            'N',           SYSDATE        )
+    </insert>
+
+    <select id="selectAllInquiries" resultType="com.project.model.FooterInquiryVO">
+        SELECT 
+            inquiry_no,
+            user_name,
+            user_email,
+            user_content,
+            reply_content,
+            is_answered,
+            reg_date
+        FROM footer_inquiry
+        ORDER BY inquiry_no DESC
+    </select>
 
 </mapper>
