@@ -1,131 +1,105 @@
-@charset "UTF-8";
-/* 마이페이지 공통 탭 스타일 */
-    .mypage-tab-container {
-        display: flex;
-        width: 100%;
-        margin-bottom: 30px;
-        border-bottom: 1px solid #ddd;
-    }
-    .mypage-tab {
-        flex: 1;
-        padding: 15px;
-        text-align: center;
-        cursor: pointer;
-        font-size: 18px;
-        color: #999;
-        transition: 0.3s;
-    }
-    .mypage-tab.active {
-        color: #333;
-        font-weight: bold;
-        border-bottom: 3px solid #007bff; /* 파란색 강조선 */
-    }
-    .mypage-tab:hover { color: #007bff; }
-/* 1. 기본 초기화 및 폰트 설정 */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* 전체 컨테이너: 좌우 여백 최적화 */
+.mypage-wrapper {
+    max-width: 1000px; /* 대시보드가 들어갈 수 있도록 넉넉히 조정 */
+    margin: 50px auto;
+    padding: 0 20px;
 }
 
-body {
-    font-family: 'Pretendard', 'Malgun Gothic', sans-serif;
-    background-color: #f8f9fa;
-    line-height: 1.6;
-    padding: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* 2. 제목 영역 */
-h2 {
-    color: #333;
+/* 타이틀 및 탭 메뉴 스타일 */
+.mypage-header {
     margin-bottom: 30px;
+}
+
+.main-title {
     font-size: 24px;
-    position: relative;
+    font-weight: 700;
+    color: #1a2a44;
+    margin-bottom: 20px;
+}
+
+.tab-container {
+    display: flex;
+    gap: 25px;
+    border-bottom: 2px solid #f0f0f0;
     padding-bottom: 10px;
 }
 
-h2::after {
+.tab-item {
+    text-decoration: none;
+    font-size: 16px;
+    color: #888;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+/* 활성화된 탭 하단 바 디자인 */
+.tab-item.active {
+    color: #1a2a44;
+    font-weight: 700;
+}
+
+.tab-item.active::after {
     content: '';
     position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 50px;
-    height: 3px;
-    background-color: #007bff;
-}
-
-/* 3. 정보 테이블 스타일 */
-table {
+    bottom: -12px;
+    left: 0;
     width: 100%;
-    max-width: 500px;
+    height: 3px;
+    background-color: #1a2a44;
+}
+
+/* 테이블 스타일: 깔끔한 선 위주 */
+.info-table {
+    width: 100%;
     border-collapse: collapse;
-    background: #ffffff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-top: 10px;
 }
 
-th, td {
-    padding: 15px 20px;
-    border-bottom: 1px solid #f0f0f0;
-}
-
-th {
-    background-color: #fcfcfc;
-    color: #666;
-    font-weight: 600;
+.info-table th {
     text-align: left;
-    width: 40%;
+    padding: 20px 15px;
+    background-color: #fcfcfc;
+    border-bottom: 1px solid #eee;
+    color: #555;
+    font-size: 15px;
 }
 
-td {
-    color: #222;
-    font-weight: 400;
+.info-table td {
+    padding: 20px 15px;
+    border-bottom: 1px solid #eee;
+    font-size: 15px;
+    color: #333;
 }
 
-tr:last-child th, 
-tr:last-child td {
-    border-bottom: none;
+.status-text {
+    font-weight: 600;
 }
 
-/* 4. 하단 버튼 영역 */
-.button-container {
-    margin-top: 30px;
+/* 버튼 디자인 */
+.action-buttons {
     display: flex;
+    justify-content: flex-end;
     gap: 10px;
+    margin-top: 40px;
 }
 
-button {
-    padding: 12px 25px;
+.btn-outline {
+    padding: 10px 24px;
+    background: #fff;
+    border: 1px solid #d1d1d1;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.btn-solid {
+    padding: 10px 24px;
+    background: #1a2a44;
+    color: #fff;
     border: none;
-    border-radius: 6px;
+    border-radius: 4px;
+    cursor: pointer;
     font-size: 14px;
     font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease-in-out;
-}
-
-/* 메인으로 버튼 */
-button:nth-child(1) {
-    background-color: #e9ecef;
-    color: #495057;
-}
-
-button:nth-child(1):hover {
-    background-color: #dee2e6;
-}
-
-/* 정보 수정 버튼 */
-button:nth-child(2) {
-    background-color: #007bff;
-    color: #ffffff;
-}
-
-button:nth-child(2):hover {
-    background-color: #0056b3;
-    box-shadow: 0 4px 8px rgba(0, 123, 255, 0.2);
 }

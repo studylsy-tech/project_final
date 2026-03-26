@@ -74,17 +74,32 @@ public class MemberController {
         return "redirect:/member/login";
     }
     
-    // [수정] 내 정보 보기
+ // 내 정보 확인 (GET)
     @GetMapping("/info")
-    public String memberInfo(HttpSession session, org.springframework.ui.Model model) {
-        // 세션에서 로그인한 유저 정보 가져오기
-        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
-        // 로그인 안 되어 있으면 로그인 페이지로 보내버리기
-        if(loginUser == null) {
+    public String myInfoPage(HttpSession session, Model model) {
+        // 수정: "user" -> "loginUser"
+        MemberDTO user = (MemberDTO) session.getAttribute("loginUser"); 
+        
+        if (user == null) {
             return "redirect:/member/login";
         }
-        model.addAttribute("user", loginUser);
-        return "member/info"; 
+        
+        model.addAttribute("user", user); // JSP에서는 ${user}로 쓰기 위해 모델 이름은 유지
+        return "member/info";
+    }
+
+    // 알림 설정 (GET)
+    @GetMapping("/notification")
+    public String notificationPage(HttpSession session, Model model) {
+        // 수정: "user" -> "loginUser"
+        MemberDTO user = (MemberDTO) session.getAttribute("loginUser");
+        
+        if (user == null) {
+            return "redirect:/member/login";
+        }
+        
+        model.addAttribute("user", user);
+        return "member/notification_settings";
     }
     
     // 내 정보 수정
@@ -101,7 +116,9 @@ public class MemberController {
         model.addAttribute("user", loginUser);
         return "member/update"; // => WEB-INF/views/member/update.jsp 실행
     }
-
+    
+    
+    
     // 실제 정보 수정 처리 용 (POST)
     @PostMapping("/update")
     public String updateMember(MemberDTO member, HttpSession session) {

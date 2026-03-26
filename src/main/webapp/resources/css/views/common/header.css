@@ -1,83 +1,81 @@
-/* /resources/css/views/common/header.css */
-
-/* body 마진 제거 (필수) */
-body {
-    margin: 0;
-    font-family: 'Pretendard', -apple-system, sans-serif;
-}
+@charset "UTF-8";
 
 /* 헤더 전체 컨테이너 */
-.header-container {
-    background-color: #1a2a44; /* 짙은 남색 */
-    color: white;
-    padding: 0 50px; /* 위아래 패딩은 0, 좌우만 50px */
-    height: 80px; /* 헤더 높이 고정 */
-    display: flex; /* Flexbox 활성화 */
-    justify-content: space-between; /* 로고는 왼쪽, 메뉴는 오른쪽 끝 */
-    align-items: center; /* 세로 중앙 정렬 */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-/* 로고 영역 스타일 */
-.logo {
+.main-header {
+    background-color: #1a2a44; /* 프로젝트 메인 네이비 */
+    padding: 15px 50px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    color: #ffffff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-.logo h1 {
-    margin: 0;
-    font-size: 24px;
+/* 로고/홈 링크 */
+.header-logo a {
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffffff;
+    text-decoration: none;
     letter-spacing: 1px;
 }
 
-.logo a {
-    color: white !important; /* 보라색 링크 강제 제거 */
-    text-decoration: none;
-    transition: opacity 0.2s;
-}
-
-.logo a:hover {
-    opacity: 0.8;
-}
-
-/* 네비게이션 메뉴 영역 스타일 */
-.nav-menu {
-    display: flex; /* 메뉴 아이템들도 한 줄로 */
-    align-items: center;
-    gap: 0; /* include되는 파일 내부에 여백이 있을 수 있으므로 0 */
-}
-
-/* include되는 header_guest/user.jsp 내부의 ul, a 태그 스타일 (예측) */
-.nav-menu ul {
+/* 네비게이션 그룹 */
+.nav-group {
     display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
     align-items: center;
-    gap: 25px; /* 메뉴 간격 */
+    gap: 20px;
 }
 
-.nav-menu a {
-    color: white;
+.nav-item {
+    color: #ffffff;
     text-decoration: none;
     font-size: 15px;
+    font-weight: 500;
     transition: color 0.2s;
 }
 
-.nav-menu a:hover {
-    color: #a8b2c1;
+.nav-item:hover {
+    color: #ffeb3b; /* 호버 시 강조색 */
 }
 
-/* 회원가입 버튼 스타일 (스크린샷 참고) */
-.nav-menu a.btn-join {
-    background-color: #00897b; /* 초록색 버튼 */
-    color: white;
-    padding: 8px 16px;
-    border-radius: 4px;
+/* 사용자 정보 및 환영 메시지 */
+.user-info {
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+.user-name {
+    color: #ffeb3b;
     font-weight: bold;
 }
 
-.nav-menu a.btn-join:hover {
-    background-color: #00796b;
+/* 알림 배지 스타일 */
+.info-link {
+    position: relative;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -15px;
+    background-color: #f44336;
     color: white;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 11px;
+    font-weight: bold;
+    line-height: 1;
+}
+
+/* 버튼 스타일 (로그인/회원가입 등) */
+.btn-login {
+    border: 1px solid #ffffff;
+    padding: 5px 15px;
+    border-radius: 4px;
+}
+
+.btn-login:hover {
+    background: #ffffff;
+    color: #1a2a44;
 }
