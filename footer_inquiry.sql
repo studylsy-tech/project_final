@@ -19,4 +19,4 @@ CREATE TABLE footer_inquiry (
 CREATE SEQUENCE seq_inquiry_no START WITH 1 INCREMENT BY 1;
 
 -- 5. 확정 저장
-COMMIT;
+COMMIT

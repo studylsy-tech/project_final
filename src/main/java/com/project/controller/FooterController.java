@@ -50,10 +50,10 @@ public class FooterController {
             
             mailUtil.sendMail(adminEmail, subject, content);
 
-            // [작업 3] 알림창을 띄우고 관리자 리스트 페이지로 이동
+         // [작업 3] 알림창을 띄우고 메인 페이지로 이동
             String script = "<script>" +
                             "alert('문의가 정상적으로 접수되었습니다.');" +
-                            "location.href='" + request.getContextPath() + "/admin/list.do';" + 
+                            "location.href='" + request.getContextPath() + "/';" + 
                             "</script>";
             return script;
         }
