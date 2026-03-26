@@ -1,4 +1,26 @@
 @charset "UTF-8";
+/* 마이페이지 공통 탭 스타일 */
+    .mypage-tab-container {
+        display: flex;
+        width: 100%;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #ddd;
+    }
+    .mypage-tab {
+        flex: 1;
+        padding: 15px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 18px;
+        color: #999;
+        transition: 0.3s;
+    }
+    .mypage-tab.active {
+        color: #333;
+        font-weight: bold;
+        border-bottom: 3px solid #007bff; /* 파란색 강조선 */
+    }
+    .mypage-tab:hover { color: #007bff; }
 /* 1. 기본 초기화 및 폰트 설정 */
 * {
     margin: 0;
