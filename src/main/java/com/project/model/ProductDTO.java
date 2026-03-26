@@ -1,5 +1,7 @@
 package com.project.model;
 
+import java.util.Date;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,4 +18,6 @@ public class ProductDTO {
     private int checkInterval;  // 추가: 확인 주기
     private String source;      // 추가: 출처 (Danawa 등)
     private String category; 
+    private Date regDate;
+
 }

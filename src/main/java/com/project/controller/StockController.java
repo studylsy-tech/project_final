@@ -33,7 +33,13 @@ public class StockController {
         model.addAttribute("boardTitle", "오늘의 급락 상품");
         return "stock/stock_list";
     }
-
+ // StockController.java 에 추가
+    @GetMapping("/analysis")
+    public String analysisStocks(Model model) {
+        // 현재는 데이터가 없으므로 빈 리스트 전달 혹은 서비스 호출
+        model.addAttribute("boardTitle", "자동 분석 리포트");
+        return "stock/stock_list"; 
+    }
     @GetMapping("/new-low")
     public String newLowStocks(Model model) {
         List<ProductDTO> list = productService.findNewLowProducts();
