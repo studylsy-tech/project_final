@@ -14,6 +14,9 @@ SELECT * FROM MEMBERS;
 -- 관리자 계정 생성
 INSERT INTO MEMBERS (PHONE, PW, NAME, EMAIL, BIRTH, GENDER, MEMBER_TYPE) 
 VALUES ('01099999999', '12345', '관리자', 'admin@test.com', '1990-01-01', 'M', 'ADMIN');
-
+INSERT INTO MEMBERS (PHONE, PW, NAME, EMAIL, BIRTH, GENDER, MEMBER_TYPE) 
+VALUES ('1', '1', '관리자', 'admin@test.com', '1990-01-01', 'M', 'ADMIN');
+-- 아이디 1인 계정 삭제
+DELETE FROM MEMBERS WHERE PHONE = '1';
 -- 관리자 계정 생성 후 저장
 COMMIT

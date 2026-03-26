@@ -117,7 +117,18 @@ public class MemberController {
         return "member/update"; // => WEB-INF/views/member/update.jsp 실행
     }
     
-    
+ // 관리자 페이지 요청을 처리할 핸들러 메서드
+    @GetMapping("/admin/main")
+    public String adminMain(HttpSession session) {
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        
+        // 세션이 없거나 권한이 ADMIN이 아닌 경우 접근 차단
+        if (loginUser == null || !"ADMIN".equals(loginUser.getMemberType())) {
+            return "redirect:/"; // 권한 없으면 메인으로 리다이렉트
+        }
+        
+        return "admin/main"; // WEB-INF/views/admin/main.jsp 실행
+    }
     
     // 실제 정보 수정 처리 용 (POST)
     @PostMapping("/update")
