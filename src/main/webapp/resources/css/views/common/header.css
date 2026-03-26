@@ -1,81 +1,76 @@
-@charset "UTF-8";
-
 /* 헤더 전체 컨테이너 */
 .main-header {
-    background-color: #1a2a44; /* 프로젝트 메인 네이비 */
-    padding: 15px 50px;
+    display: flex;
+    justify-content: space-between; /* 로고는 왼쪽, 네비는 오른쪽 */
+    align-items: center;
+    padding: 0 40px;
+    height: 80px; /* 헤더 높이 고정 */
+    background-color: #fff;
+    border-bottom: 1px solid #eaeaea;
+    box-sizing: border-box;
+}
+
+/* 로고 및 드롭다운 컨테이너 */
+.header-logo.dropdown-container {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    color: #ffffff;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    height: 100%; /* 헤더 높이에 맞춤 */
 }
 
-/* 로고/홈 링크 */
-.header-logo a {
+.header-logo > a {
     font-size: 22px;
     font-weight: 800;
-    color: #ffffff;
+    color: #1a1a1a;
     text-decoration: none;
-    letter-spacing: 1px;
+    letter-spacing: -0.5px;
 }
 
-/* 네비게이션 그룹 */
+/* 네비게이션 그룹 (로그인/회원가입 영역) */
 .nav-group {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 20px; /* 항목 간 간격 */
 }
 
 .nav-item {
-    color: #ffffff;
     text-decoration: none;
-    font-size: 15px;
-    font-weight: 500;
-    transition: color 0.2s;
-}
-
-.nav-item:hover {
-    color: #ffeb3b; /* 호버 시 강조색 */
-}
-
-/* 사용자 정보 및 환영 메시지 */
-.user-info {
+    color: #666;
     font-size: 14px;
-    margin-right: 10px;
+    font-weight: 500;
 }
 
-.user-name {
-    color: #ffeb3b;
-    font-weight: bold;
-}
-
-/* 알림 배지 스타일 */
-.info-link {
-    position: relative;
-}
-
-.notification-badge {
+/* 드롭다운 메뉴 위치 미세 조정 */
+.dropdown-menu {
+    display: none;
     position: absolute;
-    top: -8px;
-    right: -15px;
-    background-color: #f44336;
-    color: white;
-    border-radius: 10px;
-    padding: 2px 6px;
-    font-size: 11px;
-    font-weight: bold;
-    line-height: 1;
+    top: 60px; /* 로고 텍스트보다 약간 아래로 */
+    left: 0;
+    width: 160px;
+    background-color: #ffffff;
+    border: 1px solid #eee;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    list-style: none;
+    padding: 8px 0;
+    margin: 0;
+    z-index: 9999;
+    border-radius: 8px;
 }
 
-/* 버튼 스타일 (로그인/회원가입 등) */
-.btn-login {
-    border: 1px solid #ffffff;
-    padding: 5px 15px;
-    border-radius: 4px;
+.header-logo.dropdown-container:hover .dropdown-menu {
+    display: block;
 }
 
-.btn-login:hover {
-    background: #ffffff;
-    color: #1a2a44;
+.dropdown-menu li a {
+    display: block;
+    padding: 10px 20px;
+    color: #444 !important;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.dropdown-menu li a:hover {
+    background-color: #f4f7ff;
+    color: #007bff !important;
 }
