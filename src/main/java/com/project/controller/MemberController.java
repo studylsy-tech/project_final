@@ -54,6 +54,8 @@ public class MemberController {
         return "redirect:/member/login";
     }
 
+
+    // 정회원 가입(GET)
     @GetMapping("/joinFull")
     public String joinFull() {
         return "member/join_full";
@@ -74,22 +76,50 @@ public class MemberController {
     
     // [수정] 내 정보 보기
     @GetMapping("/info")
-    public String memberInfo(HttpSession session, Model model) {
+    public String memberInfo(HttpSession session, org.springframework.ui.Model model) {
+        // 세션에서 로그인한 유저 정보 가져오기
         MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
-        if(loginUser == null) return "redirect:/member/login";
-        
+        // 로그인 안 되어 있으면 로그인 페이지로 보내버리기
+        if(loginUser == null) {
+            return "redirect:/member/login";
+        }
         model.addAttribute("user", loginUser);
-        return "member/info";
+        return "member/info"; 
+    }
+    
+    // 내 정보 수정
+    @GetMapping("/update")
+    public String updateForm(HttpSession session, org.springframework.ui.Model model) {
+        // 세션에서 현재 로그인한 유저 정보 가져오기
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        
+        if (loginUser == null) {
+            return "redirect:/member/login";
+        }
+        
+        // JSP에서 사용할 'user'라는 이름으로 세션 정보를 모델에 담아주는 역할
+        model.addAttribute("user", loginUser);
+        return "member/update"; // => WEB-INF/views/member/update.jsp 실행
     }
 
-    // [추가] 알림 설정 페이지 이동
-    @GetMapping("/notification")
-    public String notificationSettings(HttpSession session, Model model) {
+    // 실제 정보 수정 처리 용 (POST)
+    @PostMapping("/update")
+    public String updateMember(MemberDTO member, HttpSession session) {
+    	// 세션에서 기존 로그인 정보 꺼내기
         MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
-        if(loginUser == null) return "redirect:/member/login";
         
-        // 현재는 보이기 전용이므로 바로 JSP 리턴
-        // 추후 알림 잔여 슬롯 등을 DB에서 조회하여 model에 담는 로직이 들어갈 자리입니다.
-        return "member/notification_settings";
+        // 정보 수정시 회원등급 바뀌는 오류 확인용
+        member.setMemberType(loginUser.getMemberType());
+        
+        // DB 수정 실행 (service 호출)
+        int result = memberService.updateMember(member);
+        
+        if (result > 0) {
+            // DB가 바뀌었으니 세션에 저장된 loginUser 정보도 새 정보로 교체 역할
+            session.setAttribute("loginUser", member); 
+            return "redirect:/member/info"; // 수정 후 정보 확인 페이지로 다시 이동
+        } else {
+        	return "redirect:/member/update"; // 실패 시 다시 정보 수정 란으로(없으면 적절한 곳으로 리다이렉트)
+        }
     }
 }
