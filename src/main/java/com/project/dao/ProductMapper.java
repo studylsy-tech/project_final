@@ -14,4 +14,7 @@ public interface ProductMapper {
     // 조회 로직 (추가)
     ProductDTO getProductDetail(int prodId);
     List<Map<String, Object>> getPriceHistory(int prodId);
+    List<ProductDTO> findAllProducts();
+    List<ProductDTO> findDropProducts();
+    List<ProductDTO> findNewLowProducts();
 }

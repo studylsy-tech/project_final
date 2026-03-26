@@ -42,4 +42,18 @@ public class ProductService {
     public List<Map<String, Object>> getPriceHistory(int prodId) {
         return productMapper.getPriceHistory(prodId);
     }
+    
+ // src/main/java/com/project/service/ProductService.java 에 추가
+
+    public List<ProductDTO> findAllProducts() {
+        return productMapper.findAllProducts(); //
+    }
+
+    public List<ProductDTO> findDropProducts() {
+        return productMapper.findDropProducts(); //
+    }
+
+    public List<ProductDTO> findNewLowProducts() {
+        return productMapper.findNewLowProducts(); //
+    }
 }

@@ -24,20 +24,21 @@
         </ul>
     </div>
     <nav class="nav-group">
+    <%-- 게시판 메뉴 추가 --%>
+    <a href="${path}/board/notice" class="nav-item">공지사항</a>
+    <a href="${path}/board/qna" class="nav-item">Q&A</a>
+    
     <c:choose>
-        <%-- sessionScope.user 대신 sessionScope.loginUser 확인 --%>
         <c:when test="${not empty sessionScope.loginUser}">
+            <%-- 기존 로그인 사용자 정보 영역 --%>
             <span class="user-info">
                 <span class="user-name">
                     ${not empty sessionScope.loginUser.name ? sessionScope.loginUser.name : sessionScope.loginUser.phone}
                 </span>님 반갑습니다.
             </span>
-            <a href="${path}/member/info" class="nav-item info-link">
-                내 정보 <span class="notification-badge">3</span>
-            </a>
+            <a href="${path}/member/info" class="nav-item info-link">내 정보</a>
             <a href="${path}/member/logout" class="nav-item">로그아웃</a>
         </c:when>
-
         <c:otherwise>
             <a href="${path}/member/login" class="nav-item btn-login">로그인</a>
             <a href="${path}/member/join" class="nav-item">회원가입</a>

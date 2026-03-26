@@ -27,10 +27,11 @@
         </tbody>
     </table>
 
-    <c:if test="${loginUser.memberType == 'ADMIN'}">
-        <div class="board-footer">
-            <a href="${path}/board/write" class="btn-write">공지등록</a>
-        </div>
-    </c:if>
+    <%-- 공지사항 목록 하단 버튼 영역 --%>
+<c:if test="${loginUser.memberType == 'ADMIN'}">
+    <div class="board-footer">
+        <a href="${path}/board/write" class="btn-write">공지등록</a>
+    </div>
+</c:if>
 </div>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
