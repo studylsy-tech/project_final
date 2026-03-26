@@ -2,10 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="path" value="${pageContext.request.contextPath}" />
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<c:set var="path" value="${pageContext.request.contextPath}" />
-
-
 <%-- 비로그인 사용자 헤더 (스토리보드 Screen 2 국문 명칭 반영) --%>
 <div class="header-nav">
     <div class="menu-group">
