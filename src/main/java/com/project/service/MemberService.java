@@ -1,9 +1,13 @@
 package com.project.service;
 
-import com.project.model.MemberDTO;
-import com.project.dao.MemberMapper;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.project.dao.MemberMapper;
+import com.project.model.MemberDTO;
 
 @Service
 public class MemberService {
@@ -34,4 +38,26 @@ public class MemberService {
 		// memberMapper를 호출해서 DB 수정을 요청 후, 수정 성공한 행의 개수 하나를 리턴 함.
 	    return memberMapper.updateMember(member);
 	}
+	
+	// 자동 로그인 쿠키 관리
+	public void handleCookie(String phone, String rememberMe, HttpServletResponse response) {
+	    if ("on".equals(rememberMe)) {
+	        // 체크했을 때: 7일짜리 쿠키 생성 => 설정 미지정 시 기본값은 session
+	        Cookie cookie = new Cookie("rememberID", phone);
+	        cookie.setMaxAge(60 * 60 * 24 * 7);
+	        cookie.setPath("/");
+	        response.addCookie(cookie);
+	    } else {
+	        // 체크 안 했거나 해제했을 때: 쿠키 삭제
+	        Cookie cookie = new Cookie("rememberID", null);
+	        cookie.setMaxAge(0);
+	        cookie.setPath("/");
+	        response.addCookie(cookie);
+	    }
+	}
+	
+	
+	
+	
+	
 }

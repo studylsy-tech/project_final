@@ -1,5 +1,6 @@
 package com.project.controller;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +31,15 @@ public class MemberController {
 
     // 로그인 처리
     @PostMapping("/login")
-    public String login(MemberDTO member, HttpSession session, Model model) {
+    public String login(MemberDTO member, HttpSession session, Model model, HttpServletResponse response, String rememberMe) {
         MemberDTO loginUser = memberService.loginCheck(member);
         
         if(loginUser != null) {
             session.setAttribute("loginUser", loginUser);
+            
+            // MemberService 에 존재하는 쿠키 로직 갖고오기
+            memberService.handleCookie(loginUser.getPhone(), rememberMe, response);
+            
             return "redirect:/";
         } else {
             model.addAttribute("msg", "아이디 또는 비밀번호를 확인해주세요.");
@@ -68,13 +73,15 @@ public class MemberController {
         return "redirect:/"; 
     }
     
+    // 로그아웃
     @RequestMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/member/login";
+    public String logout(HttpSession session, HttpServletResponse response) {
+//        session.invalidate();
+//        memberService.handleCookie(null, "off", response);
+        return "member/logout";
     }
     
- // 내 정보 확인 (GET)
+    // 내 정보 확인 (GET)
     @GetMapping("/info")
     public String myInfoPage(HttpSession session, Model model) {
         // 수정: "user" -> "loginUser"
@@ -116,7 +123,6 @@ public class MemberController {
         model.addAttribute("user", loginUser);
         return "member/update"; // => WEB-INF/views/member/update.jsp 실행
     }
-    
     
     
     // 실제 정보 수정 처리 용 (POST)
