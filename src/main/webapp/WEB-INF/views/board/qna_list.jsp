@@ -30,7 +30,7 @@
     </table>
 
     <div class="board-footer">
-        <a href="${path}/board/write" class="btn-write">질문하기</a>
+        <a href="${path}/board/qnaWrite" class="btn-write">질문하기</a>
     </div>
 </div>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>

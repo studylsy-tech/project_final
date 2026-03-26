@@ -1,0 +1,28 @@
+-- 1. 공지사항 테이블 (NOTICE)
+CREATE TABLE NOTICE (
+    NOTICE_NO NUMBER PRIMARY KEY,           -- 번호
+    TITLE VARCHAR2(200) NOT NULL,           -- 제목
+    CONTENT CLOB NOT NULL,                  -- 내용
+    WRITER VARCHAR2(20) NOT NULL,           -- 작성자(PHONE)
+    COUNT NUMBER DEFAULT 0,                 -- 조회수
+    CREATE_DATE DATE DEFAULT SYSDATE,       -- 작성일
+    STATUS VARCHAR2(1) DEFAULT 'Y',         -- 삭제여부(Y/N) < 어차피 관리자용이라 필요 없을지도
+    CONSTRAINT FK_NOTICE_WRITER FOREIGN KEY(WRITER) REFERENCES MEMBERS(PHONE)
+);
+
+-- 2. Q&A 테이블 (QNA)
+CREATE TABLE QNA (
+    QNA_NO NUMBER PRIMARY KEY,			    -- 번호
+    TITLE VARCHAR2(200) NOT NULL,			-- 제목
+    CONTENT CLOB NOT NULL,					-- 내용
+    WRITER VARCHAR2(20) NOT NULL,			-- 작성자
+    ANSWER CLOB,                           -- 관리자 답변 내용
+    IS_ANSWERED CHAR(1) DEFAULT 'N',       -- 답변여부(Y/N)
+    CREATE_DATE DATE DEFAULT SYSDATE,
+    STATUS VARCHAR2(1) DEFAULT 'Y',		   -- 삭제여부
+    CONSTRAINT FK_QNA_WRITER FOREIGN KEY(WRITER) REFERENCES MEMBERS(PHONE)
+);
+
+-- 3. 자동 번호 생성을 위한 시퀀스
+CREATE SEQUENCE SEQ_NNO NOCACHE; -- 공지용
+CREATE SEQUENCE SEQ_QNO NOCACHE; -- Q&A용
