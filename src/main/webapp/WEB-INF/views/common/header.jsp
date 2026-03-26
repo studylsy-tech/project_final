@@ -12,11 +12,17 @@
 <body>
 
 <header class="main-header">
-    <%-- 로고 영역 --%>
-    <div class="header-logo">
+<%-- 로고 및 드롭다운 영역 --%>
+    <div class="header-logo dropdown-container">
         <a href="${path}/">STOCK ALARM</a>
+<%-- 호버 시 나타날 메뉴 --%>
+        <ul class="dropdown-menu">
+            <li><a href="${path}/stock/all">전체</a></li>
+            <li><a href="${path}/stock/drop">오늘의 급락</a></li>
+            <li><a href="${path}/stock/analysis">자동분석</a></li>
+            <li><a href="${path}/stock/new-low">최저가 갱신</a></li>
+        </ul>
     </div>
-
     <nav class="nav-group">
     <c:choose>
         <%-- sessionScope.user 대신 sessionScope.loginUser 확인 --%>
