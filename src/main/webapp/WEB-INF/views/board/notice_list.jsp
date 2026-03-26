@@ -1,4 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%-- 헤더 포함 --%>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <link rel="stylesheet" href="${path}/resources/css/views/board/board.css">
 
@@ -27,8 +30,9 @@
         </tbody>
     </table>
 
+	 <%-- 2. 관리자 권한 체크 --%>
     <c:if test="${loginUser.memberType == 'ADMIN'}">
-        <div class="board-footer">
+        <div class="btn-area center">
             <a href="${path}/board/write" class="btn-dark">공지등록</a>
         </div>
     </c:if>
