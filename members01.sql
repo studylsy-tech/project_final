@@ -8,6 +8,12 @@ CREATE TABLE MEMBERS (
     MEMBER_TYPE VARCHAR2(10) DEFAULT 'SEMI' -- 반회원/정회원 구분
 );
 
-
-
+-- 회원 목록 조회
 SELECT * FROM MEMBERS;
+
+-- 관리자 계정 생성
+INSERT INTO MEMBERS (PHONE, PW, NAME, EMAIL, BIRTH, GENDER, MEMBER_TYPE) 
+VALUES ('01099999999', '12345', '관리자', 'admin@test.com', '1990-01-01', 'M', 'ADMIN');
+
+-- 관리자 계정 생성 후 저장
+COMMIT

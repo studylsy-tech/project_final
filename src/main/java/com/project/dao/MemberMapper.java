@@ -17,4 +17,7 @@ public interface MemberMapper {
     
     // 4. 정회원 전환 (이름, 이메일 등 추가 정보 업데이트)
     int updateToFullMember(MemberDTO member);
+    
+    // 5. 내 정보 수정 (준회원/정회원 공통. 4번은 전환이라면 관리자 용도인가요..?)
+    int updateMember(MemberDTO member);
 }

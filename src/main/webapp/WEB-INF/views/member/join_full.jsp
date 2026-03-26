@@ -33,7 +33,7 @@
         </div>
 
         <div class="form-group">
-            <label>성별</label><br>
+            <label>성별</label> <br>
             <input type="radio" name="gender" value="M" id="male"> <label for="male">남성</label>
             <input type="radio" name="gender" value="F" id="female"> <label for="female">여성</label>
         </div>
