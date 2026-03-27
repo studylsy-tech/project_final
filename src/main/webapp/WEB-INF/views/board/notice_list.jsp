@@ -26,11 +26,11 @@
             </tr>
         </tbody>
     </table>
-
+	<br>
     <c:if test="${loginUser.memberType == 'ADMIN'}">
-        <div class="board-footer">
-            <a href="${path}/board/write" class="btn-dark">공지등록</a>
-        </div>
+        <div class="board-footer" style="width: 75%; margin-left: auto; margin-top: 20px; display: flex; justify-content: flex-end;">
+    <a href="${path}/board/qnaWrite" class="btn-dark">공지등록</a>
+</div>
     </c:if>
 </div>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
