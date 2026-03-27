@@ -4,10 +4,10 @@
 
     <select id="findAllProducts" resultType="com.project.model.ProductDTO">
         SELECT 
-            PROD_ID as prodId,
-            PROD_CODE as prodCode,
-            PROD_NAME as name,
-            PROD_PRICE as price,
+            PROD_ID as prodId, 
+            PROD_CODE as prodCode, 
+            PROD_NAME as name, 
+            PROD_PRICE as price, 
             REG_DATE as regDate
         FROM Common_Product
         ORDER BY REG_DATE DESC
@@ -48,6 +48,17 @@
             WHERE PROD_ID = p.PROD_ID
         )
         ORDER BY p.REG_DATE DESC
+    </select>
+
+    <select id="getProductDetail" resultType="com.project.model.ProductDTO">
+        SELECT 
+            PROD_ID as prodId, 
+            PROD_CODE as prodCode, 
+            PROD_NAME as name, 
+            PROD_PRICE as price, 
+            REG_DATE as regDate
+        FROM Common_Product 
+        WHERE PROD_ID = #{productId}
     </select>
 
 </mapper>

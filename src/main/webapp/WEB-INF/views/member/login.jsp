@@ -25,6 +25,10 @@
                 <label for="pw">비밀번호</label>
                 <input type="password" id="pw" name="pw" placeholder="비밀번호를 입력하세요" required>
             </div>
+            <div class="remember-me-container">
+			    <input type="checkbox" name="rememberMe" id="rememberMe">
+			    <label for="rememberMe">로그인 상태 유지</label>
+			</div>
             <button type="submit" class="login-btn">로그인</button>
         </form>
 

@@ -47,7 +47,13 @@
 
         <div class="action-buttons">
             <button type="button" class="btn-outline" onclick="location.href='${path}/'">메인으로</button>
-            <button type="button" class="btn-solid" onclick="location.href='${path}/member/update'">정보 수정</button>
+    <button type="button" class="btn-solid" onclick="location.href='${path}/member/update'">정보 수정</button>
+        <c:if test="${sessionScope.loginUser.memberType eq 'ADMIN'}">
+        <button type="button" class="btn-admin" onclick="location.href='${path}/admin/main'" 
+                style="background-color: #dc3545; color: white; margin-left: 10px;">
+            관리자 모드
+        </button>
+    </c:if>
         </div>
     </div>
 </div>
