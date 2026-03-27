@@ -8,20 +8,32 @@
         <result property="phone" column="PHONE" />
         <result property="pw" column="PW" />
         <result property="name" column="NAME" />
+        <result property="nickname" column="NICKNAME" />
         <result property="email" column="EMAIL" />
-        <result property="birth" column="BIRTH" />
-        <result property="gender" column="GENDER" />
+        <result property="address" column="ADDRESS" />
         <result property="memberType" column="MEMBER_TYPE" />
+        <result property="createdAt" column="CREATED_AT" />
     </resultMap>
     
     <insert id="insertSemi" parameterType="com.project.model.MemberDTO">
-        INSERT INTO MEMBERS(PHONE, PW, MEMBER_TYPE)
-        VALUES(#{phone}, #{pw}, 'SEMI')
-    </insert>
+    INSERT INTO MEMBERS (
+        PHONE, 
+        PW, 
+        NICKNAME, 
+        MEMBER_TYPE, 
+        CREATED_AT
+    ) VALUES (
+        #{phone}, 
+        #{pw}, 
+        #{nickname}, -- Controller에서 세팅한 phone 값이 일로 들어감
+        'SEMI', 
+        SYSDATE
+    )
+</insert>
     
     <insert id="insertFull" parameterType="com.project.model.MemberDTO">
-        INSERT INTO MEMBERS(PHONE, PW, NAME, EMAIL, BIRTH, GENDER, MEMBER_TYPE)
-        VALUES(#{phone}, #{pw}, #{name}, #{email}, #{birth}, #{gender}, 'FULL')
+        INSERT INTO MEMBERS(PHONE, PW, NAME, NICKNAME, EMAIL, ADDRESS, MEMBER_TYPE)
+        VALUES(#{phone}, #{pw}, #{name}, #{nickname}, #{email}, #{address}, 'FULL')
     </insert>
     
     <select id="loginCheck" parameterType="com.project.model.MemberDTO" resultMap="MemberResultMap">
@@ -29,20 +41,15 @@
     </select>
   
     <update id="updateMember" parameterType="com.project.model.MemberDTO">
-	    UPDATE MEMBERS 
-	    SET 
-	        PW = #{pw}
-	        <if test="memberType == 'FULL' or memberType == 'ADMIN'">
-	            , NAME = #{name}
-	            , EMAIL = #{email}
-	            , BIRTH = #{birth}
-	            , GENDER = #{gender}
-	        </if>
-	    WHERE PHONE = #{phone}
+        UPDATE MEMBERS 
+        SET 
+            PW = #{pw}
+            <if test="memberType == 'FULL' or memberType == 'ADMIN'">
+                , NAME = #{name}
+                , NICKNAME = #{nickname}
+                , ADDRESS = #{address}
+            </if>
+        WHERE EMAIL = #{email}
     </update>
-    
-    
-    
-    
     
 </mapper>
