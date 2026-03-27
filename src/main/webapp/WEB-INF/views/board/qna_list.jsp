@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%-- JSTL 사용을 위한 선언문 추가 --%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <link rel="stylesheet" href="${path}/resources/css/views/board/board.css">
 
@@ -19,17 +21,34 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>1</td>
-                <td class="title-cell text-left"><a href="#">가격 알림이 오지 않아요.</a></td>
-                <td>${loginUser.name}</td>
-                <td><span class="badge bg-green">답변완료</span></td>
-                <td>2026-03-24</td>
-            </tr>
+            <%-- Controller에서 보낸 'list'가 비어있지 않을 때 출력 --%>
+            <c:forEach items="${list}" var="board">
+                <tr>
+                    <td>${board.notice_no}</td>
+                    <td class="title-cell text-left">
+                        <a href="${path}/board/detail?notice_no=${board.notice_no}">${board.title}</a>
+                    </td>
+                    <td>${board.writer}</td>
+                    <td>
+                        <span class="badge ${board.board_type eq 'QNA' ? 'bg-blue' : 'bg-green'}">
+                            ${board.board_type eq 'QNA' ? '질문' : '공지'}
+                        </span>
+                    </td>
+                    <td>${board.indate}</td>
+                </tr>
+            </c:forEach>
+            
+            <%-- 데이터가 없을 경우 처리 --%>
+            <c:if test="${empty list}">
+                <tr>
+                    <td colspan="5" style="text-align:center;">등록된 문의사항이 없습니다.</td>
+                </tr>
+            </c:if>
         </tbody>
     </table>
 
     <div class="board-footer" style="width: 75%; margin-left: auto; margin-top: 20px; display: flex; justify-content: flex-end;">
-    <a href="${path}/board/qnaWrite" class="btn-dark">질문하기</a>
-	</div>
+        <a href="${path}/board/qnaWrite" class="btn-dark">질문하기</a>
+    </div>
+</div>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>

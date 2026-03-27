@@ -36,29 +36,39 @@
     </select>
 
     <select id="findNewLowProducts" resultType="com.project.model.ProductDTO">
-        SELECT 
-            p.PROD_ID as prodId,
-            p.PROD_CODE as prodCode,
-            p.PROD_NAME as name,
-            p.PROD_PRICE as price
-        FROM Common_Product p
-        WHERE p.PROD_PRICE = (
-            SELECT MIN(PRICE) 
-            FROM PRICE_HISTORY 
-            WHERE PROD_ID = p.PROD_ID
-        )
-        ORDER BY p.REG_DATE DESC
-    </select>
+    SELECT 
+        p.PROD_ID as prodId,
+        p.PROD_CODE as prodCode,
+        p.PROD_NAME as name,
+        p.PROD_PRICE as price
+    FROM Common_Product p
+    WHERE p.PROD_PRICE = (
+        SELECT MIN(PRICE) 
+        FROM PRICE_HISTORY 
+        WHERE PROD_ID = p.PROD_ID
+    )
+    ORDER BY p.REG_DATE DESC
+</select>
 
-    <select id="getProductDetail" resultType="com.project.model.ProductDTO">
-        SELECT 
-            PROD_ID as prodId, 
-            PROD_CODE as prodCode, 
-            PROD_NAME as name, 
-            PROD_PRICE as price, 
-            REG_DATE as regDate
-        FROM Common_Product 
-        WHERE PROD_ID = #{productId}
-    </select>
+<select id="findHotdealLowProducts" resultType="com.project.model.ProductDTO">
+    SELECT 
+        T.DEAL_ID as prodId,
+        T.TITLE as name,
+        T.CURRENT_PRICE as price,
+        T.ORIGIN_URL as originUrl,
+        T.MALL_NAME as mallName,
+        T.LAST_UPDATE_DATE as lastUpdateDate
+    FROM TB_HOTDEAL_TRACKER T
+    WHERE T.CURRENT_PRICE = (
+        SELECT MIN(PRICE) 
+        FROM TB_PRICE_HISTORY H 
+        WHERE H.DEAL_ID = T.DEAL_ID
+    )
+    ORDER BY T.LAST_UPDATE_DATE DESC
+</select>
+
+<select id="getTotalDealCount" resultType="_int">
+    SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
+</select>
 
 </mapper>

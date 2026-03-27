@@ -12,8 +12,7 @@
 
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <%-- 관리자 전용 CSS 파일이 있다면 연결 --%>
-<link rel="stylesheet" href="${path}/resources/css/views/admin/admin_main.css">
-
+<link rel="stylesheet" href="${path}/resources/css/admin/admin_main.css">
 <div class="admin-wrapper">
     <div class="admin-header">
         <h2 class="main-title">시스템 관리자 대시보드</h2>

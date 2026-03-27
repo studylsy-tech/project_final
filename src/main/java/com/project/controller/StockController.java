@@ -49,4 +49,17 @@ public class StockController {
 		model.addAttribute("boardTitle", "최저가 갱신");
 		return "stock/stock_list";
 	}
+	@Autowired
+    private com.project.service.HotDealService hotDealService;
+
+    @GetMapping("/analysis")
+    public String stockAnalysis(Model model) {
+        // 1. 역대 최저가 경신 상품 리스트
+        model.addAttribute("lowPriceList", hotDealService.getNewLowProducts());
+        // 2. 전체 핫딜 통계 데이터 (필요 시)
+        model.addAttribute("totalCount", hotDealService.getTotalDealCount());
+        
+        return "stock/analysis";
+    }
+
 }
