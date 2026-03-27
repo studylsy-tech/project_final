@@ -18,19 +18,26 @@
     </div>
 
     <div class="support-form">
-        <form action="#">
-            <label for="name">성함</label>
-            <input type="text" id="name" placeholder="성함을 입력해주세요.">
+    <%-- 1. action 경로를 컨트롤러의 @PostMapping 주소로 설정 --%>
+    <%-- 2. method를 post로 설정 --%>
+    <form action="${path}/footer/support.do" method="post">
+        
+        <label for="user_name">성함</label>
+        <%-- name="user_name" 추가: VO의 필드명과 일치해야 함 --%>
+        <input type="text" id="user_name" name="user_name" placeholder="성함을 입력해주세요." required>
 
-            <label for="email">답변받을 이메일</label>
-            <input type="email" id="email" placeholder="example@email.com">
+        <label for="user_email">답변받을 이메일</label>
+        <%-- name="user_email" 추가: VO의 필드명과 일치해야 함 --%>
+        <input type="email" id="email" name="user_email" placeholder="example@email.com" required>
 
-            <label for="content">문의 내용</label>
-            <textarea id="content" rows="6" placeholder="문의하실 내용을 상세히 적어주세요."></textarea>
+        <label for="user_content">문의 내용</label>
+        <%-- name="user_content" 추가: VO의 필드명과 일치해야 함 --%>
+        <textarea id="user_content" name="user_content" rows="6" placeholder="문의하실 내용을 상세히 적어주세요." required></textarea>
 
-            <button type="button" onclick="alert('문의가 접수되었습니다. (데모 버전)')">문의하기</button>
-        </form>
-    </div>
+        <%-- type을 submit으로 변경하여 폼 전송 활성화 --%>
+        <button type="submit">문의하기</button>
+    </form>
+</div>
 
     <div class="back-btn">
         <a href="${path}/">← 메인으로 돌아가기</a>
