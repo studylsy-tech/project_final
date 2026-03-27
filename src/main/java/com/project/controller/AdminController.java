@@ -19,15 +19,17 @@ public class AdminController {
 
     // 관리자 문의 목록 페이지 (http://localhost:8080/프로젝트명/admin/list.do)
     @GetMapping("/list.do")
-    public String adminInquiryList(Model model) {
-        
-        // 1. DB에서 모든 문의 내역을 가져옵니다.
-        List<FooterInquiryVO> list = footerMapper.selectAllInquiries();
-        
-        // 2. 가져온 리스트를 'inquiryList'라는 이름으로 JSP에 전달합니다.
-        model.addAttribute("inquiryList", list);
-        
-        // 3. /WEB-INF/views/admin/inquiryList.jsp 파일을 찾아서 보여줍니다.
-        return "admin/inquiryList"; 
+public String adminInquiryList(HttpSession session, Model model) {
+    // 세션에서 로그인 정보 확인
+    MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+
+    // 권한 체크: 로그인이 안 되어 있거나 관리자가 아니면 메인으로 리다이렉트
+    if (loginUser == null || !"ADMIN".equals(loginUser.getMemberType())) {
+        return "redirect:/";
     }
+
+    List<FooterInquiryVO> list = footerMapper.selectAllInquiries();
+    model.addAttribute("inquiryList", list);
+    return "admin/inquiryList";
+}
 }
