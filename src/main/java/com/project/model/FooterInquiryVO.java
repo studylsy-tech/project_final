@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class FooterInquiryVO {
-	
+
 	private int inquiry_no;
 	private String user_name;
 	private String user_email;
@@ -12,6 +12,5 @@ public class FooterInquiryVO {
 	private String reply_content;
 	private String status;
 	private String reg_data;
-	
 
 }
