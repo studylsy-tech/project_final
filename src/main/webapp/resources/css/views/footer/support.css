@@ -57,52 +57,63 @@ a { text-decoration: none !important; }
     margin-left: 5px; 
 }
 
-/* 5. 문의 폼 스타일 */
+/* 5. 문의 폼 스타일 - 테두리 및 포커스 효과 강화 */
 .support-form { width: 100%; }
 
-.support-form label { 
-    display: block; 
-    margin-bottom: 10px; 
-    font-weight: 600; 
-    color: #495057;
+.support-form label { 
+    display: block; 
+    margin-bottom: 10px; 
+    font-weight: 600; 
+    color: #495057;
+    transition: color 0.2s; /* 포커스 시 라벨 색상 변화를 위한 전환 */
 }
 
-.support-form input, 
-.support-form textarea { 
-    width: 100% !important; 
-    padding: 14px; 
-    margin-bottom: 25px; 
-    border: 1px solid #ced4da; 
-    border-radius: 6px; 
-    box-sizing: border-box; 
-    font-size: 15px;
-    transition: border-color 0.2s;
+.support-form input, 
+.support-form textarea { 
+    width: 100% !important; 
+    padding: 14px; 
+    margin-bottom: 25px; 
+    border: 2px solid #ced4da; /* 기본 테두리: 회색 (기존 1px에서 2px로 두께 증가 추천) */
+    border-radius: 6px; 
+    box-sizing: border-box; 
+    font-size: 15px;
+    background-color: #ffffff; /* 가독성을 위해 배경은 흰색 유지 */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* 부드러운 변화 효과 */
 }
 
-.support-form input:focus, 
+/* ★★★★★ 핵심 수정 부분 ★★★★★ */
+/* 1. 입력창을 클릭했을 때(Focus 상태) 적용되는 테두리 효과 */
+.support-form input:focus, 
 .support-form textarea:focus {
-    border-color: #007bff;
-    outline: none;
+    border-color: #007bff !important; /* 테두리 색상: 선명한 파란색으로 변경 */
+    box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.15) !important; /* 중요: 은은한 파란색 번짐 효과 추가 (명시도 극대화) */
+    outline: none !important; /* 브라우저 기본 아웃라인 제거 */
+}
+
+/* 2. (선택 사항) 입력 중일 때 해당 입력창 바로 위의 라벨 색상도 파란색으로 변경하여 일관성 부여 */
+.support-form input:focus - label,
+.support-form textarea:focus - label {
+    color: #007bff;
 }
 
 .support-form textarea { resize: none; }
 
 /* 6. 버튼 디자인 */
-.support-form button { 
-    width: 100%; 
-    padding: 16px; 
-    background-color: #556B2F !important; /* 짙은 올리브색으로 변경 */
-    color: white; impotant;
-    border: none; 
-    border-radius: 6px; 
-    font-size: 18px; 
-    font-weight: bold;
-    cursor: pointer; 
-    transition: background-color 0.2s; 
+.support-form button { 
+    width: 100%; 
+    padding: 16px; 
+    background-color: #556B2F !important; 
+    color: white !important; /* 오타 수정: impotant -> important */
+    border: none; 
+    border-radius: 6px; 
+    font-size: 18px; 
+    font-weight: bold;
+    cursor: pointer; 
+    transition: background-color 0.2s; 
 }
 
-.support-form button:hover { 
-    background-color: #3D4A26 !important; /* 마우스 올렸을 때 더 짙은 올리브 */ 
+.support-form button:hover { 
+    background-color: #3D4A26 !important; 
 }
 
 /* 7. 하단 링크 */
