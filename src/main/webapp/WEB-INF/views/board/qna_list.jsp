@@ -29,8 +29,7 @@
         </tbody>
     </table>
 
-    <div class="board-footer">
-        <a href="${path}/board/qnaWrite" class="btn-write">질문하기</a>
-    </div>
-</div>
+    <div class="board-footer" style="width: 75%; margin-left: auto; margin-top: 20px; display: flex; justify-content: flex-end;">
+    <a href="${path}/board/qnaWrite" class="btn-dark">질문하기</a>
+	</div>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
