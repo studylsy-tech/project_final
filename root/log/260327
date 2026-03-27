@@ -1,24 +1,19 @@
-Markdown에서는 글자 크기를 직접 지정하는 HTML 태그가 제한적으로 작동하므로, **헤더(Header)**와 **인용문(Blockquote)**을 활용하여 시각적 위계와 가독성을 극대화한 버전입니다. 
-
----
-
-# ⚠️ [필독] application.properties 충돌 방지 설정
+## ⚠️ [필독] application.properties 충돌 방지 설정
 
 팀 프로젝트 진행 중 DB 비밀번호 등 개인 설정 차이로 발생하는 **Git 충돌(Conflict)**을 방지하기 위한 가이드입니다. 팀원분들께서는 아래 절차를 반드시 수행해 주시기 바랍니다.
 
 ---
 
 ### 🛑 사전 확인 사항
-> **현재 `application.properties`를 수정 중이라면?**
-> 중요한 설정 내용이 있다면 잠시 다른 곳에 **백업**하거나 **커밋(Commit)**을 완료한 후 진행하세요.
+> **현재 `application.properties`를 수정 중이라면?** > 중요한 설정 내용이 있다면 잠시 다른 곳에 **백업**하거나 **커밋(Commit)**을 완료한 후 진행하세요.
 
 ---
 
-## 🛠️ 터미널 입력 명령어
-* (서버 오른쪽 버튼 Show In-System Explorer클릭 이후 자신의 프로젝트 클릭, 터미널 열기)
+### 🛠️ 터미널 입력 명령어
+* (서버 오른쪽 버튼 Show In-System Explorer 클릭 이후 자신의 프로젝트 클릭, 터미널 열기)  
 본인의 **터미널(Terminal)** 또는 **Git Bash**를 열고 아래 명령어를 복사하여 입력합니다.
 
-## `git update-index --assume-unchanged src/main/resources/application.properties`
+# `git update-index --assume-unchanged src/main/resources/application.properties`
 
 ---
 
@@ -30,5 +25,5 @@ Markdown에서는 글자 크기를 직접 지정하는 HTML 태그가 제한적�
 ---
 
 ### 💡 (참고) 설정을 해제하고 싶을 때
-만약 파일 구조 자체가 변경되어 다시 Git에 반영(Push)해야 한다면 아래 명령어를 입력하세요.
+만약 파일 구조 자체가 변경되어 다시 Git에 반영(Push)해야 한다면 아래 명령어를 입력하세요.  
 `git update-index --no-assume-unchanged src/main/resources/application.properties`
