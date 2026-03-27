@@ -1,29 +1,43 @@
-## ⚠️ [필독] application.properties 충돌 방지 설정
+Markdown은 일반적인 워드 프로세서와 달리 폰트 크기를 숫자로 지정(예: 14pt)할 수 없지만, HTML 태그를 사용하거나 헤더의 레벨을 조절하여 시각적으로 크기 차이를 확실하게 줄 수 있습니다.
 
-팀 프로젝트 진행 중 DB 비밀번호 등 개인 설정 차이로 발생하는 **Git 충돌(Conflict)**을 방지하기 위한 가이드입니다. 팀원분들께서는 아래 절차를 반드시 수행해 주시기 바랍니다.
+요청하신 내용을 바탕으로 **가장 중요한 명령어 부분은 압도적으로 크게**, 강조할 부분은 색상과 크기를 조절하여 INTJ 스타일의 명확하고 논리적인 구조로 다시 짜보았습니다.
 
----
+-----
 
-### 🛑 사전 확인 사항
-> **현재 `application.properties`를 수정 중이라면?** > 중요한 설정 내용이 있다면 잠시 다른 곳에 **백업**하거나 **커밋(Commit)**을 완료한 후 진행하세요.
+# \<center\>⚠️ [필독] application.properties 충돌 방지 설정\</center\>
 
----
+팀 프로젝트 진행 중 DB 비밀번호 등 개인 설정 차이로 발생하는 \*\*Git 충돌(Conflict)\*\*을 방지하기 위한 가이드입니다. 팀원분들께서는 아래 절차를 반드시 수행해 주시기 바랍니다.
 
-### 🛠️ 터미널 입력 명령어
-* (서버 오른쪽 버튼 Show In-System Explorer 클릭 이후 자신의 프로젝트 클릭, 터미널 열기)  
-본인의 **터미널(Terminal)** 또는 **Git Bash**를 열고 아래 명령어를 복사하여 입력합니다.
+-----
 
-# `git update-index --assume-unchanged src/main/resources/application.properties`
+### \<font size="5"\>🛑 사전 확인 사항\</font\>
 
----
+> **현재 application.properties를 수정 중이라면?**
+> 중요한 설정 내용이 있다면 잠시 다른 곳에 **백업**하거나 \*\*커밋(Commit)\*\*을 완료한 후 진행하세요.
 
-### ✅ 설정 후 기대 효과
-* **추적 제외**: 위 명령어를 실행하면 로컬의 파일 변경 사항을 Git이 더 이상 감시하지 않습니다.
-* **자유로운 수정**: 이제 본인의 **DB 비밀번호**에 맞춰 파일을 수정해도 `pull` / `push` 시 에러가 발생하지 않습니다.
-* **환경 독립성**: 각자 환경에 맞는 설정을 유지하며 충돌 없이 개발에 집중할 수 있습니다.
+-----
 
----
+### \<font size="5"\>🛠️ 터미널 입력 명령어\</font\>
 
-### 💡 (참고) 설정을 해제하고 싶을 때
-만약 파일 구조 자체가 변경되어 다시 Git에 반영(Push)해야 한다면 아래 명령어를 입력하세요.  
-`git update-index --no-assume-unchanged src/main/resources/application.properties`
+\<font size="3"\>\* 서버 오른쪽 버튼 **Show In-System Explorer** 클릭 → 프로젝트 폴더 진입 → 터미널 열기\</font\>
+
+<br>
+
+# \<center\>\<font size="6" color="\#E74C3C"\>`git update-index --assume-unchanged src/main/resources/application.properties`\</font\>\</center\>
+
+<br>
+
+-----
+
+### \<font size="5"\>✅ 설정 후 기대 효과\</font\>
+
+  * **추적 제외**: 위 명령어를 실행하면 로컬의 파일 변경 사항을 Git이 더 이상 감시하지 않습니다.
+  * **자유로운 수정**: 이제 본인의 **DB 비밀번호**에 맞춰 파일을 수정해도 `pull` / `push` 시 에러가 발생하지 않습니다.
+  * **환경 독립성**: 각자 환경에 맞는 설정을 유지하며 충돌 없이 개발에 집중할 수 있습니다.
+
+-----
+
+### \<font size="4"\>💡 (참고) 설정을 해제하고 싶을 때\</font\>
+
+파일 구조 자체가 변경되어 다시 Git에 반영(Push)해야 한다면 아래 명령어를 입력하세요.
+`<font size="4">git update-index --no-assume-unchanged src/main/resources/application.properties</font>`
