@@ -1,19 +1,16 @@
-# ⚠️ [필독] application.properties 충돌 방지 설정
+application.properties 설정 파일 충돌 방지 가이드
+팀 프로젝트 진행 시 각자의 로컬 DB 환경(비밀번호 등) 차이로 발생하는 pull/push 충돌을 방지하기 위한 설정입니다. 아래 절차를 따라 터미널에 명령어를 입력해 주세요.
 
-팀 프로젝트 진행 중 DB 비밀번호 등 개인 설정 차이로 발생하는 **Git 충돌(Conflict)**을 방지하기 위한 가이드입니다. 팀원분들께서는 아래 절차를 반드시 수행해 주시기 바랍니다.
+⚠️ 사전 주의사항
+현재 application.properties 파일을 수정 중인 내용이 있다면, 명령어를 입력하기 전에 반드시 내용을 별도로 백업하거나 **커밋(Commit)**을 완료해 주시기 바랍니다.
 
----
+🚀 설정 방법
+* 서버 오른쪽 버튼 Show In-System Explorer 클릭 → 프로젝트 폴더 진입 → 터미널 열기
+터미널 또는 Git Bash를 열고 아래 명령어를 복사하여 입력하세요.
 
-### 🛑 사전 확인 사항
-> **현재 application.properties를 수정 중이라면?**
-> 중요한 설정 내용이 있다면 잠시 다른 곳에 **백업**하거나 **커밋(Commit)**을 완료한 후 진행하세요.
-
----
-
-### 🛠️ 터미널 입력 명령어
-* 서버 우클릭 → **Show In-System Explorer** 클릭 → 프로젝트 폴더 진입 → 터미널 열기
-
-# 📋 핵심 명령어 (가장 중요)
-
-```bash
+Bash
 git update-index --assume-unchanged src/main/resources/application.properties
+💡 설정 결과
+이 명령어를 입력한 후에는 로컬에서 본인의 DB 계정 및 비밀번호에 맞춰 파일을 수정하더라도, Git이 변경 사항을 추적하지 않습니다.
+
+따라서 pull 또는 push 시에 설정 파일로 인한 충돌(Conflict) 에러가 발생하지 않으며, 각자의 환경에 맞게 자유롭게 수정하여 사용할 수 있습니다.
