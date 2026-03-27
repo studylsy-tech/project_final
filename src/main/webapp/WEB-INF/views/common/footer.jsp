@@ -15,6 +15,7 @@
     <div class="copyright">
         &copy; 2026 Price Tracking Platform. All rights reserved.<br>
         팀 프로젝트: 가격 추적 서비스 | 부산광역시...
+        문의: <a href="mailto:pafagolu.gmail.com" style="color: #bbb; text-decoration: none;">admin@pricetrack.com</a>
     </div>
 </footer>
 
