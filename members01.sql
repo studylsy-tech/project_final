@@ -1,22 +1,33 @@
+--기존 테이블 삭제
+DROP TABLE MEMBERS;
+
+-- 새 테이블 작성
 CREATE TABLE MEMBERS (
-    PHONE       VARCHAR2(20) PRIMARY KEY, -- 휴대폰 번호 (아이디 대용)
-    PW          VARCHAR2(100) NOT NULL,   -- 비밀번호
-    NAME        VARCHAR2(50),             -- 이름
-    EMAIL       VARCHAR2(100),            -- 이메일
-    BIRTH       VARCHAR2(20),             -- 생년월일 (DTO가 String이므로)
-    GENDER      VARCHAR2(10),             -- 성별 (M/F)
-    MEMBER_TYPE VARCHAR2(10) DEFAULT 'SEMI' -- 반회원/정회원 구분
+    PHONE         VARCHAR2(20) PRIMARY KEY, -- 아이디 역할을 하므로 PK는 유지
+    PW            VARCHAR2(100),            -- NOT NULL 제거
+    NAME          VARCHAR2(50),             -- NOT NULL 제거 (준회원 가입 에러 해결)
+    NICKNAME      VARCHAR2(50),
+    EMAIL         VARCHAR2(100),            -- UNIQUE 제거 (중복 이메일 허용)
+    ADDRESS       VARCHAR2(300),
+    MEMBER_TYPE   VARCHAR2(20) DEFAULT 'SEMI',
+    CREATED_AT    DATE DEFAULT SYSDATE
 );
 
--- 회원 목록 조회
+-- 관리자 계정 생성
+INSERT INTO MEMBERS (PHONE, PW, NAME, NICKNAME, EMAIL, ADDRESS, MEMBER_TYPE) 
+VALUES ('01099999999', '12345', '관리자', '최고관리자', 'admin@test.com', '서울특별시 강남구', 'ADMIN');
+
+-- 테스트용 관리자 계정
+INSERT INTO MEMBERS (PHONE, PW, NAME, NICKNAME, EMAIL, ADDRESS, MEMBER_TYPE) 
+VALUES ('1', '1', '관리자', '관리자1', 'test_admin@test.com', '비공개', 'ADMIN');
+-- 변경사항 확정
+COMMIT;
+
+-- 회원 목록 전체 조회
 SELECT * FROM MEMBERS;
 
--- 관리자 계정 생성
-INSERT INTO MEMBERS (PHONE, PW, NAME, EMAIL, BIRTH, GENDER, MEMBER_TYPE) 
-VALUES ('01099999999', '12345', '관리자', 'admin@test.com', '1990-01-01', 'M', 'ADMIN');
-INSERT INTO MEMBERS (PHONE, PW, NAME, EMAIL, BIRTH, GENDER, MEMBER_TYPE) 
-VALUES ('1', '1', '관리자', 'admin@test.com', '1990-01-01', 'M', 'ADMIN');
--- 아이디 1인 계정 삭제
+-- 특정 계정 삭제 (PHONE이 1인 계정)
 DELETE FROM MEMBERS WHERE PHONE = '1';
--- 관리자 계정 생성 후 저장
-COMMIT
+
+-- 삭제 후 저장
+COMMIT;

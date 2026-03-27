@@ -30,5 +30,14 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     <select id="loginCheck" parameterType="com.project.model.MemberDTO" resultMap="MemberResultMap">
         SELECT * FROM MEMBERS WHERE PHONE = #{phone} AND PW = #{pw}
     </select>
-    
+    <select id="getBoardList" parameterType="string" resultType="com.project.model.BoardDTO">
+    SELECT * FROM BOARD 
+    WHERE BOARD_TYPE = #{board_type} 
+    ORDER BY NOTICE_NO DESC
+</select>
+
+<insert id="insertBoard" parameterType="com.project.model.BoardDTO">
+    INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
+    VALUES (#{title}, #{content}, #{writer}, #{board_type})
+</insert>
 </mapper>
