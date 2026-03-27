@@ -1,28 +1,32 @@
-마크다운 뷰어(GitHub, Notion, IntelliJ 등)의 렌더링 방식에 따라 <font size="..."> 태그가 작동하지 않는 경우가 많습니다. 특히 최신 마크다운 엔진들은 보안과 표준화를 이유로 HTML 태그 지원을 제한하기 때문입니다.
+# ⚠️ [필독] application.properties 충돌 방지 설정
 
-HTML 태그가 먹히지 않는 환경에서도 **시각적인 위계(크기 차이)**를 확실하게 느낄 수 있도록, 마크다운 표준 문법인 **Header(#)**와 Code Block을 조합하여 직관적으로 재구성했습니다.
-
-⚠️ [필독] application.properties 충돌 방지 설정
 팀 프로젝트 진행 중 DB 비밀번호 등 개인 설정 차이로 발생하는 **Git 충돌(Conflict)**을 방지하기 위한 가이드입니다. 팀원분들께서는 아래 절차를 반드시 수행해 주시기 바랍니다.
 
-🛑 사전 확인 사항
-현재 application.properties를 수정 중이라면?
-중요한 설정 내용이 있다면 잠시 다른 곳에 백업하거나 **커밋(Commit)**을 완료한 후 진행하세요.
+---
 
-🛠️ 터미널 입력 명령어
-서버 오른쪽 버튼 Show In-System Explorer 클릭 → 프로젝트 폴더 진입 → 터미널 열기
+### 🛑 사전 확인 사항
+> **현재 application.properties를 수정 중이라면?**
+> 중요한 설정 내용이 있다면 잠시 다른 곳에 **백업**하거나 **커밋(Commit)**을 완료한 후 진행하세요.
 
-아래 명령어를 복사하여 입력합니다.
+---
 
-git update-index --assume-unchanged src/main/resources/application.properties
-✅ 설정 후 기대 효과
-추적 제외: 위 명령어를 실행하면 로컬의 파일 변경 사항을 Git이 더 이상 감시하지 않습니다.
+### 🛠️ 터미널 입력 명령어
+* 서버 오른쪽 버튼 **Show In-System Explorer** 클릭 → 프로젝트 폴더 진입 → 터미널 열기
 
-자유로운 수정: 이제 본인의 DB 비밀번호에 맞춰 파일을 수정해도 pull / push 시 에러가 발생하지 않습니다.
+## 📋 핵심 명령어 (복사하여 사용)
 
-환경 독립성: 각자 환경에 맞는 설정을 유지하며 충돌 없이 개발에 집중할 수 있습니다.
+<h1>git update-index --assume-unchanged src/main/resources/application.properties</h1>
 
-💡 (참고) 설정을 해제하고 싶을 때
+---
+
+### ✅ 설정 후 기대 효과
+* **추적 제외**: 위 명령어를 실행하면 로컬의 파일 변경 사항을 Git이 더 이상 감시하지 않습니다.
+* **자유로운 수정**: 이제 본인의 **DB 비밀번호**에 맞춰 파일을 수정해도 `pull` / `push` 시 에러가 발생하지 않습니다.
+* **환경 독립성**: 각자 환경에 맞는 설정을 유지하며 충돌 없이 개발에 집중할 수 있습니다.
+
+---
+
+### 💡 (참고) 설정을 해제하고 싶을 때
 파일 구조 자체가 변경되어 다시 Git에 반영(Push)해야 한다면 아래 명령어를 입력하세요.
 
-git update-index --no-assume-unchanged src/main/resources/application.properties
+`git update-index --no-assume-unchanged src/main/resources/application.properties`
