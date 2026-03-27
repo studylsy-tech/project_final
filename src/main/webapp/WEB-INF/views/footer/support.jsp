@@ -7,17 +7,41 @@
 
 <%-- 고객센터 전용 CSS 연결 --%>
 <link rel="stylesheet" href="${path}/resources/css/views/footer/support.css">
-
-<div class="support-container">
-    <h1>고객센터</h1>
-
-    <div class="contact-info">
-        <p>📧 이메일 문의: <a href="mailto:webmaster@koreate.net">webmaster@koreate.net</a></p>
-        <p>⏰ 운영시간: 평일 09:00 ~ 18:00 (주말/공휴일 휴무)</p>
-        <p>📍 위치: 부산광역시... (팀 프로젝트 사무실)</p>
+	<div class="support-container">
+    <div class="support-header">
+        <h1>고객센터</h1>
+        <p class="subtitle">서비스 이용 중 불편한 점이나 궁금한 점을 알려주세요.</p>
     </div>
 
-    <div class="support-form">
+    <div class="contact-info">
+        <div class="info-item">
+            <span class="icon">📞</span>
+            <span class="label">대표 전화:</span>
+            <span class="value">051-123-4567</span>
+        </div>
+        <div class="info-item">
+            <span class="icon">💬</span>
+            <span class="label">카카오 채널:</span>
+            <span class="value">@STOCK_ALARM</span>
+        </div>
+        <div class="info-item">
+            <span class="icon">⏰</span>
+            <span class="label">운영시간:</span>
+            <span class="value">평일 09:00 ~ 18:00 (주말/공휴일 휴무)</span>
+        </div>
+        <div class="info-item">
+            <span class="icon">🍽️</span>
+            <span class="label">점심시간:</span>
+            <span class="value">12:00 ~ 13:00 (상담이 제한될 수 있습니다)</span>
+        </div>
+        <div class="info-item">
+            <span class="icon">📍</span>
+            <span class="label">위치:</span>
+            <span class="value">부산광역시 충렬대로 미남역 3번 출구 ~> 도보 5분)</span>
+        </div>
+    </div>
+    
+     <div class="support-form">
     <%-- 1. action 경로를 컨트롤러의 @PostMapping 주소로 설정 --%>
     <%-- 2. method를 post로 설정 --%>
     <form action="${path}/footer/support.do" method="post">
@@ -46,3 +70,6 @@
 
 <%-- 공통 푸터 포함 --%>
 <jsp:include page="/WEB-INF/views/common/footer.jsp" />
+
+
+    
