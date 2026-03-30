@@ -141,5 +141,19 @@ public class MemberController {
         } else {
             return "redirect:/member/update"; 
         }
+        
+    }
+ // 알림 설정 페이지 이동
+    @GetMapping("/notification")
+    public String notificationPage(HttpSession session, Model model) {
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+
+        // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
+        if (loginUser == null) {
+            return "redirect:/member/login";
+        }
+
+        model.addAttribute("user", loginUser); 
+        return "member/notification_settings";
     }
 }
