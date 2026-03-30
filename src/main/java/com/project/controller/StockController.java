@@ -8,58 +8,54 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.project.model.ProductDTO;
-import com.project.service.ProductService; // 1. 임포트 확인
+import com.project.service.ProductService;
+import com.project.service.HotDealService; // 서비스 임포트 확인
 
 @Controller
 @RequestMapping("/stock")
 public class StockController {
 
-	@Autowired
-	private ProductService productService; // 2. 의존성 주입 확인
+    @Autowired
+    private ProductService productService;
 
-	@GetMapping("/all")
-	public String allStocks(Model model) {
-		// productService를 사용하여 데이터 호출
-		List<ProductDTO> list = productService.findAllProducts();
-		model.addAttribute("stockList", list);
-		model.addAttribute("boardTitle", "전체 상품 목록");
-		return "stock/stock_list";
-	}
+    @Autowired
+    private HotDealService hotDealService; // 필드 주입 위치 통합
 
-	@GetMapping("/drop")
-	public String dropStocks(Model model) {
-		List<ProductDTO> list = productService.findDropProducts();
-		model.addAttribute("stockList", list);
-		model.addAttribute("boardTitle", "오늘의 급락 상품");
-		return "stock/stock_list";
-	}
+    @GetMapping("/all")
+    public String allStocks(Model model) {
+        List<ProductDTO> list = productService.findAllProducts();
+        model.addAttribute("stockList", list);
+        model.addAttribute("boardTitle", "전체 상품 목록");
+        return "stock/stock_list";
+    }
 
-	// StockController.java 에 추가
-	@GetMapping("/analysis")
-	public String analysisStocks(Model model) {
-		// 현재는 데이터가 없으므로 빈 리스트 전달 혹은 서비스 호출
-		model.addAttribute("boardTitle", "자동 분석 리포트");
-		return "stock/stock_list";
-	}
+    @GetMapping("/drop")
+    public String dropStocks(Model model) {
+        List<ProductDTO> list = productService.findDropProducts();
+        model.addAttribute("stockList", list);
+        model.addAttribute("boardTitle", "오늘의 급락 상품");
+        return "stock/stock_list";
+    }
 
-	@GetMapping("/new-low")
-	public String newLowStocks(Model model) {
-		List<ProductDTO> list = productService.findNewLowProducts();
-		model.addAttribute("stockList", list);
-		model.addAttribute("boardTitle", "최저가 갱신");
-		return "stock/stock_list";
-	}
-	@Autowired
-    private com.project.service.HotDealService hotDealService;
-
+    // 두 메서드를 하나로 통합한 분석 메서드
     @GetMapping("/analysis")
     public String stockAnalysis(Model model) {
-        // 1. 역대 최저가 경신 상품 리스트
+        // 1. 기존의 제목 설정 기능 통합
+        model.addAttribute("boardTitle", "자동 분석 리포트");
+
+        // 2. 새로운 핫딜 및 최저가 데이터 추가
         model.addAttribute("lowPriceList", hotDealService.getNewLowProducts());
-        // 2. 전체 핫딜 통계 데이터 (필요 시)
         model.addAttribute("totalCount", hotDealService.getTotalDealCount());
         
+        // 3. 리턴 페이지 결정 (분석 전용 페이지인 stock/analysis로 이동)
         return "stock/analysis";
     }
 
+    @GetMapping("/new-low")
+    public String newLowStocks(Model model) {
+        List<ProductDTO> list = productService.findNewLowProducts();
+        model.addAttribute("stockList", list);
+        model.addAttribute("boardTitle", "최저가 갱신");
+        return "stock/stock_list";
+    }
 }
