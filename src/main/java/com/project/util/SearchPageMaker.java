@@ -45,9 +45,3 @@ public class SearchPageMaker extends PageMaker{
 	
 
 }
-
-
-
-
-
-

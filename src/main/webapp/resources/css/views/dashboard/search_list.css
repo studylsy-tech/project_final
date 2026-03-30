@@ -1,0 +1,38 @@
+/* 검색 결과 없음 컨테이너 */
+.no-result-container {
+    padding: 80px 20px;
+    text-align: center;
+    background-color: #f9f9f9; /* 살짝 밝은 배경으로 영역 구분 */
+    border-radius: 10px;
+    margin: 20px 0;
+}
+
+/* 이미지 스타일 */
+.no-result-img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 20px;
+    opacity: 0.7; /* 너무 튀지 않게 조절 */
+}
+
+/* 제목 스타일 */
+.no-result-title {
+    font-size: 22px;
+    color: #1a2a44; /* 프로젝트 메인 컬러 */
+    margin-bottom: 10px;
+}
+
+/* 설명 문구 스타일 */
+.no-result-text {
+    font-size: 16px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* 버튼 그룹 스타일 */
+.no-result-actions .start-btn {
+    display: inline-block;
+    text-decoration: none;
+    /* index.css의 .start-btn 스타일이 적용되도록 유도 */
+}
