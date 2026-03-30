@@ -3,65 +3,70 @@
 <c:set var="path" value="${pageContext.request.contextPath}" />
 
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-<link rel="stylesheet" href="${path}/resources/css/views/member/info.css">
+
 <link rel="stylesheet" href="${path}/resources/css/views/member/notification.css">
 
-<div class="mypage-wrapper">
-    <div class="mypage-header">
-        <h2 class="main-title">마이페이지</h2>
-        <div class="tab-container">
-            <a href="${path}/member/info" class="tab-item">내 정보 확인</a>
-            <a href="${path}/member/notification" class="tab-item active">알림 설정</a>
-        </div>
-    </div>
+<div class="main-content">
+    <div class="settings-container">
+        <h2 class="settings-title">알림 설정</h2>
 
-    <div class="notif-content-box">
-        <%-- ① 상단 요약 카드 영역 --%>
-        <div class="summary-section">
-            <div class="summary-card tracking">
-                <div class="card-title">① 추적중인 상품</div>
-                <div class="card-value">12</div>
-            </div>
-            <div class="summary-card goal">
-                <div class="card-title">목표가 도달</div>
-                <div class="card-value">3</div>
-            </div>
-            <div class="summary-card lowest">
-                <div class="card-title">이번 달 최저가</div>
-                <div class="card-value">5</div>
-            </div>
+        <%-- ① 알림 잔여 슬롯 --%>
+        <div class="slot-info-box">
+            ① 알림 잔여 슬롯 : 7 / 10 (쿠폰 사용 시 추가 가능)
         </div>
 
-        <%-- ② 관심 상품 목록 영역 --%>
-        <div class="list-section">
-            <div class="section-header">
-                <h3>② 관심 상품 목록</h3>
-                <button class="btn-add-item">+ 상품 추가</button>
+        <form action="${path}/member/updateNotification" method="post">
+            <%-- ② 수신 이메일 주소 --%>
+            <div class="setting-section">
+                <label class="section-label">② 수신 이메일 주소</label>
+                <div class="email-input-group">
+                    <input type="email" name="email" value="${loginUser.email}" placeholder="user@example.com" readonly>
+                    <button type="button" class="btn-change">변경 저장</button>
+                </div>
             </div>
-            <div class="product-list">
-                <div class="product-item">
-                    <div class="item-info">Apple MacBook Pro M4</div>
-                    <div class="item-prices">
-                        <span>현재 ₩2,290,000</span>
-                        <span>목표 ₩2,100,000</span>
-                        <span class="price-down">▼ 2.1%</span>
-                    </div>
-                    <div class="item-status"><span class="badge tracking">추적중</span></div>
-                </div>
-                </div>
-        </div>
 
-        <%-- ③ 최근 알림 내역 영역 --%>
-        <div class="notification-section">
-            <div class="section-header-box">
-                <h3>③ 최근 알림 내역</h3>
-            </div>
-            <div class="notif-list">
-                <div class="notif-item">
-                    <span class="notif-text">MacBook Pro M4 – 목표가 ₩2,100,000 도달! (2026.03.22 14:30)</span>
+            <%-- ③ 알림 유형 선택 --%>
+            <div class="setting-section">
+                <label class="section-label">③ 알림 유형 선택</label>
+                
+                <div class="noti-item">
+                    <span>목표가 도달 알림</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="goal_alarm" value="Y" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="noti-item">
+                    <span>최저가 갱신 알림 (역대)</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="lowest_alarm" value="Y" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="noti-item">
+                    <span>주간 가격 요약 리포트</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="weekly_report" value="Y">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="noti-item">
+                    <span>마케팅·이벤트 알림</span>
+                    <label class="toggle-switch">
+                        <input type="checkbox" name="marketing_alarm" value="Y">
+                        <span class="slider"></span>
+                    </label>
                 </div>
             </div>
-        </div>
+
+            <%-- ④ 설정 저장 버튼 --%>
+            <div class="btn-area">
+                <button type="submit" class="btn-submit-all">④ 설정 저장</button>
+            </div>
+        </form>
     </div>
 </div>
 

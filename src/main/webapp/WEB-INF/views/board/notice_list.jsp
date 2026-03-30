@@ -1,4 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<c:set var="path" value="${pageContext.request.contextPath}" />
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <link rel="stylesheet" href="${path}/resources/css/views/board/board.css">
 
@@ -12,25 +14,49 @@
         <thead>
             <tr>
                 <th style="width: 10%;">번호</th>
-                <th style="width: 60%;">제목</th>
+                <th style="width: 50%;">제목</th>
+                <th style="width: 15%;">작성자</th>
                 <th style="width: 15%;">날짜</th>
-                <th style="width: 15%;">조회수</th>
+                <th style="width: 10%;">조회수</th>
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td><span class="badge badge-notice bg-red">공지</span></td>
-                <td class="title-cell text-left"><a href="#">서비스 이용 가이드 및 공지사항</a></td>
-                <td>2026-03-25</td>
-                <td>152</td>
-            </tr>
+            <c:choose>
+                <c:when test="${not empty list}">
+                    <c:forEach var="board" items="${list}">
+                        <tr>
+                            <%-- IDENTITY COLUMN으로 생성된 번호 출력 --%>
+                            <td>${board.notice_no}</td>
+                            <td class="title-cell text-left">
+                                <%-- 상세 페이지 이동 시 notice_no 파라미터 전달 --%>
+                                <a href="${path}/board/detail?notice_no=${board.notice_no}">
+                                    <c:if test="${board.board_type == 'NOTICE'}">
+                                        <span class="badge badge-notice bg-red" style="margin-right:5px;">공지</span>
+                                    </c:if>
+                                    <c:out value="${board.title}" />
+                                </a>
+                            </td>
+                            <td>${board.writer}</td>
+                            <td>${board.indate}</td>
+                            <td>${board.count}</td>
+                        </tr>
+                    </c:forEach>
+                </c:when>
+                <c:otherwise>
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 50px 0;">등록된 공지사항이 없습니다.</td>
+                    </tr>
+                </c:otherwise>
+            </c:choose>
         </tbody>
     </table>
 
+    <%-- 관리자(ADMIN) 권한 확인 후 등록 버튼 노출 --%>
     <c:if test="${loginUser.memberType == 'ADMIN'}">
-        <div class="board-footer">
-            <a href="${path}/board/write" class="btn-dark">공지등록</a>
+        <div class="board-footer" style="text-align: right; margin-top: 20px;">
+            <a href="${path}/board/write?type=NOTICE" class="btn-dark">공지등록</a>
         </div>
     </c:if>
 </div>
+
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>

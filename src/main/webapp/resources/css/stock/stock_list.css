@@ -1,89 +1,114 @@
 @charset "UTF-8";
 
-/* 배경 및 기본 레이아웃 */
-body { 
-    background-color: #f0f2f5; 
-    color: #333; 
-    margin: 0;
-}
-
+/* [1] 기본 레이아웃 - 너비 800px 강제 적용 */
 .board-wrapper {
-    max-width: 1000px;
-    margin: 50px auto;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    /* 다른 스타일보다 우선순위를 높이기 위해 !important를 추가했습니다. */
+    max-width: 800px !important; 
+    margin: 60px auto;
+    padding: 0 20px;
+    font-family: 'Pretendard', sans-serif;
 }
 
 .board-wrapper h2 {
-    font-size: 22px;
-    font-weight: 700;
+    text-align: left;
     color: #1a2a44;
     margin-bottom: 30px;
     border-bottom: 2px solid #1a2a44;
-    padding-bottom: 10px;
+    padding-bottom: 15px;
 }
 
-/* 가로형 카드 컨테이너 (이미지 2번 형태) */
+/* [2] 카드 컨테이너 스타일 */
 .stock-list-container {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 15px;
 }
 
-/* 개별 카드 스타일 */
+/* [3] 개별 카드 - .stock-card 구조 유지 */
 .stock-card {
     display: flex;
     align-items: center;
-    padding: 15px 20px;
+    padding: 20px 25px;
     background-color: #fff;
     border: 1px solid #e1e4e8;
-    border-radius: 4px;
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .stock-card:hover {
-    background-color: #f8fbff;
+    background-color: #fcfdfe;
     border-color: #1a2a44;
-    transform: translateX(5px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
-/* 왼쪽 배지 */
+/* [4] 배지 색상 연동 */
 .badge {
-    width: 60px;
-    padding: 6px 0;
+    width: 65px;
+    padding: 8px 0;
     text-align: center;
-    border-radius: 3px;
-    font-size: 12px;
+    border-radius: 5px;
+    font-size: 13px;
     font-weight: bold;
-    color: #fff;
-    margin-right: 20px;
+    color: #fff !important;
+    margin-right: 25px;
 }
 
-.bg-red { background-color: #e74c3c; }   /* 급락 */
-.bg-blue { background-color: #3498db; }  /* 갱신 */
-.bg-green { background-color: #27ae60; } /* 자동 */
+/* 급락: 빨간색 */
+.bg-red { background-color: #e74c3c !important; }
 
-/* 상품 정보 영역 */
+/* 갱신: 초록색 */
+.bg-blue, .bg-green { background-color: #27ae60 !important; }
+
+/* [5] 상품 정보 영역 */
 .prod-info {
     flex: 1;
 }
 
 .prod-main-text {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: 600;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     color: #2c3e50;
 }
 
 .prod-sub-text {
-    font-size: 13px;
-    color: #7f8c8d;
+    font-size: 14px;
+    color: #95a5a6;
 }
 
+/* [6] 가격 강조 - 연한 파란색 글씨만 적용 */
 .price-highlight {
-    color: #e74c3c;
-    font-weight: bold;
+    background-color: transparent !important; 
+    color: #3498db !important;
+    font-weight: 800;
+    margin-left: 5px;
+    display: inline-block;
+}
+
+/* [7] 하단 질문하기 버튼 (75% 크기 및 오른쪽 정렬) */
+.board-footer {
+    margin-top: 30px;
+    display: flex;
+    justify-content: flex-end; 
+}
+
+.btn-dark {
+    background-color: #1a2a44;
+    color: #fff !important;
+    padding: 15px 0;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 700;
+    
+    width: 75%;            
+    display: block;        
+    text-align: center;    
+    box-sizing: border-box; 
+    
+    transition: background-color 0.3s;
+}
+
+.btn-dark:hover {
+    background-color: #34495e;
 }

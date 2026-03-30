@@ -4,10 +4,10 @@
 
     <select id="findAllProducts" resultType="com.project.model.ProductDTO">
         SELECT 
-            PROD_ID as prodId,
-            PROD_CODE as prodCode,
-            PROD_NAME as name,
-            PROD_PRICE as price,
+            PROD_ID as prodId, 
+            PROD_CODE as prodCode, 
+            PROD_NAME as name, 
+            PROD_PRICE as price, 
             REG_DATE as regDate
         FROM Common_Product
         ORDER BY REG_DATE DESC
@@ -49,50 +49,72 @@
         )
         ORDER BY p.REG_DATE DESC
     </select>
-    
-	<select id="listSearch" resultType="com.project.model.ProductDTO">
-	    <![CDATA[
-	    SELECT * FROM (
-	        SELECT rownum rn, a.* FROM (
-	            SELECT 
-	                PROD_ID as prodId, PROD_CODE as prodCode, PROD_NAME as name, 
-	                PROD_PRICE as price, REG_DATE as regDate
-	            FROM Common_Product p
-	            WHERE 1=1
-	    ]]>
-	            <choose>
-	                <when test="searchType == 'drop'">
-	                    AND EXISTS (SELECT 1 FROM (SELECT PROD_ID, PRICE, ROW_NUMBER() OVER(PARTITION BY PROD_ID ORDER BY REG_DATE DESC) as rn FROM PRICE_HISTORY) h 
-	                                WHERE h.PROD_ID = p.PROD_ID AND h.rn = 2 AND ((h.PRICE - p.PROD_PRICE) / h.PRICE * 100) >= 10)
-	                </when>
-	                <when test="searchType == 'low'">
-	                    AND p.PROD_PRICE = (SELECT MIN(PRICE) FROM PRICE_HISTORY WHERE PROD_ID = p.PROD_ID)
-	                </when>
-	            </choose>
-	            <if test="keyword != null and keyword != ''">
-	                AND p.PROD_NAME LIKE '%'||#{keyword}||'%'
-	            </if>
-	    <![CDATA[
-	            ORDER BY p.REG_DATE DESC
-	        ) a WHERE rownum <= #{page} * #{perPageNum}
-	    ) WHERE rn > (#{page} - 1) * #{perPageNum}
-	    ]]>
-	</select>
 
-	<select id="listSearchCount" resultType="int">
-	    SELECT count(*) FROM Common_Product p
-	    WHERE 1=1
-	    <choose>
-	        <when test="searchType == 'drop'">
-	            AND EXISTS (SELECT 1 FROM (SELECT PROD_ID, PRICE, ROW_NUMBER() OVER(PARTITION BY PROD_ID ORDER BY REG_DATE DESC) as rn FROM PRICE_HISTORY) h 
-	                        WHERE h.PROD_ID = p.PROD_ID AND h.rn = 2 AND ((h.PRICE - p.PROD_PRICE) / h.PRICE * 100) >= 10)
-	        </when>
-	        <when test="searchType == 'low'">
-	            AND p.PROD_PRICE = (SELECT MIN(PRICE) FROM PRICE_HISTORY WHERE PROD_ID = p.PROD_ID)
-	        </when>
-	    </choose>
-	    <if test="keyword != null and keyword != ''">
-	        AND p.PROD_NAME LIKE '%'||#{keyword}||'%'
-	    </if>
-	</select>
+    <select id="listSearch" resultType="com.project.model.ProductDTO">
+        <![CDATA[
+        SELECT * FROM (
+            SELECT rownum rn, a.* FROM (
+                SELECT 
+                    PROD_ID as prodId, PROD_CODE as prodCode, PROD_NAME as name, 
+                    PROD_PRICE as price, REG_DATE as regDate
+                FROM Common_Product p
+                WHERE 1=1
+        ]]>
+                <choose>
+                    <when test="searchType == 'drop'">
+                        AND EXISTS (SELECT 1 FROM (SELECT PROD_ID, PRICE, ROW_NUMBER() OVER(PARTITION BY PROD_ID ORDER BY REG_DATE DESC) as rn FROM PRICE_HISTORY) h 
+                                    WHERE h.PROD_ID = p.PROD_ID AND h.rn = 2 AND ((h.PRICE - p.PROD_PRICE) / h.PRICE * 100) >= 10)
+                    </when>
+                    <when test="searchType == 'low'">
+                        AND p.PROD_PRICE = (SELECT MIN(PRICE) FROM PRICE_HISTORY WHERE PROD_ID = p.PROD_ID)
+                    </when>
+                </choose>
+                <if test="keyword != null and keyword != ''">
+                    AND p.PROD_NAME LIKE '%'||#{keyword}||'%'
+                </if>
+        <![CDATA[
+                ORDER BY p.REG_DATE DESC
+            ) a WHERE rownum <= #{page} * #{perPageNum}
+        ) WHERE rn > (#{page} - 1) * #{perPageNum}
+        ]]>
+    </select>
+
+    <select id="listSearchCount" resultType="int">
+        SELECT count(*) FROM Common_Product p
+        WHERE 1=1
+        <choose>
+            <when test="searchType == 'drop'">
+                AND EXISTS (SELECT 1 FROM (SELECT PROD_ID, PRICE, ROW_NUMBER() OVER(PARTITION BY PROD_ID ORDER BY REG_DATE DESC) as rn FROM PRICE_HISTORY) h 
+                            WHERE h.PROD_ID = p.PROD_ID AND h.rn = 2 AND ((h.PRICE - p.PROD_PRICE) / h.PRICE * 100) >= 10)
+            </when>
+            <when test="searchType == 'low'">
+                AND p.PROD_PRICE = (SELECT MIN(PRICE) FROM PRICE_HISTORY WHERE PROD_ID = p.PROD_ID)
+            </when>
+        </choose>
+        <if test="keyword != null and keyword != ''">
+            AND p.PROD_NAME LIKE '%'||#{keyword}||'%'
+        </if>
+    </select>
+
+    <select id="findHotdealLowProducts" resultType="com.project.model.ProductDTO">
+        SELECT 
+            T.DEAL_ID as prodId,
+            T.TITLE as name,
+            T.CURRENT_PRICE as price,
+            T.ORIGIN_URL as originUrl,
+            T.MALL_NAME as mallName,
+            T.LAST_UPDATE_DATE as lastUpdateDate
+        FROM TB_HOTDEAL_TRACKER T
+        WHERE T.CURRENT_PRICE = (
+            SELECT MIN(PRICE) 
+            FROM TB_PRICE_HISTORY H 
+            WHERE H.DEAL_ID = T.DEAL_ID
+        )
+        ORDER BY T.LAST_UPDATE_DATE DESC
+    </select>
+
+    <select id="getTotalDealCount" resultType="_int">
+        SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
+    </select>
+
 </mapper>

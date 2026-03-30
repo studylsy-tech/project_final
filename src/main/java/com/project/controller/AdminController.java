@@ -1,33 +1,72 @@
 package com.project.controller;
 
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody; // ResponseBody import 추가
 
 import com.project.dao.FooterMapper;
 import com.project.model.FooterInquiryVO;
+import com.project.model.MemberDTO;
+import com.project.service.HotDealService; // Service import 추가
 
 @Controller
-@RequestMapping("/admin") // 모든 경로는 /admin으로 시작합니다.
+@RequestMapping("/admin")
 public class AdminController {
 
     @Autowired
     private FooterMapper footerMapper;
 
-    // 관리자 문의 목록 페이지 (http://localhost:8080/프로젝트명/admin/list.do)
+    @Autowired
+    private HotDealService hotDealService; // 필드 선언 위치를 클래스 상단으로 이동
+
+    // 1. 관리자 메인 페이지
+    @GetMapping("/main")
+    public String adminMain(HttpSession session) {
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        if (loginUser == null || !"ADMIN".equals(loginUser.getMemberType())) {
+            return "redirect:/member/login";
+        }
+        return "admin/main";
+    }
+
+    // 2. 관리자 문의 목록 페이지
     @GetMapping("/list.do")
-    public String adminInquiryList(Model model) {
-        
-        // 1. DB에서 모든 문의 내역을 가져옵니다.
+    public String adminInquiryList(HttpSession session, Model model) {
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        if (loginUser == null || !"ADMIN".equals(loginUser.getMemberType())) {
+            return "redirect:/";
+        }
+
         List<FooterInquiryVO> list = footerMapper.selectAllInquiries();
-        
-        // 2. 가져온 리스트를 'inquiryList'라는 이름으로 JSP에 전달합니다.
         model.addAttribute("inquiryList", list);
-        
-        // 3. /WEB-INF/views/admin/inquiryList.jsp 파일을 찾아서 보여줍니다.
         return "admin/inquiryList"; 
     }
-}
+
+    // 3. 크롤링 관리 페이지 이동
+    @GetMapping("/crawling_manage")
+    public String crawlingManage(HttpSession session) {
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        if (loginUser == null || !"ADMIN".equals(loginUser.getMemberType())) {
+            return "redirect:/member/login";
+        }
+        return "admin/crawling_manage";
+    }
+
+    // 4. 핫딜 50개 불러오기 실행 (비동기)
+    @RequestMapping("/fetchDeals.do")
+    @ResponseBody // import 후 사용
+    public String fetchDeals() {
+        try {
+            hotDealService.fetchAndStoreDeals(20);
+            return "success";
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+} // 클래스 끝을 알리는 중괄호는 가장 마지막에 한 번만 나옵니다.

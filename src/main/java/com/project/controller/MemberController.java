@@ -17,131 +17,143 @@ import com.project.service.MemberService;
 @RequestMapping("/member")
 public class MemberController {
 
-	@Autowired
-	private MemberService memberService;
-
-	// 로그인 페이지 이동
-	@GetMapping("/login")
-	public String loginForm(HttpSession session) {
-		if (session.getAttribute("loginUser") != null) {
-			return "redirect:/";
-		}
-		return "member/login";
-	}
-
-	// 로그인 처리
-	@PostMapping("/login")
-	public String login(MemberDTO member, HttpSession session, Model model, HttpServletResponse response,
-			String rememberMe) {
-		MemberDTO loginUser = memberService.loginCheck(member);
-
-		if (loginUser != null) {
-			session.setAttribute("loginUser", loginUser);
-
-			// MemberService 에 존재하는 쿠키 로직 갖고오기
-			memberService.handleCookie(loginUser.getPhone(), rememberMe, response);
-
-			return "redirect:/";
-		} else {
-			model.addAttribute("msg", "아이디 또는 비밀번호를 확인해주세요.");
-			return "member/login";
-		}
-	}
-
-	@GetMapping("/join")
-	public String joinPage() {
-		return "member/join";
-	}
-
-	@PostMapping("/joinSemi")
-	public String joinSemi(MemberDTO member) {
-		member.setMemberType("SEMI");
-		memberService.registerMember(member);
-		return "redirect:/member/login";
-	}
-
-	// 정회원 가입(GET)
-	@GetMapping("/joinFull")
-	public String joinFull() {
-		return "member/join_full";
-	}
-
 	@PostMapping("/joinFull")
 	public String joinFull(MemberDTO member) {
-		member.setMemberType("FULL");
-		memberService.registerMember(member);
-		return "redirect:/";
+	    // 별명 미입력 시 이름을 별명으로 설정
+	    if (member.getNickname() == null || member.getNickname().trim().isEmpty()) {
+	        member.setNickname(member.getName());
+	    }
+	    
+	    member.setMemberType("FULL");
+	    memberService.registerMember(member);
+	    return "redirect:/member/login";
 	}
+	
+    @Autowired
+    private MemberService memberService;
 
-	// 로그아웃
-	@RequestMapping("/logout")
-	public String logout(HttpSession session, HttpServletResponse response) {
-//        session.invalidate();
-//        memberService.handleCookie(null, "off", response);
-		return "member/logout";
-	}
+    // 로그인 페이지 이동
+    @GetMapping("/login")
+    public String loginForm(HttpSession session) {
+        if (session.getAttribute("loginUser") != null) {
+            return "redirect:/";
+        }
+        return "member/login";
+    }
 
-	// 내 정보 확인 (GET)
-	@GetMapping("/info")
-	public String myInfoPage(HttpSession session, Model model) {
-		// 수정: "user" -> "loginUser"
-		MemberDTO user = (MemberDTO) session.getAttribute("loginUser");
+    // 로그인 처리
+    @PostMapping("/login")
+    public String login(MemberDTO member, HttpSession session, Model model, HttpServletResponse response,
+            String rememberMe) {
+        MemberDTO loginUser = memberService.loginCheck(member);
 
-		if (user == null) {
-			return "redirect:/member/login";
-		}
+        if (loginUser != null) {
+            session.setAttribute("loginUser", loginUser);
+            memberService.handleCookie(loginUser.getPhone(), rememberMe, response);
+            return "redirect:/";
+        } else {
+            model.addAttribute("msg", "아이디 또는 비밀번호를 확인해주세요.");
+            return "member/login";
+        }
+    }
 
-		model.addAttribute("user", user); // JSP에서는 ${user}로 쓰기 위해 모델 이름은 유지
-		return "member/info";
-	}
+    @GetMapping("/join")
+    public String joinPage() {
+        return "member/join";
+    }
 
-	// 알림 설정 (GET)
-	@GetMapping("/notification")
-	public String notificationPage(HttpSession session, Model model) {
-		// 수정: "user" -> "loginUser"
-		MemberDTO user = (MemberDTO) session.getAttribute("loginUser");
+ // 준회원 가입 처리
+    @PostMapping("/joinSemi")
+    public String joinSemi(MemberDTO member) {
+        // 준회원은 별명이 없으므로 휴대폰 번호를 별명으로 강제 설정
+        member.setNickname(member.getPhone());
+        member.setMemberType("SEMI");
+        
+        memberService.registerMember(member);
+        return "redirect:/member/login";
+    }
 
-		if (user == null) {
-			return "redirect:/member/login";
-		}
+    // 정회원 가입 (이름, 별명, 주소 포함)
+    @GetMapping("/joinFull")
+    public String joinFull() {
+        return "member/join_full";
+    }
 
-		model.addAttribute("user", user);
-		return "member/notification_settings";
-	}
+    // 로그아웃
+    @RequestMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // 세션 무효화
+        return "redirect:/";
+    }
 
-	// 내 정보 수정
-	@GetMapping("/update")
-	public String updateForm(HttpSession session, org.springframework.ui.Model model) {
-		// 세션에서 현재 로그인한 유저 정보 가져오기
-		MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+    // 내 정보 확인 (별명, 주소 등 출력)
+    @GetMapping("/info")
+    public String myInfoPage(HttpSession session, Model model) {
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
 
-		if (loginUser == null) {
-			return "redirect:/member/login";
-		}
+        if (loginUser == null) {
+            return "redirect:/member/login";
+        }
 
-		// JSP에서 사용할 'user'라는 이름으로 세션 정보를 모델에 담아주는 역할
-		model.addAttribute("user", loginUser);
-		return "member/update"; // => WEB-INF/views/member/update.jsp 실행
-	}
+        model.addAttribute("user", loginUser); 
+        return "member/info";
+    }
 
-	// 실제 정보 수정 처리 용 (POST)
-	@PostMapping("/update")
-	public String updateMember(MemberDTO member, HttpSession session) {
-		// 세션에서 기존 로그인 정보 꺼내기
-		MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+    // 정보 수정 페이지 이동
+    @GetMapping("/update")
+    public String updateForm(HttpSession session, Model model) {
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
 
-		// 정보 수정시 회원등급 바뀌는 오류 확인용
-		member.setMemberType(loginUser.getMemberType());
+        if (loginUser == null) {
+            return "redirect:/member/login";
+        }
 
-		// DB 수정 실행 (service 호출)
-		int result = memberService.updateMember(member);
+        model.addAttribute("user", loginUser);
+        return "member/update";
+    }
 
-		if (result > 0) {
-			// DB가 바뀌었으니 세션에 저장된 loginUser 정보도 새 정보로 교체 역할
-			session.setAttribute("loginUser", member);
-			return "redirect:/member/info"; // 수정 후 정보 확인 페이지로 다시 이동
-		} else {
-			return "redirect:/member/update"; // 실패 시 다시 정보 수정 란으로(없으면 적절한 곳으로 리다이렉트)
-		}
-	}
+    // 실제 정보 수정 처리 (POST)
+    @PostMapping("/update")
+    public String updateMember(MemberDTO member, HttpSession session) {
+        // 1. 세션에서 기존 유저의 등급과 식별 정보를 가져옴
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        
+        if (loginUser == null) return "redirect:/member/login";
+
+        // 2. 등급 유지 및 이메일(수정 기준값) 설정
+        member.setMemberType(loginUser.getMemberType());
+        member.setEmail(loginUser.getEmail()); // 이메일 인증 기반이므로 기준값 고정
+
+        // 3. DB 업데이트 실행
+        int result = memberService.updateMember(member);
+
+        if (result > 0) {
+            // 4. 세션 정보 갱신 (핵심: 메인에서 바뀐 별명을 바로 부르기 위함)
+            // 수정한 정보 외에 누락된 정보(가입일 등)가 있을 수 있으므로 
+            // 가급적 DB에서 다시 조회하거나 기존 loginUser와 병합하는 것이 안전합니다.
+            loginUser.setName(member.getName());
+            loginUser.setNickname(member.getNickname());
+            loginUser.setAddress(member.getAddress());
+            loginUser.setPw(member.getPw());
+            
+            session.setAttribute("loginUser", loginUser);
+            return "redirect:/member/info"; 
+        } else {
+            return "redirect:/member/update"; 
+        }
+        
+    }
+ // 알림 설정 페이지 이동
+    @GetMapping("/notification")
+    public String notificationPage(HttpSession session, Model model) {
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+
+        // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
+        if (loginUser == null) {
+            return "redirect:/member/login";
+        }
+
+        model.addAttribute("user", loginUser); 
+        return "member/notification_settings";
+    }
 }

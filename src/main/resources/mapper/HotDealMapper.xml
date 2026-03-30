@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.dao.HotDealMapper">
+
+    <insert id="upsertHotDeal" parameterType="com.project.model.HotDealDTO">
+        MERGE INTO TB_HOTDEAL_TRACKER t
+        USING DUAL
+        ON (t.ORIGIN_URL = #{originUrl})
+        WHEN MATCHED THEN
+            UPDATE SET 
+                t.TITLE = #{title},
+                t.CURRENT_PRICE = #{currentPrice},
+                t.LAST_UPDATE_DATE = SYSDATE
+        WHEN NOT MATCHED THEN
+            /* DEAL_ID는 IDENTITY 설정으로 인해 생략 가능합니다 */
+            INSERT (ORIGIN_URL, TITLE, CURRENT_PRICE, START_PRICE, MALL_NAME, COMMUNITY_NAME, LAST_UPDATE_DATE)
+            VALUES (#{originUrl}, #{title}, #{currentPrice}, #{currentPrice}, #{mallName}, #{communityName}, SYSDATE)
+    </insert>
+
+    <select id="selectRecentDeals" resultType="com.project.model.HotDealDTO">
+        SELECT 
+            DEAL_ID, 
+            ORIGIN_URL, 
+            TITLE, 
+            CURRENT_PRICE, 
+            START_PRICE, 
+            MALL_NAME, 
+            COMMUNITY_NAME, 
+            LAST_UPDATE_DATE
+        FROM TB_HOTDEAL_TRACKER 
+        ORDER BY LAST_UPDATE_DATE DESC
+    </select>
+
+</mapper>
