@@ -11,6 +11,7 @@ public class SearchCriteria extends Criteria{
 
 	private String searchType;			// 검색 column type
 	private String keyword;				// 검색 단어
+	private String boardType;			// 게시판 타입
 	
 	public SearchCriteria(int page, int perPageNum, String searchType, String keyword) {
 		super(page, perPageNum);

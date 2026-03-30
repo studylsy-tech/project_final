@@ -56,4 +56,6 @@ public class ProductService {
 	public List<ProductDTO> findNewLowProducts() {
 		return productMapper.findNewLowProducts(); //
 	}
+	
+	
 }
