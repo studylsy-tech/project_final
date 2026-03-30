@@ -22,17 +22,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach var="deal" items="${lowPriceList}">
-                        <tr>
-                            <%-- ProductDTO의 필드명에 맞춰 title -> name 등으로 수정 --%>
-                            <td><c:out value="${deal.name}" /></td>
-                            <td style="color:red; font-weight:bold;">
-                                <fmt:formatNumber value="${deal.price}" pattern="#,###" />원
-                            </td>
-                            <td><c:out value="${deal.prodCode}" /></td>
-                            <td><a href="${path}/dashboard/search?query=${deal.name}" class="start-btn" style="padding: 5px 10px; font-size: 12px; text-decoration: none;">상세보기</a></td>
-                        </tr>
-                    </c:forEach>
+                    <%-- 기존 lowPriceList 대신 hotDealList 사용 --%>
+<c:forEach var="deal" items="${hotDealList}">
+    <tr>
+        <%-- ProductDTO 필드명이 아닌 HotDealDTO 필드명(title, currentPrice 등) 사용 --%>
+        <td><c:out value="${deal.title}" /></td>
+        <td style="color:red; font-weight:bold;">
+            <fmt:formatNumber value="${deal.currentPrice}" pattern="#,###" />원
+        </td>
+        <td><c:out value="${deal.communityName}" /></td>
+        <td>
+            <%-- 상세보기를 클릭하면 원문 주소(originUrl)로 이동하도록 수정 --%>
+            <a href="${deal.originUrl}" target="_blank" class="start-btn" 
+               style="padding: 5px 10px; font-size: 12px; text-decoration: none;">원문보기</a>
+        </td>
+    </tr>
+</c:forEach>
                 </tbody>
             </table>
         </div>

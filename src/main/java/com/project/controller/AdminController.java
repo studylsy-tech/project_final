@@ -62,7 +62,7 @@ public class AdminController {
     @ResponseBody // import 후 사용
     public String fetchDeals() {
         try {
-            hotDealService.fetchAndStoreDeals(50);
+            hotDealService.fetchAndStoreDeals(20);
             return "success";
         } catch (Exception e) {
             e.printStackTrace();
