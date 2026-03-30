@@ -66,7 +66,7 @@ SELECT * FROM PRICE_HISTORY;
 -- 아래는 페이징 및 검색기능 확인 용도로 만든 겁니다.
 -- 상품 정보 12개 넣기 (그래야 2페이지까지 생깁니다)
 INSERT INTO Common_Product (PROD_CODE, PROD_NAME, PROD_PRICE, REG_DATE)
-SELECT 'PCODE_' || LEVEL, '테스트상품_' || LEVEL, 10000 * LEVEL, SYSDATE
+SELECT 'PCODE_' || LEVEL, '테스트상품_00' || LEVEL, 10000 * LEVEL, SYSDATE
 FROM DUAL CONNECT BY LEVEL <= 12;
 
 -- 가격 이력 데이터도 대충 1개 넣어주기 (외래키 연결 확인용)
