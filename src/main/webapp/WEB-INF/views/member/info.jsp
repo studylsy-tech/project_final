@@ -18,6 +18,10 @@
         <div class="tab-container">
             <a href="${path}/member/info" class="tab-item active">내 정보 확인</a>
             <a href="${path}/member/notification" class="tab-item">알림 설정</a>
+            <%-- 관리자 권한이 있을 경우에만 탭 메뉴 노출 --%>
+            <c:if test="${sessionScope.loginUser.memberType eq 'ADMIN'}">
+                <a href="${path}/admin/main" class="tab-item admin-tab">관리자 모드</a>
+            </c:if>
         </div>
     </div>
 
@@ -42,18 +46,13 @@
                         </c:choose>
                     </td>
                 </tr>
-                </tbody>
+            </tbody>
         </table>
 
         <div class="action-buttons">
             <button type="button" class="btn-outline" onclick="location.href='${path}/'">메인으로</button>
-    <button type="button" class="btn-solid" onclick="location.href='${path}/member/update'">정보 수정</button>
-        <c:if test="${sessionScope.loginUser.memberType eq 'ADMIN'}">
-        <button type="button" class="btn-admin" onclick="location.href='${path}/admin/main'" 
-                style="background-color: #dc3545; color: white; margin-left: 10px;">
-            관리자 모드
-        </button>
-    </c:if>
+            <button type="button" class="btn-solid" onclick="location.href='${path}/member/update'">정보 수정</button>
+            <%-- 기존 하단 관리자 버튼은 삭제하거나 주석 처리 --%>
         </div>
     </div>
 </div>

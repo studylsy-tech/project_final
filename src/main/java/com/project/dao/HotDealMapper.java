@@ -11,4 +11,5 @@ public interface HotDealMapper {
 
     // 최신 핫딜 목록 조회
     List<HotDealDTO> selectRecentDeals();
+    int getTotalCount();
 }

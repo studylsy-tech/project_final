@@ -37,61 +37,61 @@ public class HotDealServiceImpl implements HotDealService {
 
     @Override
     @Transactional
-    public void fetchAndStoreDeals(int limit) {
-        try {
-            String apiUrl = "https://hotdeal.zip/api/deals.php?page=1&category=all";
-            
-            URL url = new URL(apiUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-            conn.setRequestMethod("GET");
-            conn.setRequestProperty("User-Agent", 
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36");
-            conn.setRequestProperty("Referer", "https://hotdeal.zip/");
-            
-            BufferedReader reader = new BufferedReader(
-                new InputStreamReader(conn.getInputStream(), "UTF-8"));
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) sb.append(line);
-            reader.close();
-            
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readTree(sb.toString());
-            JsonNode deals = root.path("data");
-            
-            int count = 0;
-            for (JsonNode deal : deals) {
-                if (count >= limit) break;
-                try {
+    public int fetchAndStoreDeals(int targetNewCount) {
+        int currentNewCount = 0; // 이번 호출에서 실제 신규 삽입된 수
+        int page = 1;
+        ObjectMapper mapper = new ObjectMapper();
+
+        // 목표치(targetNewCount)를 채울 때까지 또는 최대 5페이지까지 반복
+        while (currentNewCount < targetNewCount && page <= 5) {
+            try {
+                String apiUrl = "https://hotdeal.zip/api/deals.php?page=" + page + "&category=all";
+                URL url = new URL(apiUrl);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.setRequestProperty("User-Agent", "Mozilla/5.0");
+
+                BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                reader.close();
+
+                JsonNode root = mapper.readTree(sb.toString());
+                JsonNode deals = root.path("data");
+
+                // 페이지 내의 데이터(보통 20개)를 하나씩 처리
+                for (JsonNode deal : deals) {
+                    if (currentNewCount >= targetNewCount) break;
+
                     HotDealDTO dto = new HotDealDTO();
-                    
-                    // JSON 필드명 확인됨
                     dto.setOriginUrl(deal.path("post_url").asText());
                     dto.setTitle(deal.path("title").asText());
                     dto.setMallName(deal.path("site").asText("기타"));
                     dto.setCommunityName(deal.path("community_name").asText("기타"));
                     
-                    // 가격은 null인 경우 있음 ("거울 속 유령" 같은 무료 게임)
                     String priceStr = deal.path("price").asText("0");
-                    long price = 0;
-                    if (!priceStr.equals("null") && !priceStr.isEmpty()) {
-                        price = Long.parseLong(priceStr.replaceAll("[^0-9]", ""));
-                    }
+                    long price = Long.parseLong(priceStr.replaceAll("[^0-9]", ""));
                     dto.setCurrentPrice(price);
                     dto.setStartPrice(price);
-                    
-                    hotDealMapper.upsertHotDeal(dto);
-                    count++;
-                } catch (Exception e) {
-                    log.error("항목 저장 실패: {}", e.getMessage());
+
+                    // 신규 여부 판단을 위한 개수 체크
+                    int beforeCount = hotDealMapper.getTotalCount();
+                    hotDealMapper.upsertHotDeal(dto); // MERGE 실행
+                    int afterCount = hotDealMapper.getTotalCount();
+
+                    if (afterCount > beforeCount) {
+                        currentNewCount++; // 실제 INSERT 발생 시 카운트 증가
+                    }
                 }
+                page++; // 다음 페이지 준비
+                
+            } catch (Exception e) {
+                log.error("페이지 {} 수집 중 오류: {}", page, e.getMessage());
+                break;
             }
-            log.info("총 {}개 저장 완료", count);
-            
-        } catch (Exception e) {
-            log.error("API 호출 오류: {}", e.getMessage());
         }
-        // finally에서 seleniumDriver.closeDriver() 제거 - 더 이상 불필요
+        return currentNewCount;
     }
 
     @Override
