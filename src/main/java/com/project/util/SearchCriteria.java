@@ -25,12 +25,3 @@ public class SearchCriteria extends Criteria{
 	
 	
 }
-
-
-
-
-
-
-
-
-

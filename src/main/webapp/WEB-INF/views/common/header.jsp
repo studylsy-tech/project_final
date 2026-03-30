@@ -13,6 +13,15 @@
     <div class="header-logo dropdown-container">
         <a href="${path}/">STOCK ALARM</a>
         <ul class="dropdown-menu">
+            <li><a href="${path}/stock/list">전체</a></li>
+            <li><a href="${path}/stock/list?searchType=drop">오늘의 급락</a></li>
+            <li><a href="${path}/stock/analysis">자동분석</a></li>
+            <li><a href="${path}/stock/list?searchType=low">최저가 갱신</a></li>
+        </ul>
+    </div>
+    <%-- 
+    이전에 사용했던 경로 잠시 주석처리
+    <ul class="dropdown-menu">
             <li><a href="${path}/stock/all">전체</a></li>
             <li><a href="${path}/stock/drop">오늘의 급락</a></li>
             <li><a href="${path}/stock/analysis">자동분석</a></li>

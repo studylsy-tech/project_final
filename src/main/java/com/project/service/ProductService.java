@@ -2,11 +2,14 @@ package com.project.service;
 
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.project.dao.ProductMapper;
 import com.project.model.ProductDTO;
+import com.project.util.SearchCriteria;
 
 @Service
 public class ProductService {
@@ -56,4 +59,18 @@ public class ProductService {
 	public List<ProductDTO> findNewLowProducts() {
 		return productMapper.findNewLowProducts(); //
 	}
+	
+	// 페이징 및 검색 기능이 포함된 목록 조회
+	public List<ProductDTO> listSearch(SearchCriteria cri) throws Exception {
+	    return productMapper.listSearch(cri);
+	}
+
+	// 검색 조건에 맞는 총 상품 개수 (페이징 버튼 계산용)
+	public int listSearchCount(SearchCriteria cri) throws Exception {
+	    return productMapper.listSearchCount(cri);
+	}
+	
+	
+	
+	
 }
