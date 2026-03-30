@@ -5,30 +5,37 @@
 
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 
-<%-- 절대 경로 대신 ${path}와 파일의 실제 물리 경로를 맞춥니다 --%>
 <link rel="stylesheet" href="${path}/resources/css/stock/stock_list.css">
 <div class="board-wrapper">
-<h2>실시간 핫딜 자동분석</h2>
+    <h2>실시간 핫딜 자동분석</h2>
 
-<div class="analysis-container">
-    <div class="card">
-        <h3>🔥 역대 최저가 경신 상품</h3>
-        <table border="1">
-            <tr>
-                <th>상품명</th>
-                <th>현재가</th>
-                <th>출처</th>
-                <th>링크</th>
-            </tr>
-            <c:forEach var="deal" items="${lowPriceList}">
-                <tr>
-                    <td>${deal.title}</td>
-                    <td style="color:red; font-weight:bold;">${deal.currentPrice}원</td>
-                    <td>${deal.mallName}</td>
-                    <td><a href="${deal.originUrl}" target="_blank">이동</a></td>
-                </tr>
-            </c:forEach>
-        </table>
+    <div class="analysis-container">
+        <div class="card">
+            <h3>🔥 역대 최저가 경신 상품</h3>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>상품명</th>
+                        <th>현재가</th>
+                        <th>출처</th>
+                        <th>링크</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="deal" items="${lowPriceList}">
+                        <tr>
+                            <%-- ProductDTO의 필드명에 맞춰 title -> name 등으로 수정 --%>
+                            <td><c:out value="${deal.name}" /></td>
+                            <td style="color:red; font-weight:bold;">
+                                <fmt:formatNumber value="${deal.price}" pattern="#,###" />원
+                            </td>
+                            <td><c:out value="${deal.prodCode}" /></td>
+                            <td><a href="${path}/dashboard/search?query=${deal.name}" class="start-btn" style="padding: 5px 10px; font-size: 12px; text-decoration: none;">상세보기</a></td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
