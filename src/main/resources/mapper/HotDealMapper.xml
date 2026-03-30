@@ -10,30 +10,33 @@
             UPDATE SET 
                 t.TITLE = #{title},
                 t.CURRENT_PRICE = #{currentPrice},
-                t.LAST_UPDATE_DATE = SYSDATE
+                t.IMAGE_URL = #{imageUrl}, t.LAST_UPDATE_DATE = SYSDATE
         WHEN NOT MATCHED THEN
-            /* DEAL_ID는 IDENTITY 설정으로 인해 생략 가능합니다 */
-            INSERT (ORIGIN_URL, TITLE, CURRENT_PRICE, START_PRICE, MALL_NAME, COMMUNITY_NAME, LAST_UPDATE_DATE)
-            VALUES (#{originUrl}, #{title}, #{currentPrice}, #{currentPrice}, #{mallName}, #{communityName}, SYSDATE)
+            INSERT (ORIGIN_URL, TITLE, IMAGE_URL, CURRENT_PRICE, START_PRICE, MALL_NAME, COMMUNITY_NAME, LAST_UPDATE_DATE)
+            VALUES (#{originUrl}, #{title}, #{imageUrl}, #{currentPrice}, #{currentPrice}, #{mallName}, #{communityName}, SYSDATE)
     </insert>
 
     <select id="selectRecentDeals" resultType="com.project.model.HotDealDTO">
         SELECT 
-            DEAL_ID, 
-            ORIGIN_URL, 
+            DEAL_ID as dealId, 
+            ORIGIN_URL as originUrl, 
             TITLE, 
-            CURRENT_PRICE, 
-            START_PRICE, 
-            MALL_NAME, 
-            COMMUNITY_NAME, 
-            LAST_UPDATE_DATE
+            IMAGE_URL as imageUrl, CURRENT_PRICE as currentPrice, 
+            START_PRICE as startPrice, 
+            MALL_NAME as mallName, 
+            COMMUNITY_NAME as communityName, 
+            LAST_UPDATE_DATE as lastUpdateDate
         FROM TB_HOTDEAL_TRACKER 
         ORDER BY LAST_UPDATE_DATE DESC
     </select>
 
-<select id="getTotalCount" resultType="int">
-    SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
-</select>
+    <select id="getTotalCount" resultType="int">
+        SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
+    </select>
 
+    <select id="getLastCollectTime" resultType="string">
+        SELECT NVL(TO_CHAR(MAX(LAST_UPDATE_DATE), 'YYYY-MM-DD HH24:MI:SS'), '-') 
+        FROM TB_HOTDEAL_TRACKER
+    </select>
 
 </mapper>

@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.crawling.SeleniumDriver;
 import com.project.dao.HotDealMapper; // [추가] HotDealMapper 임포트
 import com.project.dao.ProductMapper;
 import com.project.model.HotDealDTO;
@@ -26,25 +25,54 @@ import lombok.extern.slf4j.Slf4j;
 public class HotDealServiceImpl implements HotDealService {
 
     private final ProductMapper productMapper;
-    private final HotDealMapper hotDealMapper; // [추가] 핫딜 전용 매퍼 주입
-    private final SeleniumDriver seleniumDriver;
+    private final HotDealMapper hotDealMapper;
+    // [추가] SqlSession 주입을 위해 final로 선언합니다.
+    //private final org.apache.ibatis.session.SqlSession sqlSession;
 
-    // 1. 누락되었던 인터페이스 메서드 구현
+    // ... 기존 메서드들 (getRecentDeals, fetchAndStoreDeals 등) ...
+
     @Override
-    public List<HotDealDTO> getRecentDeals() {
-        return hotDealMapper.selectRecentDeals();
+    public int getTotalCount() {
+        try {
+            return hotDealMapper.getTotalCount();
+        } catch (Exception e) {
+            log.error("총 개수 조회 실패: {}", e.getMessage());
+            return 0; // 에러 발생 시 0 반환으로 500 에러 방지
+        }
+    }
+
+    @Override
+    public boolean checkConnection() {
+        try {
+        	// 별도의 SqlSession 주입 없이 Mapper의 간단한 메서드를 호출해봄으로써 
+            // DB 연결 상태를 간접적으로 확인할 수 있습니다.
+            return hotDealMapper.getTotalCount() >= 0;
+        } catch (Exception e) {
+            log.error("DB 연결 확인 중 오류 발생: {}", e.getMessage());
+            return false;
+        }
+    }
+
+    @Override
+    public String getLastCollectTime() {
+        try {
+            String lastTime = hotDealMapper.getLastCollectTime();
+            return (lastTime != null) ? lastTime : "-";
+        } catch (Exception e) {
+            log.error("마지막 수집 시간 조회 중 오류(테이블명 확인 필요): {}", e.getMessage());
+            return "-";
+        }
     }
 
     @Override
     @Transactional
-    public int fetchAndStoreDeals(int targetNewCount) {
-        int currentNewCount = 0; // 이번 호출에서 실제 신규 삽입된 수
+    public int fetchAndStoreDeals(int limit) {
+        int newlyAddedCount = 0;
         int page = 1;
         ObjectMapper mapper = new ObjectMapper();
 
-        // 목표치(targetNewCount)를 채울 때까지 또는 최대 5페이지까지 반복
-        while (currentNewCount < targetNewCount && page <= 5) {
-            try {
+        try {
+            while (newlyAddedCount < limit && page <= 5) {
                 String apiUrl = "https://hotdeal.zip/api/deals.php?page=" + page + "&category=all";
                 URL url = new URL(apiUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -60,9 +88,8 @@ public class HotDealServiceImpl implements HotDealService {
                 JsonNode root = mapper.readTree(sb.toString());
                 JsonNode deals = root.path("data");
 
-                // 페이지 내의 데이터(보통 20개)를 하나씩 처리
                 for (JsonNode deal : deals) {
-                    if (currentNewCount >= targetNewCount) break;
+                    if (newlyAddedCount >= limit) break;
 
                     HotDealDTO dto = new HotDealDTO();
                     dto.setOriginUrl(deal.path("post_url").asText());
@@ -70,37 +97,46 @@ public class HotDealServiceImpl implements HotDealService {
                     dto.setMallName(deal.path("site").asText("기타"));
                     dto.setCommunityName(deal.path("community_name").asText("기타"));
                     
+                 // fetchAndStoreDeals 메서드 내 이미지 수집 부분 수정
+                    String imageUrl = deal.path("thumbnail_url").asText("");
+                    dto.setImageUrl(imageUrl);
+                    
                     String priceStr = deal.path("price").asText("0");
                     long price = Long.parseLong(priceStr.replaceAll("[^0-9]", ""));
                     dto.setCurrentPrice(price);
                     dto.setStartPrice(price);
 
-                    // 신규 여부 판단을 위한 개수 체크
-                    int beforeCount = hotDealMapper.getTotalCount();
-                    hotDealMapper.upsertHotDeal(dto); // MERGE 실행
-                    int afterCount = hotDealMapper.getTotalCount();
+                    int before = hotDealMapper.getTotalCount();
+                    hotDealMapper.upsertHotDeal(dto); 
+                    int after = hotDealMapper.getTotalCount();
 
-                    if (afterCount > beforeCount) {
-                        currentNewCount++; // 실제 INSERT 발생 시 카운트 증가
+                    if (after > before) {
+                        newlyAddedCount++;
                     }
                 }
-                page++; // 다음 페이지 준비
-                
-            } catch (Exception e) {
-                log.error("페이지 {} 수집 중 오류: {}", page, e.getMessage());
-                break;
+                page++;
             }
+        } catch (Exception e) {
+            log.error("핫딜 수집 중 오류 발생: {}", e.getMessage());
         }
-        return currentNewCount;
+        return newlyAddedCount;
+    }
+
+    @Override
+    public List<HotDealDTO> getRecentDeals() {
+        // 게시판(Screen 11)에 표시할 최신 핫딜 목록을 가져옵니다 [cite: 289]
+        return hotDealMapper.selectRecentDeals();
     }
 
     @Override
     public List<ProductDTO> getNewLowProducts() {
+        // 대시보드(Screen 8)의 '이번 달 최저가 갱신' 상품 목록을 가져옵니다 [cite: 194, 228]
         return productMapper.findNewLowProducts();
     }
-    
+
     @Override
     public int getTotalDealCount() {
-        return productMapper.getTotalDealCount();
+        // 통계 카드(Screen 14)의 '오늘 수집 건수' 등을 계산하기 위해 전체 건수를 반환합니다 [cite: 348]
+        return hotDealMapper.getTotalCount();
     }
 }

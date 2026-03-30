@@ -12,4 +12,10 @@ public interface HotDealService {
     
     List<ProductDTO> getNewLowProducts();
     int getTotalDealCount();
+
+	boolean checkConnection();
+
+	int getTotalCount();
+
+	String getLastCollectTime();
 }
