@@ -5,6 +5,9 @@
 <link rel="stylesheet" href="${path}/resources/css/views/common/header.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
+<!-- jQuery 추가 -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <header class="main-header">
     <%-- 로고 및 드롭다운 영역 --%>
     <div class="header-logo dropdown-container">

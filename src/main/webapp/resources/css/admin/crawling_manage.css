@@ -1,0 +1,86 @@
+/* crawling_manage.css */
+
+.admin-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+    background-color: #f4f7f6;
+    padding: 20px;
+}
+
+.admin-card {
+    background: #ffffff;
+    padding: 50px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    max-width: 550px;
+    width: 100%;
+    border: 1px solid #eee;
+}
+
+.admin-card h2 {
+    margin-bottom: 15px;
+    color: #2c3e50;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.admin-card p {
+    color: #7f8c8d;
+    margin-bottom: 35px;
+    line-height: 1.6;
+}
+
+/* 버튼 스타일 및 호버 효과 */
+.btn-fetch {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 18px 40px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+}
+
+.btn-fetch:hover {
+    background-color: #2980b9;
+    transform: translateY(-3px);
+    box-shadow: 0 7px 14px rgba(52, 152, 219, 0.3);
+}
+
+.btn-fetch:active {
+    transform: translateY(-1px);
+}
+
+.btn-fetch:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* 상태 메시지 및 로딩 텍스트 */
+#status {
+    margin-top: 25px;
+    font-size: 1rem;
+    min-height: 1.5rem;
+    transition: all 0.5s ease;
+}
+
+.loading-text {
+    color: #3498db;
+    font-weight: 600;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
