@@ -117,4 +117,32 @@
         SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
     </select>
 
+
+<select id="selectIntegratedList" resultType="com.project.model.ProductDTO">
+    SELECT * FROM (
+        SELECT rownum rnum, a.* FROM (
+            SELECT 
+                PROD_ID as prodId, NAME as name, PRICE as price, 
+                NULL as imageUrl, NULL as originUrl, '일반' as communityName,
+                'NORMAL' as boardType, REG_DATE as regDate
+            FROM PRODUCT
+            
+            UNION ALL
+            
+            SELECT 
+                DEAL_ID as prodId, TITLE as name, CURRENT_PRICE as price,
+                IMAGE_URL as imageUrl, ORIGIN_URL as originUrl, COMMUNITY_NAME as communityName,
+                'HOT' as boardType, LAST_UPDATE_DATE as regDate
+            FROM TB_HOTDEAL_TRACKER
+            
+            ORDER BY regDate DESC
+        ) a WHERE rownum &lt;= #{pageEnd}
+    ) WHERE rnum &gt;= #{pageStart}
+</select>
+
+<select id="getIntegratedCount" resultType="int">
+    SELECT 
+        (SELECT COUNT(*) FROM PRODUCT) + (SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER) 
+    FROM DUAL
+</select>
 </mapper>
