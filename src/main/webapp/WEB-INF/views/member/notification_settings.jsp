@@ -14,6 +14,7 @@
 <link rel="stylesheet" href="${path}/resources/css/views/member/info.css">
 <link rel="stylesheet" href="${path}/resources/css/views/member/notification.css">
 
+<div class="mypage-outer-container">
 <div class="mypage-wrapper">
     <%-- 상단 탭 메뉴 영역 (info.jsp와 동일한 구조) --%>
     <div class="mypage-header">
@@ -34,13 +35,13 @@
 
             <%-- ① 알림 잔여 슬롯 --%>
             <div class="slot-info-box">
-                ① 알림 잔여 슬롯 : 7 / 10 (쿠폰 사용 시 추가 가능)
+                알림 잔여 슬롯 : 7 / 10 (쿠폰 사용 시 추가 가능)
             </div>
 
             <form action="${path}/member/updateNotification" method="post">
                 <%-- ② 수신 이메일 주소 --%>
                 <div class="setting-section">
-                    <label class="section-label">② 수신 이메일 주소</label>
+                    <label class="section-label">수신 이메일 주소</label>
                     <div class="email-input-group">
                         <input type="email" name="email" value="${sessionScope.loginUser.email}" placeholder="user@example.com" readonly>
                         <button type="button" class="btn-change">변경 저장</button>
@@ -49,7 +50,7 @@
 
                 <%-- ③ 알림 유형 선택 --%>
                 <div class="setting-section">
-                    <label class="section-label">③ 알림 유형 선택</label>
+                    <label class="section-label">알림 유형 선택</label>
                     
                     <div class="noti-item">
                         <span>목표가 도달 알림</span>
@@ -84,9 +85,9 @@
                     </div>
                 </div>
 
-                <%-- ④ 설정 저장 버튼 --%>
+                <%--설정 저장 버튼 --%>
                 <div class="btn-area">
-                    <button type="submit" class="btn-submit-all">④ 설정 저장</button>
+                    <button type="submit" class="btn-submit-all">설정 저장</button>
                 </div>
             </form>
         </div>
