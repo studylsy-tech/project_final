@@ -22,3 +22,23 @@ INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
 VALUES ('입고 알림 문의', '품절 상품 재입고 시 알림이 오나요?', '유저별명', 'QNA');
 
 commit
+
+
+-- 게시판 더미데이터(페이징 확인용도)
+INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
+VALUES ('두 번째 공지사항입니다.', '테스트 내용입니다.', '관리자', 'NOTICE');
+INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
+VALUES ('이벤트 안내드립니다.', '많은 참여 부탁드립니다.', '관리자', 'NOTICE');
+INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
+VALUES ('점검 공지입니다.', '새벽 2시부터 점검입니다.', '관리자', 'NOTICE');
+INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
+VALUES ('필독! 이용 약관 변경', '약관이 변경되었습니다.', '관리자', 'NOTICE');
+INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
+VALUES ('시스템 최적화 완료', '속도가 빨라졌습니다.', '관리자', 'NOTICE');
+INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
+VALUES ('신규 기능 소개', '새로운 기능이 추가되었습니다.', '관리자', 'NOTICE');
+
+COMMIT
+
+
+

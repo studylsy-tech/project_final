@@ -1,15 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <c:set var="path" value="${pageContext.request.contextPath}" />
 
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 
 <%-- 절대 경로 대신 ${path}와 파일의 실제 물리 경로를 맞춥니다 --%>
 <link rel="stylesheet" href="${path}/resources/css/stock/stock_list.css">
+
+<!-- 검색 -->
 <div class="board-wrapper">
     <h2>${boardTitle}</h2>
     
+    <div>
+	    <form action="${path}/search/list" method="get">
+	        <select name="searchType">
+	            <option value="t" ${scri.searchType eq 't' ? 'selected' : ''}>상품명</option>
+	            <option value="c" ${scri.searchType eq 'c' ? 'selected' : ''}>내용</option>
+	            <option value="tc" ${scri.searchType eq 'tc' ? 'selected' : ''}>상품명+내용</option>
+	        </select>
+	        <input type="text" name="keyword" value="${scri.keyword}">
+	        <button type="submit">검색</button>
+	    </form>
+	</div>
+
     <div class="stock-list-container">
         <c:choose>
             <c:when test="${empty stockList}">
@@ -37,6 +52,42 @@
             </c:otherwise>
         </c:choose>
     </div>
+</div>
+
+<!-- 검색기능 -->
+<div class="search-bar" style="text-align: center; margin-bottom: 20px;">
+    <select id="searchType" name="searchType" style="padding: 5px;">
+        <option value="n" <c:out value="${pageMaker.criteria.searchType == null ? 'selected' : ''}"/>>---</option>
+        <option value="name" <c:out value="${pageMaker.criteria.searchType eq 'name' ? 'selected' : ''}"/>>상품명</option>
+        <option value="drop" <c:out value="${pageMaker.criteria.searchType eq 'drop' ? 'selected' : ''}"/>>급락상품</option>
+        <option value="low" <c:out value="${pageMaker.criteria.searchType eq 'low' ? 'selected' : ''}"/>>최저가</option>
+    </select>
+    
+    <input type="text" id="keywordInput" name="keyword" value="${pageMaker.criteria.keyword}" style="padding: 5px; width: 200px;">
+    <button id="searchBtn" style="padding: 5px 15px;">검색</button>
+</div>
+
+<!-- 페이징 -->
+<div style="text-align: center;">
+    <c:if test="${pageMaker.prev}">
+        <a href="list${pageMaker.query(pageMaker.startPage - 1)}">[이전]</a>
+    </c:if>
+
+    <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
+        <a href="list${pageMaker.query(idx)}">
+            <c:choose>
+                <c:when test="${pageMaker.criteria.page == idx}">
+                    <b>[${idx}]</b> </c:when>
+                <c:otherwise>
+                    ${idx}
+                </c:otherwise>
+            </c:choose>
+        </a>
+    </c:forEach>
+
+    <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+        <a href="list${pageMaker.query(pageMaker.endPage + 1)}">[다음]</a>
+    </c:if>
 </div>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>

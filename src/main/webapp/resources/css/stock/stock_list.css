@@ -111,4 +111,61 @@
 
 .btn-dark:hover {
     background-color: #34495e;
+} 
+    
+ /* [8] 테이블 스타일 - hotdeal 페이지용 */
+.analysis-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
+
+.card {
+    background-color: #fff;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    padding: 20px 25px;
+}
+
+.card h3 {
+    color: #2c3e50;
+    margin-bottom: 16px;
+    font-size: 16px;
+}
+
+.card table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.card table th {
+    background-color: #f4f6f8;
+    color: #1a2a44;
+    padding: 10px 12px;
+    border: 1px solid #e1e4e8;
+    text-align: left;
+    font-weight: 600;
+}
+
+.card table td {
+    padding: 10px 12px;
+    border: 1px solid #e1e4e8;
+    color: #2c3e50;
+}
+
+.card table tr:hover td {
+    background-color: #fcfdfe;
+}
+
+.start-btn {
+    background-color: #1a2a44;
+    color: #fff !important;
+    border-radius: 4px;
+    display: inline-block;
+    transition: background-color 0.3s;
+}
+
+.start-btn:hover {
+    background-color: #34495e;
+}   

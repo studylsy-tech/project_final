@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.dao.SearchMapper">
+
+    <sql id="search">
+        <if test="searchType != null">
+            <if test="searchType == 't'.toString()">AND PROD_NAME LIKE '%' || #{keyword} || '%'</if>
+            <if test="searchType == 'c'.toString()">AND CATEGORY LIKE '%' || #{keyword} || '%'</if>
+            <if test="searchType == 'tc'.toString()">
+                AND (PROD_NAME LIKE '%' || #{keyword} || '%' OR BRAND LIKE '%' || #{keyword} || '%')
+            </if>
+        </if>
+    </sql>
+
+    <select id="getSearchList" resultType="com.project.model.ProductDTO">
+        SELECT 
+            PROD_ID as prodId,
+            PROD_CODE as prodCode,
+            PROD_NAME as name,
+            PROD_PRICE as price,
+            BRAND as brand,
+            REG_DATE as regDate
+        FROM Common_Product 
+        WHERE 1=1
+        <include refid="search"></include>
+        ORDER BY PROD_ID DESC
+        OFFSET #{pageStart} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
+    </select>
+
+    <select id="getSearchCount" resultType="int">
+        SELECT COUNT(*) 
+        FROM Common_Product 
+        WHERE 1=1
+        <include refid="search"></include>
+    </select>
+
+</mapper>

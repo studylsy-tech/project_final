@@ -2,71 +2,94 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <c:set var="path" value="${pageContext.request.contextPath}" />
 
-<%@ include file="/WEB-INF/views/common/header.jsp" %>
+<c:if test="${empty sessionScope.loginUser}">
+    <script>
+        alert("로그인이 필요한 페이지입니다.");
+        location.href = "${path}/member/login";
+    </script>
+</c:if>
 
+<%@ include file="/WEB-INF/views/common/header.jsp" %>
+<%-- 기존 info.css와 notification.css를 모두 연결하여 레이아웃과 컨텐츠 스타일을 유지합니다 --%>
+<link rel="stylesheet" href="${path}/resources/css/views/member/info.css">
 <link rel="stylesheet" href="${path}/resources/css/views/member/notification.css">
 
-<div class="main-content">
-    <div class="settings-container">
-        <h2 class="settings-title">알림 설정</h2>
-
-        <%-- ① 알림 잔여 슬롯 --%>
-        <div class="slot-info-box">
-            ① 알림 잔여 슬롯 : 7 / 10 (쿠폰 사용 시 추가 가능)
+<div class="mypage-wrapper">
+    <%-- 상단 탭 메뉴 영역 (info.jsp와 동일한 구조) --%>
+    <div class="mypage-header">
+        <h2 class="main-title">마이페이지</h2>
+        <div class="tab-container">
+            <a href="${path}/member/info" class="tab-item">내 정보 확인</a>
+            <a href="${path}/member/notification" class="tab-item active">알림 설정</a>
+            <c:if test="${sessionScope.loginUser.memberType eq 'ADMIN'}">
+                <a href="${path}/admin/main" class="tab-item admin-tab">관리자 모드</a>
+            </c:if>
         </div>
+    </div>
 
-        <form action="${path}/member/updateNotification" method="post">
-            <%-- ② 수신 이메일 주소 --%>
-            <div class="setting-section">
-                <label class="section-label">② 수신 이메일 주소</label>
-                <div class="email-input-group">
-                    <input type="email" name="email" value="${loginUser.email}" placeholder="user@example.com" readonly>
-                    <button type="button" class="btn-change">변경 저장</button>
-                </div>
+    <%-- 알림 설정 컨텐츠 영역 --%>
+    <div class="info-content-box">
+        <div class="settings-container">
+            <h2 class="settings-title">알림 설정</h2>
+
+            <%-- ① 알림 잔여 슬롯 --%>
+            <div class="slot-info-box">
+                ① 알림 잔여 슬롯 : 7 / 10 (쿠폰 사용 시 추가 가능)
             </div>
 
-            <%-- ③ 알림 유형 선택 --%>
-            <div class="setting-section">
-                <label class="section-label">③ 알림 유형 선택</label>
-                
-                <div class="noti-item">
-                    <span>목표가 도달 알림</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" name="goal_alarm" value="Y" checked>
-                        <span class="slider"></span>
-                    </label>
+            <form action="${path}/member/updateNotification" method="post">
+                <%-- ② 수신 이메일 주소 --%>
+                <div class="setting-section">
+                    <label class="section-label">② 수신 이메일 주소</label>
+                    <div class="email-input-group">
+                        <input type="email" name="email" value="${sessionScope.loginUser.email}" placeholder="user@example.com" readonly>
+                        <button type="button" class="btn-change">변경 저장</button>
+                    </div>
                 </div>
 
-                <div class="noti-item">
-                    <span>최저가 갱신 알림 (역대)</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" name="lowest_alarm" value="Y" checked>
-                        <span class="slider"></span>
-                    </label>
+                <%-- ③ 알림 유형 선택 --%>
+                <div class="setting-section">
+                    <label class="section-label">③ 알림 유형 선택</label>
+                    
+                    <div class="noti-item">
+                        <span>목표가 도달 알림</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" name="goal_alarm" value="Y" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="noti-item">
+                        <span>최저가 갱신 알림 (역대)</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" name="lowest_alarm" value="Y" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="noti-item">
+                        <span>주간 가격 요약 리포트</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" name="weekly_report" value="Y">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="noti-item">
+                        <span>마케팅·이벤트 알림</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" name="marketing_alarm" value="Y">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
                 </div>
 
-                <div class="noti-item">
-                    <span>주간 가격 요약 리포트</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" name="weekly_report" value="Y">
-                        <span class="slider"></span>
-                    </label>
+                <%-- ④ 설정 저장 버튼 --%>
+                <div class="btn-area">
+                    <button type="submit" class="btn-submit-all">④ 설정 저장</button>
                 </div>
-
-                <div class="noti-item">
-                    <span>마케팅·이벤트 알림</span>
-                    <label class="toggle-switch">
-                        <input type="checkbox" name="marketing_alarm" value="Y">
-                        <span class="slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <%-- ④ 설정 저장 버튼 --%>
-            <div class="btn-area">
-                <button type="submit" class="btn-submit-all">④ 설정 저장</button>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </div>
 
