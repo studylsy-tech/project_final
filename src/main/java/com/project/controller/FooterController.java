@@ -31,7 +31,7 @@ public class FooterController {
 
     // 2. 문의 내용 저장 및 관리자 페이지 이동 처리
     // produces 설정을 해야 알림창(alert) 한글이 깨지지 않습니다.
-    @PostMapping(value = "/support.do", produces = "text/html; charset=UTF-8")
+    @PostMapping(value = "/support.do", produces = "text/html; ")
     @ResponseBody 
     public String insertInquiry(FooterInquiryVO vo, HttpServletRequest request) {
         
