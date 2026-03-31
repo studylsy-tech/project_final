@@ -40,13 +40,3 @@ public class Criteria {
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-

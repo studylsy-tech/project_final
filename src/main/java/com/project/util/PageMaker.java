@@ -14,11 +14,11 @@ public class PageMaker {
 	private int startPage;			// 화면에 보여질 시작 페이지 번호
 	private int endPage;			// 화면에 보여질 마지막 페이지 번호
 	private int maxPage;			// 전체 페이지에 마지막 페이지 번호
-	private int displayPageNum;		//한번에 보여줄 페이지 번호 개수
-	private boolean first;			// 첫페이지 이동 가능 여부
-	private boolean last;			// 마지막페이지 이동 가능 여부
-	private boolean prev;			// 이전페이지 블럭 존재 여부
-	private boolean next;			// 마지막페이지 블럭 존재 여부
+	private int displayPageNum;		// 한 번에 보여줄 페이지 번호 개수
+	private boolean first;			// 첫 페이지 이동 가능 여부
+	private boolean last;			// 마지막 페이지 이동 가능 여부
+	private boolean prev;			// 이전 페이지 블럭 존재 여부
+	private boolean next;			// 마지막 페이지 블럭 존재 여부
 	
 	protected Criteria criteria;		// 요청 페이지 , 한번에 보여줄 게시물 수
 	
@@ -82,11 +82,3 @@ public class PageMaker {
 	}
 	
 }
-
-
-
-
-
-
-
-

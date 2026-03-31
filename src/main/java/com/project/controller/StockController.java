@@ -7,55 +7,77 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.project.model.HotDealDTO;
 import com.project.model.ProductDTO;
 import com.project.service.ProductService;
-import com.project.service.HotDealService; // 서비스 임포트 확인
+import com.project.service.HotDealService;
+import com.project.util.SearchCriteria;
+import com.project.util.SearchPageMaker;
+import com.project.util.Criteria;
 
 @Controller
 @RequestMapping("/stock")
 public class StockController {
 
-    @Autowired
-    private ProductService productService;
+@Autowired
+private ProductService productService;
 
-    @Autowired
-    private HotDealService hotDealService; // 필드 주입 위치 통합
+@Autowired
+private HotDealService hotDealService;
 
-    @GetMapping("/all")
-    public String allStocks(Model model) {
-        List<ProductDTO> list = productService.findAllProducts();
-        model.addAttribute("stockList", list);
-        model.addAttribute("boardTitle", "전체 상품 목록");
-        return "stock/stock_list";
-    }
+@GetMapping("/all")
+public String allStocks(Model model) {
+    List<ProductDTO> list = productService.findAllProducts();
+    model.addAttribute("stockList", list);
+    model.addAttribute("boardTitle", "전체 상품 목록");
+    return "stock/stock_list";
+}
 
-    @GetMapping("/drop")
-    public String dropStocks(Model model) {
-        List<ProductDTO> list = productService.findDropProducts();
-        model.addAttribute("stockList", list);
-        model.addAttribute("boardTitle", "오늘의 급락 상품");
-        return "stock/stock_list";
-    }
+@GetMapping("/drop")
+public String dropStocks(Model model) {
+    List<ProductDTO> list = productService.findDropProducts();
+    model.addAttribute("stockList", list);
+    model.addAttribute("boardTitle", "오늘의 급락 상품");
+    return "stock/stock_list";
+}
 
-    // 두 메서드를 하나로 통합한 분석 메서드
-    @GetMapping("/analysis")
-    public String stockAnalysis(Model model) {
-        // 1. 기존의 제목 설정 기능 통합
-        model.addAttribute("boardTitle", "자동 분석 리포트");
+@GetMapping("/new-low")
+public String newLowStocks(Model model) {
+    List<ProductDTO> list = productService.findNewLowProducts();
+    model.addAttribute("stockList", list);
+    model.addAttribute("boardTitle", "최저가 갱신");
+    return "stock/stock_list";
+}
 
-        // 2. 새로운 핫딜 및 최저가 데이터 추가
-        model.addAttribute("lowPriceList", hotDealService.getNewLowProducts());
-        model.addAttribute("totalCount", hotDealService.getTotalDealCount());
-        
-        // 3. 리턴 페이지 결정 (분석 전용 페이지인 stock/analysis로 이동)
-        return "stock/analysis";
-    }
+@GetMapping("/analysis")
+public String analysisStocks(Model model) {
+    model.addAttribute("boardTitle", "실시간 핫딜 자동분석 리포트");
+    model.addAttribute("lowPriceList", hotDealService.getNewLowProducts());
+    model.addAttribute("totalCount", hotDealService.getTotalDealCount());
+    
+    List<HotDealDTO> hotDeals = hotDealService.getRecentDeals(); 
+    model.addAttribute("hotDealList", hotDeals); 
 
-    @GetMapping("/new-low")
-    public String newLowStocks(Model model) {
-        List<ProductDTO> list = productService.findNewLowProducts();
-        model.addAttribute("stockList", list);
-        model.addAttribute("boardTitle", "최저가 갱신");
-        return "stock/stock_list";
-    }
+    return "stock/analysis";
+}
+
+@GetMapping("/list")
+public String list(SearchCriteria cri, Model model) throws Exception {
+    List<ProductDTO> list = productService.listSearch(cri);
+    int totalCount = productService.listSearchCount(cri);
+    
+    SearchPageMaker pageMaker = new SearchPageMaker((Criteria)cri, totalCount, 10);
+    
+    model.addAttribute("stockList", list);
+    model.addAttribute("pageMaker", pageMaker);
+
+    String title = "전체 상품 목록";
+    if ("drop".equals(cri.getSearchType())) title = "오늘의 급락 상품";
+    else if ("low".equals(cri.getSearchType())) title = "최저가 갱신";
+    else if ("analysis".equals(cri.getSearchType())) title = "자동 분석 리포트";
+    
+    model.addAttribute("boardTitle", title);
+
+    return "stock/stock_list";
+}
 }
