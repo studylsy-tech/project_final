@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.dao.BoardMapper">
@@ -37,6 +37,7 @@
         UPDATE BOARD SET COUNT = COUNT + 1 WHERE NOTICE_NO = #{notice_no}
     </update>
 
+<<<<<<< HEAD
 <select id="selectBoardListPaging" resultType="com.project.model.BoardDTO">
     SELECT * FROM (
         SELECT rownum rnum, a.* FROM (
@@ -50,3 +51,36 @@
 
 
 </mapper>
+=======
+	
+	
+	<sql id="boardSearch">
+        <if test="searchType != null">
+            <if test="searchType == 't'.toString()">AND TITLE LIKE '%' || #{keyword} || '%'</if>
+            <if test="searchType == 'c'.toString()">AND CONTENT LIKE '%' || #{keyword} || '%'</if>
+            <if test="searchType == 'w'.toString()">AND WRITER LIKE '%' || #{keyword} || '%'</if>
+        </if>
+    </sql>
+
+    <select id="selectBoardListPaging" resultType="com.project.model.BoardDTO">
+        SELECT * FROM (
+            SELECT rownum rnum, a.* FROM (
+                SELECT * FROM BOARD 
+                WHERE BOARD_TYPE = #{boardType}
+                <include refid="boardSearch" />
+                ORDER BY NOTICE_NO DESC
+            ) a WHERE rownum &lt;= #{pageEnd}
+        ) WHERE rnum &gt;= #{pageStart}
+    </select>
+
+    <select id="getBoardCount" resultType="int">
+        SELECT COUNT(*) FROM BOARD 
+        WHERE BOARD_TYPE = #{boardType}
+        <include refid="boardSearch" />
+    </select>
+	
+	
+
+	
+</mapper>
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git

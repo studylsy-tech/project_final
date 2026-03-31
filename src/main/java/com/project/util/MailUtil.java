@@ -48,7 +48,7 @@ public class MailUtil {
             message.setSubject(subject);
             
             // 내용 (HTML 형식 지정)
-            message.setContent(content, "text/html; charset=utf-8");
+            message.setContent(content, "text/html;");
 
             // 5. 실제 메일 발송
             Transport.send(message);

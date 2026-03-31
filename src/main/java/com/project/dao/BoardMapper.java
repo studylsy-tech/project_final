@@ -1,10 +1,19 @@
 package com.project.dao;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+<<<<<<< HEAD
 import org.apache.ibatis.annotations.Param;
+=======
+
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 import com.project.model.BoardDTO;
+<<<<<<< HEAD
 import com.project.util.Criteria; 
+=======
+import com.project.util.SearchCriteria;
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 
 @Mapper
 public interface BoardMapper {
@@ -16,6 +25,7 @@ public interface BoardMapper {
     void insertBoard(BoardDTO board);
     
     void updateCount(int notice_no);
+<<<<<<< HEAD
 
     int getBoardCount(String boardType);
 
@@ -27,4 +37,13 @@ public interface BoardMapper {
     	    @Param("searchType") String searchType, // 추가
     	    @Param("keyword") String keyword       // 추가
     	);
+=======
+    
+	 
+    // 검색 및 페이징 처리
+	 List<BoardDTO> selectBoardListPaging(SearchCriteria scri);
+	 int getBoardCount(SearchCriteria scri);
+    
+    
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 }
