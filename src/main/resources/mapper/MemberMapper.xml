@@ -3,34 +3,53 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.dao.MemberMapper">
-
-    <insert id="insertSemiMember" parameterType="com.project.model.MemberDTO">
-        INSERT INTO MEMBERS (
-            USER_ID, USER_PW, USER_TYPE
-        ) VALUES (
-            #{userId}, #{userPw}, 'SEMI'
-        )
+    
+    <resultMap id="MemberResultMap" type="com.project.model.MemberDTO">
+        <result property="phone" column="PHONE" />
+        <result property="pw" column="PW" />
+        <result property="name" column="NAME" />
+        <result property="nickname" column="NICKNAME" />
+        <result property="email" column="EMAIL" />
+        <result property="address" column="ADDRESS" />
+        <result property="memberType" column="MEMBER_TYPE" />
+        <result property="createdAt" column="CREATED_AT" />
+    </resultMap>
+    
+    <insert id="insertSemi" parameterType="com.project.model.MemberDTO">
+    INSERT INTO MEMBERS (
+        PHONE, 
+        PW, 
+        NICKNAME, 
+        MEMBER_TYPE, 
+        CREATED_AT
+    ) VALUES (
+        #{phone}, 
+        #{pw}, 
+        #{nickname}, -- Controller에서 세팅한 phone 값이 일로 들어감
+        'SEMI', 
+        SYSDATE
+    )
+</insert>
+    
+    <insert id="insertFull" parameterType="com.project.model.MemberDTO">
+        INSERT INTO MEMBERS(PHONE, PW, NAME, NICKNAME, EMAIL, ADDRESS, MEMBER_TYPE)
+        VALUES(#{phone}, #{pw}, #{name}, #{nickname}, #{email}, #{address}, 'FULL')
     </insert>
-
-    <select id="loginCheck" parameterType="com.project.model.MemberDTO" 
-            resultType="com.project.model.MemberDTO">
-        SELECT 
-            USER_ID as userId, 
-            USER_PW as userPw, 
-            USER_NAME as userName, 
-            USER_EMAIL as userEmail, 
-            USER_TYPE as userType
-        FROM MEMBERS
-        WHERE USER_ID = #{userId} AND USER_PW = #{userPw}
+    
+    <select id="loginCheck" parameterType="com.project.model.MemberDTO" resultMap="MemberResultMap">
+        SELECT * FROM MEMBERS WHERE PHONE = #{phone} AND PW = #{pw}
     </select>
-
-    <update id="updateToFullMember" parameterType="com.project.model.MemberDTO">
+  
+    <update id="updateMember" parameterType="com.project.model.MemberDTO">
         UPDATE MEMBERS 
         SET 
-            USER_NAME = #{userName},
-            USER_EMAIL = #{userEmail},
-            USER_TYPE = 'FULL'
-        WHERE USER_ID = #{userId}
+            PW = #{pw}
+            <if test="memberType == 'FULL' or memberType == 'ADMIN'">
+                , NAME = #{name}
+                , NICKNAME = #{nickname}
+                , ADDRESS = #{address}
+            </if>
+        WHERE EMAIL = #{email}
     </update>
-
+    
 </mapper>

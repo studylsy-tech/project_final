@@ -4,7 +4,6 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <!-- DataSource -->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="oracle.jdbc.driver.OracleDriver"/>
         <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
@@ -12,16 +11,39 @@
         <property name="password" value="12345"/>
     </bean>
 
-    <!-- SqlSessionFactory -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
-<!--         <property name="mapperLocations" value="classpath:/mappers/**/*.xml"/>
- -->    </bean>
+        <property name="mapperLocations">
+            <list>
+                <value>classpath:mybatis/mappers/**/*.xml</value>
+                <value>classpath:mapper/**/*.xml</value>
+            </list>
+        </property>
+    </bean>
 
-    <!-- MyBatis Mapper 스캔 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.project.dao"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
     </bean>
-
+    
+    <!-- MailSender Bean 등록 MailUtil에서 의존성 추가하여 메일 발송에 사용 -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <property name="host" value="smtp.gmail.com" />
+    <property name="port" value="587" />
+    <property name="username" value="pafagolue@gmail.com" />
+    <property name="password" value="zhhj-rsyu-cfdn-rbsj" /> 
+    <property name="javaMailProperties">
+        <props>
+            <prop key="mail.transport.protocol">smtp</prop>
+            <prop key="mail.smtp.auth">true</prop>
+            <prop key="mail.smtp.starttls.enable">true</prop>
+            <prop key="mail.debug">true</prop>
+            <prop key="mail.smtp.ssl.protocols">TLSv1.2</prop>
+            <prop key="mail.smtp.ssl.trust">smtp.gmail.com</prop>
+        </props>
+    </property>
+</bean>
+<bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+    <constructor-arg ref="sqlSessionFactory" />
+</bean>
 </beans>

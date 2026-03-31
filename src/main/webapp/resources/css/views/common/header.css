@@ -1,83 +1,76 @@
-/* /resources/css/views/common/header.css */
-
-/* body 마진 제거 (필수) */
-body {
-    margin: 0;
-    font-family: 'Pretendard', -apple-system, sans-serif;
-}
-
 /* 헤더 전체 컨테이너 */
-.header-container {
-    background-color: #1a2a44; /* 짙은 남색 */
-    color: white;
-    padding: 0 50px; /* 위아래 패딩은 0, 좌우만 50px */
+.main-header {
+    display: flex;
+    justify-content: space-between; /* 로고는 왼쪽, 네비는 오른쪽 */
+    align-items: center;
+    padding: 0 40px;
     height: 80px; /* 헤더 높이 고정 */
-    display: flex; /* Flexbox 활성화 */
-    justify-content: space-between; /* 로고는 왼쪽, 메뉴는 오른쪽 끝 */
-    align-items: center; /* 세로 중앙 정렬 */
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    background-color: #fff;
+    border-bottom: 1px solid #eaeaea;
+    box-sizing: border-box;
 }
 
-/* 로고 영역 스타일 */
-.logo {
+/* 로고 및 드롭다운 컨테이너 */
+.header-logo.dropdown-container {
+    position: relative;
     display: flex;
     align-items: center;
+    height: 100%; /* 헤더 높이에 맞춤 */
 }
 
-.logo h1 {
-    margin: 0;
-    font-size: 24px;
-    letter-spacing: 1px;
-}
-
-.logo a {
-    color: white !important; /* 보라색 링크 강제 제거 */
+.header-logo > a {
+    font-size: 22px;
+    font-weight: 800;
+    color: #1a1a1a;
     text-decoration: none;
-    transition: opacity 0.2s;
+    letter-spacing: -0.5px;
 }
 
-.logo a:hover {
-    opacity: 0.8;
-}
-
-/* 네비게이션 메뉴 영역 스타일 */
-.nav-menu {
-    display: flex; /* 메뉴 아이템들도 한 줄로 */
-    align-items: center;
-    gap: 0; /* include되는 파일 내부에 여백이 있을 수 있으므로 0 */
-}
-
-/* include되는 header_guest/user.jsp 내부의 ul, a 태그 스타일 (예측) */
-.nav-menu ul {
+/* 네비게이션 그룹 (로그인/회원가입 영역) */
+.nav-group {
     display: flex;
+    align-items: center;
+    gap: 20px; /* 항목 간 간격 */
+}
+
+.nav-item {
+    text-decoration: none;
+    color: #666;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* 드롭다운 메뉴 위치 미세 조정 */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 60px; /* 로고 텍스트보다 약간 아래로 */
+    left: 0;
+    width: 160px;
+    background-color: #ffffff;
+    border: 1px solid #eee;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
     list-style: none;
+    padding: 8px 0;
     margin: 0;
-    padding: 0;
-    align-items: center;
-    gap: 25px; /* 메뉴 간격 */
+    z-index: 9999;
+    border-radius: 8px;
 }
 
-.nav-menu a {
-    color: white;
+.header-logo.dropdown-container:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li a {
+    display: block;
+    padding: 10px 20px;
+    color: #444 !important;
     text-decoration: none;
-    font-size: 15px;
-    transition: color 0.2s;
+    font-size: 14px;
+    transition: background 0.2s;
 }
 
-.nav-menu a:hover {
-    color: #a8b2c1;
-}
-
-/* 회원가입 버튼 스타일 (스크린샷 참고) */
-.nav-menu a.btn-join {
-    background-color: #00897b; /* 초록색 버튼 */
-    color: white;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-weight: bold;
-}
-
-.nav-menu a.btn-join:hover {
-    background-color: #00796b;
-    color: white;
+.dropdown-menu li a:hover {
+    background-color: #f4f7ff;
+    color: #007bff !important;
 }
