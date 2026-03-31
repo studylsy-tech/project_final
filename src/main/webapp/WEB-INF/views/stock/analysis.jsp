@@ -39,14 +39,14 @@
                     </c:choose>
                 </td>
                 
-                <td><c:out value="${deal.title}" /></td>
+                <td style="font-size:15px; font-weight: 600; color:#2c3e50;"><c:out value="${deal.title}" /></td>
                 <td style="color:red; font-weight:bold;">
                     <fmt:formatNumber value="${deal.currentPrice}" pattern="#,###" />원
                 </td>
-                <td><c:out value="${deal.communityName}" /></td>
+                <td style="width: 80px; color: #1a2a44; "><c:out value="${deal.communityName}" /></td>
                 <td>
                     <a href="${deal.originUrl}" target="_blank" class="start-btn" 
-                       style="padding: 5px 10px; font-size: 12px; text-decoration: none;">원문보기</a>
+                       style="padding: 5px 10px; font-size: 12px; text-decoration: none; white-space:nowrap;">원문보기</a>
                 </td>
             </tr>
         </c:forEach>
