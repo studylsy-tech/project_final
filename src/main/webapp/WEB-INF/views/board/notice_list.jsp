@@ -51,7 +51,25 @@
         </tbody>
     </table>
 
-    <%-- 관리자(ADMIN) 권한 확인 후 등록 버튼 노출 --%>
+    <div class="pagination-area" style="text-align: center; margin-top: 20px;">
+        <ul class="pagination" style="display: inline-flex; list-style: none; padding: 0;">
+            <c:if test="${pageMaker.prev}">
+                <li style="margin: 0 5px;"><a href="${path}/board/notice${pageMaker.query(pageMaker.startPage - 1)}">이전</a></li>
+            </c:if>
+
+            <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
+                <li style="margin: 0 5px; ${pageMaker.criteria.page == idx ? 'font-weight: bold;' : ''}">
+                    <a href="${path}/board/notice${pageMaker.query(idx)}">${idx}</a>
+                </li>
+            </c:forEach>
+
+            <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+                <li style="margin: 0 5px;"><a href="${path}/board/notice${pageMaker.query(pageMaker.endPage + 1)}">다음</a></li>
+            </c:if>
+        </ul>
+    </div>
+
+    <%-- 관리자 권한 확인 후 등록 버튼 --%>
     <c:if test="${loginUser.memberType == 'ADMIN'}">
         <div class="board-footer" style="text-align: right; margin-top: 20px;">
             <a href="${path}/board/write?type=NOTICE" class="btn-dark">공지등록</a>

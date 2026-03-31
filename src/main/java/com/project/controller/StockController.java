@@ -14,6 +14,7 @@ import com.project.service.HotDealService;
 import com.project.util.SearchCriteria;
 import com.project.util.SearchPageMaker;
 import com.project.util.Criteria;
+import com.project.util.PageMaker;
 
 @Controller
 @RequestMapping("/stock")
@@ -50,13 +51,25 @@ public String newLowStocks(Model model) {
 }
 
 @GetMapping("/analysis")
-public String analysisStocks(Model model) {
+public String analysisStocks(Criteria cri, Model model) {
+    // 1. 한 페이지당 보여줄 게시글 수를 10개로 강제 설정 (기본값이 10이면 생략 가능)
+    cri.setPerPageNum(10); 
+
+    // 2. 전체 핫딜 개수 조회 (PageMaker 계산용)
+    int totalCount = hotDealService.getTotalDealCount(); 
+
+    // 3. 페이징 처리된 핫딜 목록 조회 (Service에 해당 메서드 구현 필요)
+    List<HotDealDTO> hotDeals = hotDealService.getRecentDealsPaging(cri); 
+
+    // 4. PageMaker 설정
+    PageMaker pageMaker = new PageMaker();
+    pageMaker.setCriteria(cri);
+    pageMaker.setTotalCount(totalCount);
+
     model.addAttribute("boardTitle", "실시간 핫딜 자동분석 리포트");
-    model.addAttribute("lowPriceList", hotDealService.getNewLowProducts());
-    model.addAttribute("totalCount", hotDealService.getTotalDealCount());
-    
-    List<HotDealDTO> hotDeals = hotDealService.getRecentDeals(); 
     model.addAttribute("hotDealList", hotDeals); 
+    model.addAttribute("pageMaker", pageMaker);
+    model.addAttribute("totalCount", totalCount);
 
     return "stock/analysis";
 }

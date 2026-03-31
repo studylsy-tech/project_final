@@ -51,7 +51,51 @@
             </tr>
         </c:forEach>
     </tbody>
+<%-- analysis.jsp 하단 --%>
 </table>
+<div class="search-bar" style="text-align: center; margin-bottom: 20px;">
+    <select id="searchType" name="searchType" style="padding: 5px;">
+        <option value="title">상품명</option>
+    </select>
+    <input type="text" id="keywordInput" name="keyword" value="" style="padding: 5px; width: 200px;">
+    <button id="searchBtn" style="padding: 5px 15px;">검색</button>
+</div>
+<%-- analysis.jsp 페이징 번호 부분 --%>
+<c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
+    <a href="analysis${pageMaker.query(idx)}">${idx}</a> 
+</c:forEach>
+<%-- analysis.jsp 스크립트 부분 --%>
+<script>
+    $(function() {
+        $('#searchBtn').on("click", function(event) {
+            self.location = "analysis"
+                + '${pageMaker.query(1)}' // makeQuery 대신 query 사용
+                + "&searchType=" + $("select option:selected").val()
+                + "&keyword=" + encodeURIComponent($('#keywordInput').val());
+        });
+    });
+</script>
+<div class="pagination-area" style="text-align: center; margin-top: 20px;">
+    <ul class="pagination" style="display: inline-flex; list-style: none; padding: 0;">
+        <%-- 이전 버튼 --%>
+        <c:if test="${pageMaker.prev}">
+            <li style="margin: 0 5px;">
+                <a href="${path}/stock/analysis${pageMaker.query(pageMaker.startPage - 1)}">이전</a>
+            </li>
+        </c:if>
+
+        
+
+        <%-- 다음 버튼 --%>
+        <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+            <li style="margin: 0 5px;">
+                <a href="${path}/stock/analysis${pageMaker.query(pageMaker.endPage + 1)}">다음</a>
+            </li>
+        </c:if>
+    </ul>
+</div>
+
+
         </div>
     </div>
 </div>

@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.project.model.BoardDTO;
 import com.project.model.MemberDTO;
 import com.project.service.BoardService;
+import com.project.util.Criteria;
+import com.project.util.PageMaker;
 
 @Controller
 @RequestMapping("/board")
@@ -24,17 +26,44 @@ public class BoardController {
 
     // 1. 공지사항 목록 조회
     @GetMapping("/notice") 
-    public String noticeList(Model model) {
-        List<BoardDTO> list = boardService.selectBoardList("NOTICE");
+    public String noticeList(Criteria cri, Model model) {
+        // 1. 주석을 해제하여 페이징된 목록을 실제로 가져와야 합니다.
+        List<BoardDTO> list = boardService.selectBoardListPaging("NOTICE", cri); 
+        
+        // 2. 전체 게시글 개수 조회
+        int totalCount = boardService.getBoardCount("NOTICE"); 
+        
+        // 3. PageMaker 설정
+        PageMaker pageMaker = new PageMaker();
+        pageMaker.setCriteria(cri);
+        pageMaker.setTotalCount(totalCount);
+        
+        // 4. 주석을 해제하여 조회된 목록(list)을 모델에 담아 전송해야 합니다.
         model.addAttribute("list", list);
+        model.addAttribute("pageMaker", pageMaker);
+        
         return "board/notice_list";
     }
 
     // 2. Q&A 목록 조회
     @GetMapping("/qna")
-    public String qnaList(Model model) {
-        List<BoardDTO> list = boardService.selectBoardList("QNA");
+    public String qnaList(Criteria cri, Model model) {
+        String boardType = "QNA";
+        
+        // 1. 해당 페이지에 맞는 Q&A 목록 조회
+        List<BoardDTO> list = boardService.selectBoardListPaging(boardType, cri); 
+        
+        // 2. Q&A 전체 게시글 개수 조회
+        int totalCount = boardService.getBoardCount(boardType); 
+        
+        // 3. PageMaker 객체 생성 및 설정
+        PageMaker pageMaker = new PageMaker();
+        pageMaker.setCriteria(cri);
+        pageMaker.setTotalCount(totalCount);
+        
         model.addAttribute("list", list);
+        model.addAttribute("pageMaker", pageMaker);
+        
         return "board/qna_list";
     }
 
@@ -85,6 +114,7 @@ public class BoardController {
             boardService.insertBoard(board);
             return "redirect:/board/qna";
         }
+        
     }
 
     // 5. 상세 페이지
@@ -98,4 +128,6 @@ public class BoardController {
         }
         return "redirect:/board/notice";
     }
+    
+ 
 }
