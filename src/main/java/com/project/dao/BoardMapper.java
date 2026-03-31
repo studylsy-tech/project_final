@@ -1,8 +1,11 @@
 package com.project.dao;
 
 import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
+
 import com.project.model.BoardDTO;
+import com.project.util.SearchCriteria;
 
 @Mapper // MyBatis 매퍼 인터페이스임을 명시
 public interface BoardMapper {
@@ -18,4 +21,11 @@ public interface BoardMapper {
     
     // 조회수 증가
     void updateCount(int notice_no);
+    
+	 
+    // 검색 및 페이징 처리
+	 List<BoardDTO> selectBoardListPaging(SearchCriteria scri);
+	 int getBoardCount(SearchCriteria scri);
+    
+    
 }
