@@ -24,6 +24,24 @@ VALUES ('입고 알림 문의', '품절 상품 재입고 시 알림이 오나요
 commit
 
 
+<<<<<<< HEAD
+--공지사항 및 Q&A 대량 생성 SQL
+BEGIN
+    -- 1. 공지사항(NOTICE) 50개 생성
+    FOR i IN 1..50 LOOP
+        INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
+        VALUES ('공지사항 테스트 제목 ' || i, '공지사항 테스트 내용입니다. 번호: ' || i, 'ADMIN', 'NOTICE');
+    END LOOP;
+
+    -- 2. Q&A 50개 생성
+    FOR i IN 1..50 LOOP
+        INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
+        VALUES ('Q&A 질문 제목 ' || i, '질문 내용 테스트입니다. 번호: ' || i, '테스터', 'QNA');
+    END LOOP;
+
+    COMMIT;
+END;
+=======
 -- 게시판 더미데이터(페이징 확인용도)
 INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
 VALUES ('두 번째 공지사항입니다.', '테스트 내용입니다.', '관리자', 'NOTICE');
@@ -42,3 +60,4 @@ COMMIT
 
 
 
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git

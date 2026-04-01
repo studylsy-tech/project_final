@@ -15,6 +15,7 @@ import com.project.dao.HotDealMapper; // [추가] HotDealMapper 임포트
 import com.project.dao.ProductMapper;
 import com.project.model.HotDealDTO;
 import com.project.model.ProductDTO;
+import com.project.util.Criteria;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -122,11 +123,7 @@ public class HotDealServiceImpl implements HotDealService {
         return newlyAddedCount;
     }
 
-    @Override
-    public List<HotDealDTO> getRecentDeals() {
-        // 게시판(Screen 11)에 표시할 최신 핫딜 목록을 가져옵니다 [cite: 289]
-        return hotDealMapper.selectRecentDeals();
-    }
+
 
     @Override
     public List<ProductDTO> getNewLowProducts() {
@@ -139,4 +136,28 @@ public class HotDealServiceImpl implements HotDealService {
         // 통계 카드(Screen 14)의 '오늘 수집 건수' 등을 계산하기 위해 전체 건수를 반환합니다 [cite: 348]
         return hotDealMapper.getTotalCount();
     }
+
+
+
+
+    // 페이징 처리된 핫딜 목록 조회 추가 구현
+    @Override
+    public List<HotDealDTO> getRecentDeals() {
+        // 기본적으로 첫 페이지의 10개 데이터를 가져오도록 처리하거나 
+        // 전체 최신 리스트를 반환하도록 매퍼를 호출합니다.
+        return hotDealMapper.getRecentDeals(); 
+    }
+
+    // 페이징 처리된 핫딜 목록 조회 (완성본)
+    @Override
+    public List<HotDealDTO> getRecentDealsPaging(Criteria cri) {
+        // 1. 오라클 rownum 기준 시작 및 끝 번호 계산 (10개씩 보기)
+        int pageEnd = cri.getPage() * cri.getPerPageNum();
+        int pageStart = (cri.getPage() - 1) * cri.getPerPageNum() + 1;
+        
+        // 2. 매퍼 호출 (pageStart, pageEnd 파라미터 전달)
+        return hotDealMapper.getRecentDealsPaging(pageStart, pageEnd);
+    }
+
+
 }

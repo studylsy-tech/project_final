@@ -1,9 +1,16 @@
 package com.project.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.project.model.ProductDTO;
+import com.project.service.ProductService;
+import com.project.util.SearchCriteria;
 
 @Controller
 public class MainController {
@@ -25,11 +32,18 @@ public class MainController {
 	public String support() {
 		return "footer/support"; // WEB-INF/views/footer/support.jsp 호출
 	}
-
+	@Autowired
+    private ProductService productService;
+	
 	@GetMapping("/")
-	public String mainHome(Model model) {
-		// 여기에 DB에서 전체 상품 리스트를 가져와서 model에 담는 로직을 추가하면
-		// 홈 화면(index.jsp)에서 내가 등록한 상품들을 볼 수 있습니다.
-		return "index";
-	}
+    public String mainHome(Model model, SearchCriteria cri) throws Exception {
+        
+        
+        // [수정 후] 주입받은 변수명(productService)을 사용하여 메서드 호출
+        List<ProductDTO> list = productService.findAllProducts(); 
+        
+        model.addAttribute("hotDealList", list);
+        
+        return "index";
+    }
 }
