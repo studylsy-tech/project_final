@@ -12,18 +12,21 @@
 <div class="board-wrapper">
     <h2>${boardTitle}</h2>
 
-    <%-- 상단 통합 검색 영역 (필요 시 사용) --%>
     <div style="margin-bottom: 20px; text-align: right;">
-        <form action="${path}/board/list" method="get">
-            <select name="searchType" style="padding: 5px;">
-                <option value="name" ${pageMaker.criteria.searchType eq 'name' ? 'selected' : ''}>상품명</option>
-                <option value="drop" ${pageMaker.criteria.searchType eq 'drop' ? 'selected' : ''}>급락상품</option>
-                <option value="low" ${pageMaker.criteria.searchType eq 'low' ? 'selected' : ''}>최저가</option>
-            </select>
-            <input type="text" name="keyword" value="${pageMaker.criteria.keyword}" style="padding: 5px; width: 200px;">
-            <button type="submit" style="padding: 5px 15px;">검색</button>
-        </form>
-    </div>
+    <%-- 1. 주소를 /stock/list로 수정 --%>
+    <form action="${path}/stock/list" method="get">
+        <select name="searchType" style="padding: 5px;">
+            <%-- 2. pageMaker.criteria 대신 scri 사용 --%>
+            <option value="name" ${scri.searchType eq 'name' ? 'selected' : ''}>상품명</option>
+            <option value="drop" ${scri.searchType eq 'drop' ? 'selected' : ''}>급락상품</option>
+            <option value="low" ${scri.searchType eq 'low' ? 'selected' : ''}>최저가</option>
+        </select>
+        
+        <%-- 3. keyword 부분도 scri.keyword로 수정 --%>
+        <input type="text" name="keyword" value="${scri.keyword}" style="padding: 5px; width: 200px;">
+        <button type="submit" style="padding: 5px 15px;">검색</button>
+    </form>
+</div>
 
     <%-- 상품 리스트 영역 --%>
     <div class="stock-list-container">

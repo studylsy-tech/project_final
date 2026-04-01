@@ -52,5 +52,6 @@ public class SearchPageController {
             
             return "stock/stock_list"; // 상품 JSP로 보냄
         }
+        
     }
 }
