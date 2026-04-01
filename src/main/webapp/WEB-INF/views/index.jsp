@@ -72,13 +72,15 @@
 						</div>
 
 						<%-- 제목 2줄 제한 --%>
-<p class="item-title">
-    <c:out value="${deal.title}" />
-</p>
+						<p class="item-title">
+							<c:out value="${deal.title}" />
+						</p>
 						<%-- 가격 강조 (파란색 유지) --%>
 						<p class="item-price">
-    <fmt:formatNumber value="${deal.currentPrice}" pattern="#,###"/>원 <%-- price를 currentPrice로 변경 --%>
-</p>
+							<fmt:formatNumber value="${deal.currentPrice}" pattern="#,###" />
+							원
+							<%-- price를 currentPrice로 변경 --%>
+						</p>
 
 						<%-- 출처 소규모 표시 --%>
 						<p

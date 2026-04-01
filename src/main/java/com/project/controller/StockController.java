@@ -27,11 +27,20 @@ public class StockController {
 	private HotDealService hotDealService;
 
 	@GetMapping("/all")
-	public String allStocks(Model model) {
-		List<ProductDTO> list = productService.findAllProducts();
-		model.addAttribute("stockList", list);
-		model.addAttribute("boardTitle", "전체 상품 목록");
-		return "stock/stock_list";
+	public String allStocks(SearchCriteria cri, Model model) throws Exception {
+	    // 1. 페이징 처리된 전체 리스트 가져오기 (기존 listSearch 활용 또는 별도 호출)
+	    List<ProductDTO> list = productService.listSearch(cri); 
+	    int totalCount = productService.listSearchCount(cri);
+
+	    // 2. 페이징 객체 생성
+	    SearchPageMaker pageMaker = new SearchPageMaker((Criteria) cri, totalCount, 10);
+
+	    model.addAttribute("stockList", list);
+	    model.addAttribute("pageMaker", pageMaker);
+	    model.addAttribute("boardTitle", "전체 상품 목록");
+
+	    // 3. 리턴 페이지를 stock/stock_all 로 변경!
+	    return "stock/stock_all"; 
 	}
 
 	@GetMapping("/drop")
