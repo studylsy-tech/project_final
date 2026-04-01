@@ -22,34 +22,34 @@
         </tr>
     </thead>
     <tbody>
-        <c:forEach var="deal" items="${hotDealList}">
-            <tr>
-                <%-- 이미지 출력 부분 추가 --%>
-                <td style="text-align:center; width: 100px;">
-                    <c:choose>
-                        <c:when test="${not empty deal.imageUrl}">
-                            <img src="${deal.imageUrl}" alt="상품이미지" 
-                                 style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;"
-                                 onerror="this.src='${path}/resources/images/no-image.png'">
-                        </c:when>
-                        <c:otherwise>
-                            <img src="${path}/resources/images/no-image.png" 
-                                 style="width: 80px; height: 80px;">
-                        </c:otherwise>
-                    </c:choose>
-                </td>
-                
-                <td style="font-size:15px; font-weight: 600; color:#2c3e50;"><c:out value="${deal.title}" /></td>
-                <td style="color:red; font-weight:bold;">
-                    <fmt:formatNumber value="${deal.currentPrice}" pattern="#,###" />원
-                </td>
-                <td style="width: 80px; color: #1a2a44; "><c:out value="${deal.communityName}" /></td>
-                <td>
-                    <a href="${deal.originUrl}" target="_blank" class="start-btn" 
-                       style="padding: 5px 10px; font-size: 12px; text-decoration: none; white-space:nowrap;">원문보기</a>
-                </td>
-            </tr>
-        </c:forEach>
+        <c:forEach var="hotdeal" items="${hotDealList}">
+    <tr>
+        <%-- 이미지 출력 부분 추가 --%>
+        <td style="text-align:center; width: 100px;">
+            <c:choose>
+                <c:when test="${not empty hotdeal.imageUrl}">
+                   <img src="${hotdeal.imageUrl}" alt="상품이미지" 
+     style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;"
+     onerror="this.src='${path}/resources/images/no-image.png'">
+                </c:when>
+                <c:otherwise>
+                    <img src="${path}/resources/images/no-image.png" 
+                         style="width: 80px; height: 80px;">
+                </c:otherwise>
+            </c:choose>
+        </td>
+        
+        <td style="font-size:15px; font-weight: 600; color:#2c3e50;"><c:out value="${hotdeal.title}" /></td>
+        <td style="color:red; font-weight:bold;">
+            <fmt:formatNumber value="${hotdeal.currentPrice}" pattern="#,###" />원
+        </td>
+        <td style="width: 80px; color: #1a2a44; "><c:out value="${hotdeal.communityName}" /></td>
+        <td>
+            <a href="${hotdeal.originUrl}" target="_blank" class="start-btn" 
+               style="padding: 5px 10px; font-size: 12px; text-decoration: none; white-space:nowrap;">원문보기</a>
+        </td>
+    </tr>
+</c:forEach>
     </tbody>
 <%-- analysis.jsp 하단 --%>
 </table>
