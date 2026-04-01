@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.project.model.BoardDTO;
 import com.project.model.MemberDTO;
 import com.project.service.BoardService;
+import com.project.util.Criteria;
+import com.project.util.PageMaker;
+import com.project.util.SearchCriteria;
 
 @Controller
 @RequestMapping("/board")
@@ -22,19 +25,41 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
 
-    // 1. 공지사항 목록 조회
+    // 1. 공지사항 목록 조회 (정상 반영됨)
     @GetMapping("/notice") 
-    public String noticeList(Model model) {
-        List<BoardDTO> list = boardService.selectBoardList("NOTICE");
+    public String noticeList(SearchCriteria scri, Model model) {
+        scri.setBoardType("NOTICE"); 
+        int totalCount = boardService.getBoardCount(scri); 
+        
+        PageMaker pageMaker = new PageMaker();
+        pageMaker.setCriteria(scri);
+        pageMaker.setTotalCount(totalCount);
+        
+        List<BoardDTO> list = boardService.selectBoardListPaging(scri); 
+        
         model.addAttribute("list", list);
+        model.addAttribute("pageMaker", pageMaker);
+        
         return "board/notice_list";
     }
 
-    // 2. Q&A 목록 조회
+    // 2. Q&A 목록 조회 (수정 필요했던 부분)
     @GetMapping("/qna")
-    public String qnaList(Model model) {
-        List<BoardDTO> list = boardService.selectBoardList("QNA");
+    public String qnaList(SearchCriteria scri, Model model) { // Criteria -> SearchCriteria
+        scri.setBoardType("QNA"); // boardType 설정
+        
+        // 서비스 호출 방식 변경
+        int totalCount = boardService.getBoardCount(scri); 
+        
+        PageMaker pageMaker = new PageMaker();
+        pageMaker.setCriteria(scri);
+        pageMaker.setTotalCount(totalCount);
+        
+        List<BoardDTO> list = boardService.selectBoardListPaging(scri); 
+        
         model.addAttribute("list", list);
+        model.addAttribute("pageMaker", pageMaker);
+        
         return "board/qna_list";
     }
 
@@ -85,6 +110,7 @@ public class BoardController {
             boardService.insertBoard(board);
             return "redirect:/board/qna";
         }
+        
     }
 
     // 5. 상세 페이지
@@ -98,4 +124,6 @@ public class BoardController {
         }
         return "redirect:/board/notice";
     }
+    
+ 
 }

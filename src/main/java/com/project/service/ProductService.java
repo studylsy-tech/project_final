@@ -70,7 +70,19 @@ public class ProductService {
 	    return productMapper.listSearchCount(cri);
 	}
 	
-	
+	// 일반 상품과 핫딜을 합쳐서 가져오는 통합 조회 메서드
+    public List<ProductDTO> getIntegratedList(SearchCriteria cri) throws Exception {
+        // XML에서 정의한 파라미터 계산 (1페이지면 1~10행)
+        int pageStart = (cri.getPage() - 1) * cri.getPerPageNum() + 1;
+        int pageEnd = cri.getPage() * cri.getPerPageNum();
+        
+        // ProductMapper에 추가했던 통합 쿼리 호출
+        return productMapper.selectIntegratedList(pageStart, pageEnd);
+    }
+
+    public int getIntegratedCount() throws Exception {
+        return productMapper.getIntegratedCount();
+    }
 	
 	
 }

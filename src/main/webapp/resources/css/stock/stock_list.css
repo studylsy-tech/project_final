@@ -178,26 +178,9 @@
 .start-btn:hover {
     background-color: #34495e;
 }   
+.bg-red { background-color: #ff4d4d; color: white; }    /* 급락 */
+.bg-orange { background-color: #ff9800; color: white; } /* 핫딜 */
+.bg-blue { background-color: #2196f3; color: white; }   /* 최저가/갱신 */
 
-/* 검색 폼 영역 */
-.board-wrapper form select,
-.board-wrapper form input,
-.board-wrapper form button {
-    font-size: 15px;        /* 카드 글씨 크기에 맞춤 */
-    font-weight: 600;       /* 글씨 진하게 */
-    padding: 8px 12px;
-    border: 1px solid #e1e4e8;
-    border-radius: 4px;
-    color: #2c3e50;         /* 카드 글씨색과 동일 */
-}
 
-.board-wrapper form button {
-    background-color: #1a2a44;
-    color: #fff;
-    cursor: pointer;
-    font-weight: 700;
-}
-
-.board-wrapper form button:hover {
-    background-color: #34495e;
-}
+.prod-img-wrapper { margin-right: 20px; }

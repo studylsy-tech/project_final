@@ -64,4 +64,19 @@ public interface ProductMapper {
 
     // 검색 조건에 맞는 총 상품 개수 조회
     int listSearchCount(SearchCriteria cri) throws Exception;
+    
+    /**
+     * 일반 상품(PRODUCT)과 핫딜(TB_HOTDEAL_TRACKER) 통합 목록 조회
+     * @param pageStart 시작 행 번호
+     * @param pageEnd 끝 행 번호
+     */
+    List<ProductDTO> selectIntegratedList(
+        @Param("pageStart") int pageStart, 
+        @Param("pageEnd") int pageEnd
+    ) throws Exception;
+
+    /**
+     * 통합 리스트의 전체 데이터 개수 조회 (페이징용)
+     */
+    int getIntegratedCount() throws Exception;
 }

@@ -47,6 +47,37 @@
         </tbody>
     </table>
 
+
+    <%-- 페이징 처리 영역 추가 --%>
+    <div class="pagination-area" style="text-align: center; margin-top: 20px;">
+        <ul class="pagination" style="display: inline-flex; list-style: none; padding: 0;">
+            <%-- '이전' 버튼 --%>
+            <c:if test="${pageMaker.prev}">
+                <li style="margin: 0 5px;">
+                    <a href="${path}/board/qna${pageMaker.query(pageMaker.startPage - 1)}">이전</a>
+                </li>
+            </c:if>
+
+            <%-- 페이지 번호 목록 --%>
+            <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
+                <li style="margin: 0 5px; ${pageMaker.criteria.page == idx ? 'font-weight: bold;' : ''}">
+                    <a href="${path}/board/qna${pageMaker.query(idx)}" 
+                       style="${pageMaker.criteria.page == idx ? 'color: #000; text-decoration: underline;' : 'color: #666;'}">
+                        ${idx}
+                    </a>
+                </li>
+            </c:forEach>
+
+            <%-- '다음' 버튼 --%>
+            <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+                <li style="margin: 0 5px;">
+                    <a href="${path}/board/qna${pageMaker.query(pageMaker.endPage + 1)}">다음</a>
+                </li>
+            </c:if>
+        </ul>
+    </div>
+
+    
     <div class="board-footer" style="width: 75%; margin-left: auto; margin-top: 20px; display: flex; justify-content: flex-end;">
         <a href="${path}/board/qnaWrite" class="btn-dark">질문하기</a>
     </div>

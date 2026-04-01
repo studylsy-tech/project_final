@@ -1,31 +1,22 @@
 package com.project.dao;
 
 import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
-
 import com.project.model.BoardDTO;
 import com.project.util.SearchCriteria;
 
-@Mapper // MyBatis 매퍼 인터페이스임을 명시
+@Mapper
 public interface BoardMapper {
-
-    // 게시판 목록 조회
-    List<BoardDTO> selectBoardList(String board_type);
+    // SearchCriteria를 사용하여 페이징 및 검색 처리
+    List<BoardDTO> selectBoardListPaging(SearchCriteria scri);
     
-    // 게시글 상세 조회
+    // SearchCriteria를 사용하여 게시글 개수 조회
+    int getBoardCount(SearchCriteria scri);
+    
+    // 기존 상세 조회 및 삽입/조회수 메서드 유지
     BoardDTO selectBoardDetail(int notice_no);
-    
-    // 게시글 등록
     void insertBoard(BoardDTO board);
-    
-    // 조회수 증가
     void updateCount(int notice_no);
     
-	 
-    // 검색 및 페이징 처리
-	 List<BoardDTO> selectBoardListPaging(SearchCriteria scri);
-	 int getBoardCount(SearchCriteria scri);
-    
-    
+    List<BoardDTO> selectBoardList(SearchCriteria scri);
 }

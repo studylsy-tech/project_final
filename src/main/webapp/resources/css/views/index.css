@@ -1,43 +1,176 @@
-@charset "UTF-8";
-/* /resources/css/views/index.css */
-
+/* /fin_project/src/main/webapp/resources/css/views/index.css */
+/* 메인 컨텐츠 컨테이너 */
 .main-content {
-    text-align: center;
-    padding: 100px 20px;
+    padding: 40px 20px;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-.search-bar {
-    width: 50%;
-    padding: 15px 25px;
-    font-size: 16px;
-    border: 2px solid #1a2a44;
-    border-radius: 30px;
-    margin-bottom: 20px;
-    outline: none;
+.main-content h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 30px;
 }
 
-/* 상품번호 입력칸 추가 반영 */
-.search-bar-small {
-    width: 15%;
-    padding: 15px;
-    font-size: 14px;
-    border: 2px solid #1a2a44;
-    border-radius: 10px;
-    margin-left: 10px;
-    outline: none;
+/* 검색창 + 티커 통합 래퍼 */
+.search-ticker-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    background: #fff;
+    padding: 8px 15px;
+    border-radius: 40px;
+    border: 2px solid #2196f3;
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.15);
+    transition: box-shadow 0.3s ease;
 }
 
-.start-btn {
-    background-color: #1a2a44;
-    color: white;
-    padding: 12px 30px;
+.search-ticker-wrapper:focus-within {
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.25);
+}
+
+/* 검색 폼 내부 */
+.search-ticker-wrapper input[type="text"] {
+    width: 100%;
+    padding: 12px 15px;
     border: none;
-    border-radius: 5px;
-    font-size: 18px;
-    cursor: pointer;
-    transition: 0.3s;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
 }
 
-.start-btn:hover {
-    background-color: #4a90e2;
+.search-ticker-wrapper button[type="submit"] {
+    background: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
+}
+
+.search-ticker-wrapper button[type="submit"]:hover {
+    transform: scale(1.1);
+}
+
+/* 통합 섹션 레이아웃 */
+.main-top-integrated-section {
+    display: flex;
+    gap: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
+    align-items: flex-start;
+}
+
+/* 핫딜 그리드 */
+.hotdeal-grid-container {
+    flex: 7.5;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
+
+.hotdeal-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 20px;
+}
+
+.hotdeal-item {
+    transition: transform 0.2s ease;
+}
+
+.hotdeal-item:hover {
+    transform: translateY(-5px);
+}
+
+.img-wrapper {
+    width: 100%;
+    padding-top: 100%;
+    position: relative;
+    background: #fdfdfd;
+    border-radius: 10px;
+    border: 1px solid #f0f0f0;
+    overflow: hidden;
+}
+
+.img-wrapper img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 85%;
+    max-height: 85%;
+    object-fit: contain;
+}
+
+/* 급락 순위 */
+.drop-rank-container {
+    flex: 2.5;
+    background: #fff;
+    padding: 25px;
+    border-radius: 12px;
+    border: 1px solid #eee;
+    position: sticky;
+    top: 20px;
+}
+
+.rank-list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+}
+
+.rank-num {
+    font-weight: 800;
+    color: #2196f3;
+    width: 20px;
+}
+
+/* 티커 박스 */
+.ticker-box {
+    flex: 4;
+    overflow: hidden;
+    height: 40px;
+    position: relative;
+}
+
+#mainTicker {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#mainTicker li {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #555;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.live-tag {
+    color: #2196f3;
+    font-weight: bold;
+    margin-right: 10px;
+    font-size: 12px;
+}
+
+/* 수직 구분선 */
+.v-line {
+    width: 1px;
+    height: 25px;
+    background: #ddd;
+    margin: 0 10px;
 }
