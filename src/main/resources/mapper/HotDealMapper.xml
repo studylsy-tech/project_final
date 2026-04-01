@@ -18,8 +18,39 @@
 
     <select id="getRecentDeals" resultType="com.project.model.HotDealDTO">
     SELECT * FROM (
-        SELECT * FROM TB_HOTDEAL_TRACKER  ORDER BY LAST_UPDATE_DATE DESC    ) WHERE rownum &lt;= 10
-</select>
+        SELECT 
+            DEAL_ID as dealId,
+            ORIGIN_URL as originUrl,
+            TITLE as title,
+            IMAGE_URL as imageUrl,  
+            CURRENT_PRICE as currentPrice,
+            START_PRICE as startPrice,
+            MALL_NAME as mallName,
+            COMMUNITY_NAME as communityName,
+            LAST_UPDATE_DATE as lastUpdateDate
+        FROM TB_HOTDEAL_TRACKER  
+        ORDER BY LAST_UPDATE_DATE DESC    
+    ) WHERE rownum &lt;= 10
+    </select>
+
+    <select id="getRecentDealsPaging" resultType="com.project.model.HotDealDTO">
+    SELECT * FROM (
+        SELECT rownum rnum, a.* FROM (
+            SELECT 
+                DEAL_ID as dealId,
+                ORIGIN_URL as originUrl,
+                TITLE as title,
+                IMAGE_URL as imageUrl, 
+                CURRENT_PRICE as currentPrice,
+                START_PRICE as startPrice,
+                MALL_NAME as mallName,
+                COMMUNITY_NAME as communityName,
+                LAST_UPDATE_DATE as lastUpdateDate
+            FROM TB_HOTDEAL_TRACKER  
+            ORDER BY LAST_UPDATE_DATE DESC    
+        ) a WHERE rownum &lt;= #{pageEnd}
+    ) WHERE rnum &gt;= #{pageStart}
+    </select>
 
     <select id="getTotalCount" resultType="int">
         SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
@@ -29,10 +60,5 @@
         SELECT NVL(TO_CHAR(MAX(LAST_UPDATE_DATE), 'YYYY-MM-DD HH24:MI:SS'), '-') 
         FROM TB_HOTDEAL_TRACKER
     </select>
-<select id="getRecentDealsPaging" resultType="com.project.model.HotDealDTO">
-    SELECT * FROM (
-        SELECT rownum rnum, a.* FROM (
-            SELECT * FROM TB_HOTDEAL_TRACKER  ORDER BY LAST_UPDATE_DATE DESC    ) a WHERE rownum &lt;= #{pageEnd}
-    ) WHERE rnum &gt;= #{pageStart}
-</select>
+
 </mapper>

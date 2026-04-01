@@ -20,77 +20,87 @@ import com.project.util.PageMaker;
 @RequestMapping("/stock")
 public class StockController {
 
-@Autowired
-private ProductService productService;
+	@Autowired
+	private ProductService productService;
 
-@Autowired
-private HotDealService hotDealService;
+	@Autowired
+	private HotDealService hotDealService;
 
-@GetMapping("/all")
-public String allStocks(Model model) {
-    List<ProductDTO> list = productService.findAllProducts();
-    model.addAttribute("stockList", list);
-    model.addAttribute("boardTitle", "전체 상품 목록");
-    return "stock/stock_list";
-}
+	@GetMapping("/all")
+	public String allStocks(SearchCriteria cri, Model model) throws Exception {
+	    // 1. 페이징 처리된 전체 리스트 가져오기 (기존 listSearch 활용 또는 별도 호출)
+	    List<ProductDTO> list = productService.listSearch(cri); 
+	    int totalCount = productService.listSearchCount(cri);
 
-@GetMapping("/drop")
-public String dropStocks(Model model) {
-    List<ProductDTO> list = productService.findDropProducts();
-    model.addAttribute("stockList", list);
-    model.addAttribute("boardTitle", "오늘의 급락 상품");
-    return "stock/stock_list";
-}
+	    // 2. 페이징 객체 생성
+	    SearchPageMaker pageMaker = new SearchPageMaker((Criteria) cri, totalCount, 10);
 
-@GetMapping("/new-low")
-public String newLowStocks(Model model) {
-    List<ProductDTO> list = productService.findNewLowProducts();
-    model.addAttribute("stockList", list);
-    model.addAttribute("boardTitle", "최저가 갱신");
-    return "stock/stock_list";
-}
+	    model.addAttribute("stockList", list);
+	    model.addAttribute("pageMaker", pageMaker);
+	    model.addAttribute("boardTitle", "전체 상품 목록");
 
-@GetMapping("/analysis")
-public String analysisStocks(Criteria cri, Model model) {
-    // 1. 한 페이지당 보여줄 게시글 수를 10개로 강제 설정 (기본값이 10이면 생략 가능)
-    cri.setPerPageNum(10); 
+	    // 3. 리턴 페이지를 stock/stock_all 로 변경!
+	    return "stock/stock_all"; 
+	}
 
-    // 2. 전체 핫딜 개수 조회 (PageMaker 계산용)
-    int totalCount = hotDealService.getTotalDealCount(); 
+	@GetMapping("/drop")
+	public String dropStocks(Model model) {
+		List<ProductDTO> list = productService.findDropProducts();
+		model.addAttribute("stockList", list);
+		model.addAttribute("boardTitle", "오늘의 급락 상품");
+		return "stock/stock_list";
+	}
 
-    // 3. 페이징 처리된 핫딜 목록 조회 (Service에 해당 메서드 구현 필요)
-    List<HotDealDTO> hotDeals = hotDealService.getRecentDealsPaging(cri); 
+	@GetMapping("/new-low")
+	public String newLowStocks(Model model) {
+		List<ProductDTO> list = productService.findNewLowProducts();
+		model.addAttribute("stockList", list);
+		model.addAttribute("boardTitle", "최저가 갱신");
+		return "stock/stock_list";
+	}
 
-    // 4. PageMaker 설정
-    PageMaker pageMaker = new PageMaker();
-    pageMaker.setCriteria(cri);
-    pageMaker.setTotalCount(totalCount);
+//StockController.java 수정
+	@GetMapping("/analysis")
+	public String analysisStocks(SearchCriteria cri, Model model) { // Criteria -> SearchCriteria로 변경
+		cri.setPerPageNum(10);
 
-    model.addAttribute("boardTitle", "실시간 핫딜 자동분석 리포트");
-    model.addAttribute("hotDealList", hotDeals); 
-    model.addAttribute("pageMaker", pageMaker);
-    model.addAttribute("totalCount", totalCount);
+		int totalCount = hotDealService.getTotalDealCount();
 
-    return "stock/analysis";
-}
+		// SearchCriteria를 전달하도록 서비스 호출 (필요 시 서비스/매퍼 메서드 확인)
+		List<HotDealDTO> hotDeals = hotDealService.getRecentDealsPaging(cri);
 
-@GetMapping("/list")
-public String list(SearchCriteria cri, Model model) throws Exception {
-    List<ProductDTO> list = productService.listSearch(cri);
-    int totalCount = productService.listSearchCount(cri);
-    
-    SearchPageMaker pageMaker = new SearchPageMaker((Criteria)cri, totalCount, 10);
-    
-    model.addAttribute("stockList", list);
-    model.addAttribute("pageMaker", pageMaker);
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCriteria(cri);
+		pageMaker.setTotalCount(totalCount);
 
-    String title = "전체 상품 목록";
-    if ("drop".equals(cri.getSearchType())) title = "오늘의 급락 상품";
-    else if ("low".equals(cri.getSearchType())) title = "최저가 갱신";
-    else if ("analysis".equals(cri.getSearchType())) title = "자동 분석 리포트";
-    
-    model.addAttribute("boardTitle", title);
+		model.addAttribute("boardTitle", "실시간 핫딜 자동분석 리포트");
+		model.addAttribute("hotDealList", hotDeals);
+		model.addAttribute("pageMaker", pageMaker);
+		model.addAttribute("totalCount", totalCount);
 
-    return "stock/stock_list";
-}
+		return "stock/analysis";
+	}
+
+	@GetMapping("/list")
+	public String list(SearchCriteria cri, Model model) throws Exception {
+		List<ProductDTO> list = productService.listSearch(cri);
+		int totalCount = productService.listSearchCount(cri);
+
+		SearchPageMaker pageMaker = new SearchPageMaker((Criteria) cri, totalCount, 10);
+
+		model.addAttribute("stockList", list);
+		model.addAttribute("pageMaker", pageMaker);
+
+		String title = "전체 상품 목록";
+		if ("drop".equals(cri.getSearchType()))
+			title = "오늘의 급락 상품";
+		else if ("low".equals(cri.getSearchType()))
+			title = "최저가 갱신";
+		else if ("analysis".equals(cri.getSearchType()))
+			title = "자동 분석 리포트";
+
+		model.addAttribute("boardTitle", title);
+
+		return "stock/stock_list";
+	}
 }

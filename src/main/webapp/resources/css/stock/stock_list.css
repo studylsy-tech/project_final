@@ -21,7 +21,10 @@
 .stock-list-container {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 0;          /* 간격 제거 */
+    border: 1px solid #e1e4e8;  /* 외곽선 한 번만 */
+    border-radius: 8px;
+    overflow: hidden; /* 모서리 둥글게 유지 */
 }
 
 /* [3] 개별 카드 - .stock-card 구조 유지 */
@@ -30,8 +33,9 @@
     align-items: center;
     padding: 20px 25px;
     background-color: #fff;
-    border: 1px solid #e1e4e8;
-    border-radius: 8px;
+    border: none;
+    border-bottom: 1px solid #e1e4e8;
+    border-radius: 0;
     cursor: pointer;
     transition: all 0.2s ease;
 }
