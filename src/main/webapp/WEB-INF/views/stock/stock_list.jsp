@@ -27,32 +27,58 @@
 
     <%-- 상품 리스트 영역 --%>
     <div class="stock-list-container">
-        <c:choose>
-            <c:when test="${empty stockList}">
-                <div style="text-align: center; padding: 50px; color: #999;">
-                    조회된 데이터가 없습니다.
-                </div>
-            </c:when>
-            <c:otherwise>
-                <c:forEach var="s" items="${stockList}">
-                    <div class="stock-card" onclick="location.href='${path}/dashboard/detail?prodId=${s.prodId}'">
-                        <div class="badge ${boardTitle eq '오늘의 급락 상품' ? 'bg-red' : 'bg-blue'}">
-                            ${boardTitle eq '오늘의 급락 상품' ? '급락' : '갱신'}
-                        </div>
+    <c:choose>
+        <c:when test="${empty stockList}">
+            <div style="text-align: center; padding: 50px; color: #999;">
+                조회된 데이터가 없습니다.
+            </div>
+        </c:when>
+        <c:otherwise>
+            <c:forEach var="s" items="${stockList}">
+                <div class="stock-card" onclick="location.href='${path}/dashboard/detail?prodId=${s.prodId}'" 
+                     style="display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee; cursor: pointer;">
+                    
+                    <div class="prod-img-wrapper" style="margin-right: 20px;">
+                        <c:choose>
+                            <c:when test="${not empty s.imageUrl}">
+                                <img src="${s.imageUrl}" alt="${s.name}" style="width:100px; height:100px; object-fit:cover; border-radius: 8px;">
+                            </c:when>
+                            <c:otherwise>
+                                <div style="width:100px; height:100px; background:#f4f4f4; border-radius: 8px; display:flex; align-items:center; justify-content:center; font-size:12px; color:#aaa;">No Image</div>
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
 
-                        <div class="prod-info">
-                            <div class="prod-main-text">
-                                ${s.name} — <span class="price-highlight">현재 최저가 ₩<fmt:formatNumber value="${s.price}" pattern="#,###" /></span>
+                    <div class="prod-info-wrapper">
+                        <c:set var="badgeClass" value="bg-blue" />
+                        <c:set var="badgeText" value="최저가" />
+                        
+                        <c:choose>
+                            <c:when test="${s.boardType eq 'DROP'}">
+                                <c:set var="badgeClass" value="bg-red" />
+                                <c:set var="badgeText" value="급락" />
+                            </c:when>
+                            <c:when test="${s.boardType eq 'HOT'}">
+                                <c:set var="badgeClass" value="bg-orange" />
+                                <c:set var="badgeText" value="핫딜" />
+                            </c:when>
+                        </c:choose>
+
+                        <div class="badge ${badgeClass}">${badgeText}</div>
+
+                        <div class="prod-info" style="margin-top: 8px;">
+                            <div class="prod-main-text" style="font-weight: bold; font-size: 1.1em;">
+                                ${s.name} — <span class="price-highlight" style="color: #e74c3c;">현재 최저가 ₩<fmt:formatNumber value="${s.price}" pattern="#,###" /></span>
                             </div>
-                            <div class="prod-sub-text">
-                                <fmt:formatDate value="${s.regDate}" pattern="yyyy.MM.dd HH:mm" /> | 조회수 123
+                            <div class="prod-sub-text" style="color: #888; font-size: 0.9em; margin-top: 4px;">
+                                <fmt:formatDate value="${s.regDate}" pattern="yyyy.MM.dd HH:mm" /> | ${s.source}
                             </div>
                         </div>
                     </div>
-                </c:forEach>
-            </c:otherwise>
-        </c:choose>
-    </div>
+                </div>
+            </c:forEach>
+        </c:otherwise>
+    </c:choose>
 </div>
 
 <%-- 페이징 처리 영역 --%>

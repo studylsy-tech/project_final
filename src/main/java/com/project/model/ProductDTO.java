@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Data
 public class ProductDTO {
+	private String source;       // 이 필드가 반드시 있어야 ${s.source}가 작동합니다.
     // 상품 식별을 위한 고유 코드 (추가 필수)
     private String prodCode;       // 예: "P12345" 또는 크롤링한 고유 ID
 
