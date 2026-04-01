@@ -21,7 +21,10 @@
 .stock-list-container {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 0;          /* 간격 제거 */
+    border: 1px solid #e1e4e8;  /* 외곽선 한 번만 */
+    border-radius: 8px;
+    overflow: hidden; /* 모서리 둥글게 유지 */
 }
 
 /* [3] 개별 카드 - .stock-card 구조 유지 */
@@ -30,8 +33,9 @@
     align-items: center;
     padding: 20px 25px;
     background-color: #fff;
-    border: 1px solid #e1e4e8;
-    border-radius: 8px;
+    border: none;
+    border-bottom: 1px solid #e1e4e8;
+    border-radius: 0;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -174,3 +178,26 @@
 .start-btn:hover {
     background-color: #34495e;
 }   
+
+/* 검색 폼 영역 */
+.board-wrapper form select,
+.board-wrapper form input,
+.board-wrapper form button {
+    font-size: 15px;        /* 카드 글씨 크기에 맞춤 */
+    font-weight: 600;       /* 글씨 진하게 */
+    padding: 8px 12px;
+    border: 1px solid #e1e4e8;
+    border-radius: 4px;
+    color: #2c3e50;         /* 카드 글씨색과 동일 */
+}
+
+.board-wrapper form button {
+    background-color: #1a2a44;
+    color: #fff;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.board-wrapper form button:hover {
+    background-color: #34495e;
+}
