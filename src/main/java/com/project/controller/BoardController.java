@@ -16,6 +16,7 @@ import com.project.model.MemberDTO;
 import com.project.service.BoardService;
 import com.project.util.Criteria;
 import com.project.util.PageMaker;
+import com.project.util.SearchCriteria;
 
 @Controller
 @RequestMapping("/board")
@@ -24,42 +25,37 @@ public class BoardController {
     @Autowired
     private BoardService boardService;
 
-    // 1. 공지사항 목록 조회
+    // 1. 공지사항 목록 조회 (정상 반영됨)
     @GetMapping("/notice") 
-    public String noticeList(Criteria cri, Model model) {
-        // 1. 주석을 해제하여 페이징된 목록을 실제로 가져와야 합니다.
-        List<BoardDTO> list = boardService.selectBoardListPaging("NOTICE", cri); 
+    public String noticeList(SearchCriteria scri, Model model) {
+        scri.setBoardType("NOTICE"); 
+        int totalCount = boardService.getBoardCount(scri); 
         
-        // 2. 전체 게시글 개수 조회
-        int totalCount = boardService.getBoardCount("NOTICE"); 
-        
-        // 3. PageMaker 설정
         PageMaker pageMaker = new PageMaker();
-        pageMaker.setCriteria(cri);
+        pageMaker.setCriteria(scri);
         pageMaker.setTotalCount(totalCount);
         
-        // 4. 주석을 해제하여 조회된 목록(list)을 모델에 담아 전송해야 합니다.
+        List<BoardDTO> list = boardService.selectBoardListPaging(scri); 
+        
         model.addAttribute("list", list);
         model.addAttribute("pageMaker", pageMaker);
         
         return "board/notice_list";
     }
 
-    // 2. Q&A 목록 조회
+    // 2. Q&A 목록 조회 (수정 필요했던 부분)
     @GetMapping("/qna")
-    public String qnaList(Criteria cri, Model model) {
-        String boardType = "QNA";
+    public String qnaList(SearchCriteria scri, Model model) { // Criteria -> SearchCriteria
+        scri.setBoardType("QNA"); // boardType 설정
         
-        // 1. 해당 페이지에 맞는 Q&A 목록 조회
-        List<BoardDTO> list = boardService.selectBoardListPaging(boardType, cri); 
+        // 서비스 호출 방식 변경
+        int totalCount = boardService.getBoardCount(scri); 
         
-        // 2. Q&A 전체 게시글 개수 조회
-        int totalCount = boardService.getBoardCount(boardType); 
-        
-        // 3. PageMaker 객체 생성 및 설정
         PageMaker pageMaker = new PageMaker();
-        pageMaker.setCriteria(cri);
+        pageMaker.setCriteria(scri);
         pageMaker.setTotalCount(totalCount);
+        
+        List<BoardDTO> list = boardService.selectBoardListPaging(scri); 
         
         model.addAttribute("list", list);
         model.addAttribute("pageMaker", pageMaker);

@@ -9,8 +9,8 @@ import lombok.ToString;
 @ToString
 public class Criteria {
 	
-	private int page;		// 요청 한 페이지
-	private int perPageNum;	// 한페이지에 보여줄 게시글 수
+	private int page;		
+	private int perPageNum;	
 	
 	public Criteria() {
 		this(1,10);
@@ -31,12 +31,18 @@ public class Criteria {
 		}
 		this.perPageNum = perPageNum;
 	}
+
+	// MyBatis의 #{pageStart}와 매핑됨
+	public int getPageStart() {
+		return (this.page - 1) * perPageNum + 1;
+	}
+
+	// MyBatis의 #{pageEnd}와 매핑됨
+	public int getPageEnd() {
+		return this.page * perPageNum;
+	}
 	
-	// 게시글 SELECT시에 OFFSET을 활용
-	// OFFSET #{시작 인덱스} ROWS FETCH NEXT #{게시물 수} ROWS ONLY           
-	// OFFSET #{startRow} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
 	public int getStartRow() {
 		return (this.page - 1) * perPageNum;
 	}
-	
 }
