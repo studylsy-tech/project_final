@@ -4,6 +4,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.project.model.HotDealDTO;
+import com.project.model.ProductDTO;
 
 @Mapper
 public interface HotDealMapper {
@@ -24,4 +25,6 @@ public interface HotDealMapper {
         @Param("pageStart") int pageStart, 
         @Param("pageEnd") int pageEnd
     );
+    
+    List<ProductDTO> findMainHotDeals();
 }

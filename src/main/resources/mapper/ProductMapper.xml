@@ -2,147 +2,140 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.dao.ProductMapper">
 
-    <select id="findAllProducts" resultType="com.project.model.ProductDTO">
-        SELECT 
-            PROD_ID as prodId, 
-            PROD_CODE as prodCode, 
-            PROD_NAME as name, 
-            PROD_PRICE as price, 
-            REG_DATE as regDate
-        FROM Common_Product
-        ORDER BY REG_DATE DESC
-    </select>
+	<select id="findAllProducts"
+		resultType="com.project.model.ProductDTO">
+		SELECT
+		PROD_ID as prodId,
+		PROD_CODE as prodCode,
+		PROD_NAME as name,
+		PROD_PRICE as price,
+		IMAGE_URL as imageUrl,
+		SOURCE as source,
+		BOARD_TYPE as boardType,
+		REG_DATE as regDate
+		FROM Common_Product
+		ORDER BY REG_DATE DESC
+	</select>
 
-    <select id="findDropProducts" resultType="com.project.model.ProductDTO">
-        SELECT * FROM (
-            SELECT 
-                p.PROD_ID as prodId, 
-                p.PROD_CODE as prodCode,
-                p.PROD_NAME as name, 
-                p.PROD_PRICE as price,
-                h.PREV_PRICE as prevPrice,
-                ((h.PREV_PRICE - p.PROD_PRICE) / h.PREV_PRICE * 100) as dropRate
-            FROM Common_Product p
-            JOIN (
-                SELECT PROD_ID, PRICE as PREV_PRICE 
-                FROM (
-                    SELECT PROD_ID, PRICE, 
-                           ROW_NUMBER() OVER(PARTITION BY PROD_ID ORDER BY REG_DATE DESC) as rn
-                    FROM PRICE_HISTORY
-                ) WHERE rn = 2
-            ) h ON p.PROD_ID = h.PROD_ID
-        ) WHERE dropRate >= 10
-        ORDER BY dropRate DESC
-    </select>
+	<select id="findDropProducts"
+		resultType="com.project.model.ProductDTO">
+		SELECT * FROM (
+		SELECT
+		p.PROD_ID as prodId,
+		p.PROD_NAME as name,
+		p.PROD_PRICE as price,
+		p.IMAGE_URL as imageUrl,
+		p.SOURCE as source,
+		p.BOARD_TYPE as boardType,
+		h.PREV_PRICE as prevPrice,
+		((h.PREV_PRICE - p.PROD_PRICE) / h.PREV_PRICE * 100) as dropRate
+		FROM Common_Product p
+		JOIN (
+		SELECT PROD_ID, PRICE as PREV_PRICE
+		FROM (
+		SELECT PROD_ID, PRICE,
+		ROW_NUMBER() OVER(PARTITION BY PROD_ID ORDER BY REG_DATE DESC) as rn
+		FROM PRICE_HISTORY
+		) WHERE rn = 2
+		) h ON p.PROD_ID = h.PROD_ID
+		) WHERE dropRate >= 10 OR boardType = 'DROP'
+		ORDER BY REG_DATE DESC
+	</select>
 
-    <select id="findNewLowProducts" resultType="com.project.model.ProductDTO">
-        SELECT 
-            p.PROD_ID as prodId,
-            p.PROD_CODE as prodCode,
-            p.PROD_NAME as name,
-            p.PROD_PRICE as price
-        FROM Common_Product p
-        WHERE p.PROD_PRICE = (
-            SELECT MIN(PRICE) 
-            FROM PRICE_HISTORY 
-            WHERE PROD_ID = p.PROD_ID
-        )
-        ORDER BY p.REG_DATE DESC
-    </select>
+	<select id="selectIntegratedList"
+		resultType="com.project.model.ProductDTO">
+		SELECT * FROM (
+		SELECT rownum rnum, a.* FROM (
+		SELECT
+		PROD_ID as prodId,
+		PROD_NAME as name,
+		PROD_PRICE as price,
+		IMAGE_URL as imageUrl,
+		ORIGIN_URL as originUrl,
+		SOURCE as communityName,
+		BOARD_TYPE as boardType,
+		REG_DATE as regDate
+		FROM Common_Product
 
-    <select id="listSearch" resultType="com.project.model.ProductDTO">
-        <![CDATA[
-        SELECT * FROM (
-            SELECT rownum rn, a.* FROM (
-                SELECT 
-                    PROD_ID as prodId, PROD_CODE as prodCode, PROD_NAME as name, 
-                    PROD_PRICE as price, REG_DATE as regDate
-                FROM Common_Product p
-                WHERE 1=1
-        ]]>
-                <choose>
-                    <when test="searchType == 'drop'">
-                        AND EXISTS (SELECT 1 FROM (SELECT PROD_ID, PRICE, ROW_NUMBER() OVER(PARTITION BY PROD_ID ORDER BY REG_DATE DESC) as rn FROM PRICE_HISTORY) h 
-                                    WHERE h.PROD_ID = p.PROD_ID AND h.rn = 2 AND ((h.PRICE - p.PROD_PRICE) / h.PRICE * 100) >= 10)
-                    </when>
-                    <when test="searchType == 'low'">
-                        AND p.PROD_PRICE = (SELECT MIN(PRICE) FROM PRICE_HISTORY WHERE PROD_ID = p.PROD_ID)
-                    </when>
-                </choose>
-                <if test="keyword != null and keyword != ''">
-                    AND p.PROD_NAME LIKE '%'||#{keyword}||'%'
-                </if>
-        <![CDATA[
-                ORDER BY p.REG_DATE DESC
-            ) a WHERE rownum <= #{page} * #{perPageNum}
-        ) WHERE rn > (#{page} - 1) * #{perPageNum}
-        ]]>
-    </select>
+		UNION ALL
 
-    <select id="listSearchCount" resultType="int">
-        SELECT count(*) FROM Common_Product p
-        WHERE 1=1
-        <choose>
-            <when test="searchType == 'drop'">
-                AND EXISTS (SELECT 1 FROM (SELECT PROD_ID, PRICE, ROW_NUMBER() OVER(PARTITION BY PROD_ID ORDER BY REG_DATE DESC) as rn FROM PRICE_HISTORY) h 
-                            WHERE h.PROD_ID = p.PROD_ID AND h.rn = 2 AND ((h.PRICE - p.PROD_PRICE) / h.PRICE * 100) >= 10)
-            </when>
-            <when test="searchType == 'low'">
-                AND p.PROD_PRICE = (SELECT MIN(PRICE) FROM PRICE_HISTORY WHERE PROD_ID = p.PROD_ID)
-            </when>
-        </choose>
-        <if test="keyword != null and keyword != ''">
-            AND p.PROD_NAME LIKE '%'||#{keyword}||'%'
-        </if>
-    </select>
+		SELECT
+		DEAL_ID as prodId,
+		TITLE as name,
+		CURRENT_PRICE as price,
+		IMAGE_URL as imageUrl,
+		ORIGIN_URL as originUrl,
+		COMMUNITY_NAME as communityName,
+		'HOT' as boardType,
+		LAST_UPDATE_DATE as regDate
+		FROM TB_HOTDEAL_TRACKER
 
-    <select id="findHotdealLowProducts" resultType="com.project.model.ProductDTO">
-        SELECT 
-            T.DEAL_ID as prodId,
-            T.TITLE as name,
-            T.CURRENT_PRICE as price,
-            T.ORIGIN_URL as originUrl,
-            T.MALL_NAME as mallName,
-            T.LAST_UPDATE_DATE as lastUpdateDate
-        FROM TB_HOTDEAL_TRACKER T
-        WHERE T.CURRENT_PRICE = (
-            SELECT MIN(PRICE) 
-            FROM TB_PRICE_HISTORY H 
-            WHERE H.DEAL_ID = T.DEAL_ID
-        )
-        ORDER BY T.LAST_UPDATE_DATE DESC
-    </select>
-
-    <select id="getTotalDealCount" resultType="_int">
-        SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
-    </select>
-
-
-<select id="selectIntegratedList" resultType="com.project.model.ProductDTO">
+		ORDER BY regDate DESC
+		) a WHERE rownum &lt;= #{pageEnd}
+		) WHERE rnum &gt;= #{pageStart}
+	</select>
+<select id="listSearch"
+    parameterType="com.project.model.ProductDTO"
+    resultType="com.project.model.ProductDTO">
     SELECT * FROM (
         SELECT rownum rnum, a.* FROM (
-            SELECT 
-                PROD_ID as prodId, NAME as name, PRICE as price, 
-                NULL as imageUrl, NULL as originUrl, '일반' as communityName,
-                'NORMAL' as boardType, REG_DATE as regDate
-            FROM PRODUCT
-            
-            UNION ALL
-            
-            SELECT 
-                DEAL_ID as prodId, TITLE as name, CURRENT_PRICE as price,
-                IMAGE_URL as imageUrl, ORIGIN_URL as originUrl, COMMUNITY_NAME as communityName,
-                'HOT' as boardType, LAST_UPDATE_DATE as regDate
-            FROM TB_HOTDEAL_TRACKER
-            
-            ORDER BY regDate DESC
+            SELECT
+                PROD_ID as prodId,
+                PROD_CODE as prodCode,
+                PROD_NAME as name,
+                PROD_PRICE as price,
+                IMAGE_URL as imageUrl,
+                ORIGIN_URL as originUrl,
+                SOURCE as communityName,
+                BOARD_TYPE as boardType,
+                REG_DATE as regDate
+            FROM Common_Product
+            WHERE 1=1
+            <if test="searchType != null">
+                <if test="searchType == 't'.toString()">AND PROD_NAME LIKE '%'||#{keyword}||'%'</if>
+                <if test="searchType == 'c'.toString()">AND PROD_CODE = #{keyword}</if>
+            </if>
+            ORDER BY REG_DATE DESC
         ) a WHERE rownum &lt;= #{pageEnd}
     ) WHERE rnum &gt;= #{pageStart}
 </select>
+	<select id="getIntegratedCount" resultType="int">
+		SELECT
+		(SELECT COUNT(*) FROM Common_Product) + (SELECT COUNT(*) FROM
+		TB_HOTDEAL_TRACKER)
+		FROM DUAL
+	</select>
 
-<select id="getIntegratedCount" resultType="int">
-    SELECT 
-        (SELECT COUNT(*) FROM PRODUCT) + (SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER) 
-    FROM DUAL
-</select>
+	
+
+	<select id="listSearchCount"
+	    parameterType="com.project.model.ProductDTO"
+	    resultType="int">
+	    SELECT COUNT(*)
+	    FROM Common_Product
+	    WHERE 1=1
+	    <if test="searchType != null">
+	        <if test="searchType == 't'.toString()">AND PROD_NAME LIKE '%'||#{keyword}||'%'</if>
+	        <if test="searchType == 'c'.toString()">AND PROD_CODE = #{keyword}</if>
+	    </if>
+	</select>
+	
+	<select id="findMainHotDeals" resultType="com.project.model.ProductDTO">
+        SELECT * FROM (
+            SELECT 
+                DEAL_ID as prodId,
+                TITLE as name,
+                CURRENT_PRICE as price,
+                START_PRICE as startPrice,
+                IMAGE_URL as imageUrl,
+                ORIGIN_URL as originUrl,
+                MALL_NAME as mallName,
+                COMMUNITY_NAME as communityName,
+                LAST_UPDATE_DATE as regDate
+            FROM TB_HOTDEAL_TRACKER
+            ORDER BY LAST_UPDATE_DATE DESC
+        ) WHERE rownum &lt;= 10
+    </select>
+
+
 </mapper>
