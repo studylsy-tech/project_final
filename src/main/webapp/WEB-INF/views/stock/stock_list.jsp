@@ -17,7 +17,7 @@
         <select name="searchType" style="padding: 5px;">
             <%-- 2. pageMaker.criteria 대신 scri 사용 --%>
             <option value="name" ${scri.searchType eq 'name' ? 'selected' : ''}>상품명</option>
-            <option value="drop" ${scri.searchType eq 'drop' ? 'selected' : ''}>급락상품</option>
+            <option value="drop" ${scri.searchType eq 'drop' ? 'selected' : ''}>급락</option>
             <option value="low" ${scri.searchType eq 'low' ? 'selected' : ''}>최저가</option>
         </select>
         

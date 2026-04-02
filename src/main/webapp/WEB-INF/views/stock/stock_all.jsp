@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 <!-- webapp/WEB-INF/views/stock/stock_all.jsp -->
-=======
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -27,7 +24,8 @@
             <input type="text" name="keyword" value="${pageMaker.criteria.keyword}" style="padding: 5px; width: 200px;">
             <button type="submit" style="padding: 5px 15px;">검색</button>
         </form>
-    </div><%-- 상품 리스트 영역 --%>
+    </div>
+    <%-- 상품 리스트 영역 --%>
 <div class="stock-list-container">
     <c:forEach var="s" items="${stockList}">
         <div class="stock-card" onclick="location.href='${path}/dashboard/detail?prodId=${s.prodId}'" 
