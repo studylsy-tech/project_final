@@ -46,7 +46,7 @@ VALUES ('AP-MBP16', 'COUPANG', '노트북', 'Apple 맥북 프로 16 M3 Max', 'Ap
 
 -- [소니 헤드셋]
 INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, BRAND, PROD_PRICE, BOARD_TYPE, ORIGIN_URL) 
-VALUES ('SN-XM5', 'SSG', '음향기기', '소니 WH-1000XM5 헤드셋', 'SONY', 360000, 'HOT', 'https://ssg.com/item3');
+VALUES ('SN-XM5', 'SSG', '음향기기', '소니 WH-1000XM5 헤드셋', 'SONY', 360000, 'NORMAL', 'https://ssg.com/item3');
 
 -- 5. 가격 이력 등록 (PROD_ID 기반)
 -- RTX 3090
@@ -71,5 +71,77 @@ BEGIN
     COMMIT;
 END;
 /
+
+BEGIN
+    -- 1. 전자기기/노트북 카테고리 (15개)
+    FOR i IN 1..15 LOOP
+        INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, BRAND, PROD_PRICE, BOARD_TYPE, ORIGIN_URL, REG_DATE)
+        VALUES (
+            'LAPTOP_' || i, 
+            CASE MOD(i, 3) WHEN 0 THEN 'NAVER' WHEN 1 THEN 'COUPANG' ELSE 'DANWA' END,
+            '노트북',
+            CASE MOD(i, 3) WHEN 0 THEN '삼성 갤럭시북 4 Pro ' || i WHEN 1 THEN 'LG 그램 16 ' || i ELSE 'ASUS 제피러스 ' || i END,
+            CASE MOD(i, 3) WHEN 0 THEN 'Samsung' WHEN 1 THEN 'LG' ELSE 'ASUS' END,
+            1200000 + (i * 50000),
+            CASE WHEN i <= 5 THEN 'DROP' WHEN i <= 10 THEN 'HOT' ELSE 'NORMAL' END,
+            'https://search.shopping.naver.com/search/all?query=laptop' || i,
+            SYSDATE - (i/24)
+        );
+    END LOOP;
+
+    -- 2. 스마트폰/태블릿 카테고리 (15개)
+    FOR i IN 16..30 LOOP
+        INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, BRAND, PROD_PRICE, BOARD_TYPE, ORIGIN_URL, REG_DATE)
+        VALUES (
+            'PHONE_' || i,
+            CASE MOD(i, 2) WHEN 0 THEN 'SKT' ELSE 'KT' END,
+            '스마트폰',
+            CASE MOD(i, 2) WHEN 0 THEN '아이폰 15 Pro ' || i ELSE '갤럭시 S24 울트라 ' || i END,
+            CASE MOD(i, 2) WHEN 0 THEN 'Apple' ELSE 'Samsung' END,
+            1000000 + (i * 20000),
+            CASE WHEN i <= 20 THEN 'HOT' WHEN i <= 25 THEN 'CRAWL' ELSE 'NORMAL' END,
+            'https://www.apple.com/iphone' || i,
+            SYSDATE - (i/48)
+        );
+    END LOOP;
+
+    -- 3. 가전/생활 카테고리 (10개)
+    FOR i IN 31..40 LOOP
+        INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, BRAND, PROD_PRICE, BOARD_TYPE, ORIGIN_URL, REG_DATE)
+        VALUES (
+            'LIFE_' || i,
+            'SSG',
+            '생활가전',
+            '다이슨 에어랩 멀티 스타일러 ' || i,
+            'Dyson',
+            500000 + (i * 10000),
+            'NORMAL',
+            'https://www.ssg.com/item/dyson' || i,
+            SYSDATE - (i/12)
+        );
+    END LOOP;
+
+    -- 4. 기타/실시간 크롤링 데이터 (10개)
+    FOR i IN 41..50 LOOP
+        INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, BRAND, PROD_PRICE, BOARD_TYPE, ORIGIN_URL, REG_DATE)
+        VALUES (
+            'CRAWL_' || i,
+            'CRAWLER',
+            '기타',
+            '실시간 핫딜 정보 상품 ' || i,
+            'ETC',
+            10000 * i,
+            'CRAWL',
+            'https://hotdeal.com/item' || i,
+            SYSDATE - (i/100)
+        );
+    END LOOP;
+
+    COMMIT;
+END;
+
+-- 데이터 확인
+SELECT COUNT(*) FROM Common_Product;
+SELECT * FROM (SELECT * FROM Common_Product ORDER BY REG_DATE DESC) WHERE ROWNUM <= 10;
 
 COMMIT;

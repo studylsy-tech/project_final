@@ -7,22 +7,32 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class SearchCriteria extends Criteria{
+public class SearchCriteria extends Criteria {
 
-	private String searchType;			// 검색 column type
-	private String keyword;				// 검색 단어
-	private String boardType;			// 게시판 타입
-	
-	public SearchCriteria(int page, int perPageNum, String searchType, String keyword) {
-		super(page, perPageNum);
-		this.searchType = searchType;
-		this.keyword = keyword;
-	}
+    private String searchType;    // 검색 타입 (name, drop, low 등)
+    private String keyword;       // 검색어
+    private String boardType;     // 게시판 타입
+    
+    // MyBatis rownum 범위를 위한 필드 추가
+    private int pageStart;        // 시작 행 번호
+    private int pageEnd;          // 끝 행 번호
+    
+    public SearchCriteria(int page, int perPageNum, String searchType, String keyword) {
+        super(page, perPageNum);
+        this.searchType = searchType;
+        this.keyword = keyword;
+    }
 
-	@Override
-	public String toString() {
-		return super.toString()+" startRow : "+super.getStartRow()+"- SearchCriteria [searchType=" + searchType + ", keyword=" + keyword + "]";
-	}
-	
-	
+    // Service에서 호출할 때 실제 값을 계산하여 저장하는 로직
+    public void calcPageRange() {
+        // 예: 1페이지고 perPageNum이 10이면 1~10, 2페이지면 11~20
+        this.pageStart = (super.getPage() - 1) * super.getPerPageNum() + 1;
+        this.pageEnd = super.getPage() * super.getPerPageNum();
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + " Range: " + pageStart + "~" + pageEnd + 
+               " [searchType=" + searchType + ", keyword=" + keyword + "]";
+    }
 }

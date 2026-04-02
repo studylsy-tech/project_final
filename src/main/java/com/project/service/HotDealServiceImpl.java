@@ -159,5 +159,5 @@ public class HotDealServiceImpl implements HotDealService {
         return hotDealMapper.getRecentDealsPaging(pageStart, pageEnd);
     }
 
-
+    
 }

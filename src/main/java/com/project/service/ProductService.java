@@ -14,75 +14,71 @@ import com.project.util.SearchCriteria;
 @Service
 public class ProductService {
 
-	@Autowired
-	private ProductMapper productMapper;
+    @Autowired
+    private ProductMapper productMapper;
 
-	// 1. 등록 메서드
-	@Transactional
-	public void registerNewProduct(ProductDTO product) {
-		// 1. 이미 등록된 상품인지 PROD_CODE로 확인
-		Integer existingId = productMapper.findIdByCode(product.getProdCode());
+    // --- [1] 상품 등록 및 상세 조회 로직 ---
+    @Transactional
+    public void registerNewProduct(ProductDTO product) {
+        Integer existingId = productMapper.findIdByCode(product.getProdCode());
+        if (existingId != null) {
+            product.setProdId(existingId);
+            return;
+        }
+        productMapper.insertProduct(product);
+        productMapper.insertPriceHistory(product);
+    }
 
-		if (existingId != null) {
-			// 이미 있다면, 생성된 ID를 DTO에 세팅하고 종료 (컨트롤러에서 이 ID를 사용)
-			product.setProdId(existingId);
-			System.out.println("이미 등록된 상품입니다. 기존 ID 반환: " + existingId);
-			return;
-		}
+    public ProductDTO getProductById(int prodId) {
+        return productMapper.getProductDetail(prodId);
+    }
 
-		// 2. 없는 상품일 때만 신규 등록 진행
-		productMapper.insertProduct(product);
-		productMapper.insertPriceHistory(product);
-		System.out.println("신규 상품 등록 완료. 생성된 ID: " + product.getProdId());
-	}
+    public List<Map<String, Object>> getPriceHistory(int prodId) {
+        return productMapper.getPriceHistory(prodId);
+    }
 
-	// 2. 상세 정보 조회 메서드 (등록 메서드 외부로 이동)
-	public ProductDTO getProductById(int prodId) {
-		return productMapper.getProductDetail(prodId);
-	}
+    // --- [2] ProductController 전용 (급락/최저가 등 일반 리스트) ---
+    public List<ProductDTO> listSearch(SearchCriteria cri) throws Exception {
+        // SearchCriteria에 추가한 계산 메서드 활용
+        cri.calcPageRange(); 
+        return productMapper.listSearch(cri);
+    }
 
-	// 3. 가격 이력 조회 메서드
-	public List<Map<String, Object>> getPriceHistory(int prodId) {
-		return productMapper.getPriceHistory(prodId);
-	}
+    public int listSearchCount(SearchCriteria cri) throws Exception {
+        // 0 대신 실제 매퍼의 카운트 쿼리를 호출해야 페이징 번호가 나옵니다.
+        return productMapper.listSearchCount(cri);
+    }
 
-	// src/main/java/com/project/service/ProductService.java 에 추가
+    // --- [3] AllProductController 전용 (전체 통합 리스트) ---
+    public List<ProductDTO> findAllIntegratedList(SearchCriteria cri) throws Exception {
+        // 페이징 범위 계산 (pageStart, pageEnd 세팅)
+        cri.calcPageRange(); 
+        
+        return productMapper.findAllIntegratedList(
+            cri.getSearchType(), 
+            cri.getKeyword(), 
+            cri.getPageStart(), 
+            cri.getPageEnd()
+        );
+    }
 
-	public List<ProductDTO> findAllProducts() {
-		return productMapper.findAllProducts(); //
+    public int findAllIntegratedCount(SearchCriteria cri) throws Exception {
+        return productMapper.findAllIntegratedCount(cri);
+    }
+
+	public List<ProductDTO> findNewLowProducts() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public List<ProductDTO> findDropProducts() {
-		return productMapper.findDropProducts(); //
+		// TODO Auto-generated method stub
+		return null;
 	}
 
-	public List<ProductDTO> findNewLowProducts() {
-		return productMapper.findNewLowProducts(); //
-	}
-	
-	// 페이징 및 검색 기능이 포함된 목록 조회
-	public List<ProductDTO> listSearch(SearchCriteria cri) throws Exception {
-	    return productMapper.listSearch(cri);
-	}
+	public List<ProductDTO> findAllProducts() {
+		// DAO 또는 Mapper의 메서드를 호출하여 반환합니다.
+		return productMapper.findNewLowProducts();	}
 
-	// 검색 조건에 맞는 총 상품 개수 (페이징 버튼 계산용)
-	public int listSearchCount(SearchCriteria cri) throws Exception {
-	    return productMapper.listSearchCount(cri);
-	}
-	
-	// 일반 상품과 핫딜을 합쳐서 가져오는 통합 조회 메서드
-    public List<ProductDTO> getIntegratedList(SearchCriteria cri) throws Exception {
-        // XML에서 정의한 파라미터 계산 (1페이지면 1~10행)
-        int pageStart = (cri.getPage() - 1) * cri.getPerPageNum() + 1;
-        int pageEnd = cri.getPage() * cri.getPerPageNum();
-        
-        // ProductMapper에 추가했던 통합 쿼리 호출
-        return productMapper.selectIntegratedList(pageStart, pageEnd);
-    }
-
-    public int getIntegratedCount() throws Exception {
-        return productMapper.getIntegratedCount();
-    }
-	
-	
+    
 }

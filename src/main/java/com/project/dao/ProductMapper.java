@@ -79,4 +79,8 @@ public interface ProductMapper {
      * 통합 리스트의 전체 데이터 개수 조회 (페이징용)
      */
     int getIntegratedCount() throws Exception;
+
+	List<ProductDTO> findAllIntegratedList(String searchType, String keyword, int pageStart, int pageEnd);
+
+	int findAllIntegratedCount(SearchCriteria cri);
 }

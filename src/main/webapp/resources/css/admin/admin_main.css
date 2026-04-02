@@ -1,25 +1,27 @@
 /* admin_main.css */
 
+/* 기본 레이아웃 최적화 */
 .admin-wrapper {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
-    font-family: 'Pretendard', sans-serif; /* 기존 프로젝트 폰트 유지 */
+    max-width: 1000px; /* 마이페이지 내부 폭에 최적화 */
+    margin: 0 auto;
+    padding: 10px 0;
+    font-family: 'Pretendard', -apple-system, sans-serif;
 }
 
 .admin-header {
     margin-bottom: 30px;
-    border-bottom: 2px solid #333;
     padding-bottom: 15px;
+    border-bottom: 2px solid #1a1a1a;
 }
 
-.main-title {
-    font-size: 24px;
+.settings-title {
+    font-size: 22px;
     color: #1a1a1a;
     font-weight: 700;
+    margin: 0;
 }
 
-/* 상단 현황판 (Summary Cards) */
+/* --- 상단 현황판 (Summary Cards) --- */
 .summary-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -29,74 +31,96 @@
 
 .summary-card {
     background: #ffffff;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    padding: 20px;
+    border: 1px solid #eef0f2;
+    border-radius: 12px;
+    padding: 24px 15px;
     text-align: center;
-    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+    transition: all 0.25s ease;
 }
 
 .summary-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
 .summary-card h3 {
-    font-size: 16px;
-    color: #666;
-    margin-bottom: 10px;
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 12px;
+    font-weight: 500;
 }
 
 .summary-card .count {
-    font-size: 28px;
+    font-size: 24px;
     font-weight: 800;
-    color: #007bff;
+    color: #333;
+    margin: 0;
 }
 
-/* 관리 메뉴 그리드 (Action Cards) */
+/* 상태별 강조 색상 */
+.summary-card:nth-child(1) .count { color: #28a745; } /* 크롤링 상태 - 초록 */
+.summary-card:nth-child(2) .count { color: #dc3545; } /* 오류 - 빨강 */
+.summary-card:nth-child(3) .count { color: #007bff; } /* Q&A - 파랑 */
+
+
+/* --- 관리 메뉴 그리드 (Action Cards) --- */
 .admin-menu-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 25px;
+    grid-template-columns: repeat(3, 1fr); /* 3개 균등 배치 */
+    gap: 20px;
 }
 
-.menu-item {
-    background: #f8f9fa;
-    border-left: 5px solid #343a40;
-    padding: 25px;
-    border-radius: 4px;
+/* 메뉴 아이템 공통 (div와 button 모두 대응) */
+.menu-item, 
+.admin-menu-grid button {
+    background: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-left: 5px solid #343a40; /* 포인트 라인 */
+    padding: 30px 20px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background 0.3s;
+    text-align: left;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    width: 100%; /* 버튼 태그 대응 */
+    box-sizing: border-box;
 }
 
-.menu-item:hover {
-    background: #e9ecef;
+/* 버튼 태그 특유의 기본 스타일 제거 */
+.admin-menu-grid button {
+    font-family: inherit;
+    appearance: none;
 }
 
-.menu-item h4 {
+.menu-item:hover, 
+.admin-menu-grid button:hover {
+    background: #f8f9fa;
+    border-color: #343a40;
+    transform: translateX(5px);
+}
+
+.menu-item h4, 
+.admin-menu-grid button h4 {
     font-size: 18px;
-    margin-bottom: 10px;
+    margin: 0 0 12px 0;
     color: #212529;
+    font-weight: 700;
 }
 
-.menu-item p {
+.menu-item p, 
+.admin-menu-grid button p {
     font-size: 14px;
     color: #6c757d;
-    line-height: 1.5;
+    line-height: 1.6;
+    margin: 0;
+    word-break: keep-all;
 }
 
-/* 관리자 전용 버튼 스타일 (기존 action-buttons와 연동) */
-.btn-admin {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    font-weight: 600;
-    cursor: pointer;
-    background-color: #dc3545; /* 강조용 레드 */
-    color: #fff;
-    transition: opacity 0.2s;
-}
-
-.btn-admin:hover {
-    opacity: 0.85;
+/* 반응형 처리 (화면 작아질 때) */
+@media (max-width: 768px) {
+    .summary-container, .admin-menu-grid {
+        grid-template-columns: 1fr;
+    }
 }

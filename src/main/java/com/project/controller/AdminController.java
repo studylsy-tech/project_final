@@ -91,4 +91,24 @@ public class AdminController {
         map.put("lastTime", hotDealService.getLastCollectTime());
         return map;
     }
+    
+ // 5. 오류 로그 관리 페이지 매핑 추가
+    @GetMapping("/error_logs")
+    public String errorLogs(HttpSession session) {
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        if (loginUser == null || !"ADMIN".equals(loginUser.getMemberType())) {
+            return "redirect:/member/login";
+        }
+        return "admin/error_logs"; // WEB-INF/views/admin/error_logs.jsp 호출
+    }
+
+    // 6. 공지사항 관리 페이지 매핑 추가
+    @GetMapping("/notice_manage")
+    public String noticeManage(HttpSession session) {
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        if (loginUser == null || !"ADMIN".equals(loginUser.getMemberType())) {
+            return "redirect:/member/login";
+        }
+        return "admin/notice_manage"; // WEB-INF/views/admin/notice_manage.jsp 호출
+    }
 }

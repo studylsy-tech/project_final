@@ -76,18 +76,31 @@ public String analysisStocks(Criteria cri, Model model) {
 
 @GetMapping("/list")
 public String list(SearchCriteria cri, Model model) throws Exception {
+    // 1. 서비스 호출 (Mapper의 listSearch 쿼리 실행)
     List<ProductDTO> list = productService.listSearch(cri);
+    
+    // 2. 전체 개수 조회 (Mapper의 listSearchCount 쿼리 실행)
     int totalCount = productService.listSearchCount(cri);
     
-    SearchPageMaker pageMaker = new SearchPageMaker((Criteria)cri, totalCount, 10);
+    // 3. PageMaker 설정 (10은 페이지 버튼 개수를 의미함)
+    SearchPageMaker pageMaker = new SearchPageMaker();
+    pageMaker.setCriteria(cri);
+    pageMaker.setTotalCount(totalCount);
+    // 만약 생성자 방식을 쓰신다면: SearchPageMaker pageMaker = new SearchPageMaker(cri, totalCount, 10);
     
     model.addAttribute("stockList", list);
     model.addAttribute("pageMaker", pageMaker);
 
+    // 4. 타이틀 동적 설정
     String title = "전체 상품 목록";
-    if ("drop".equals(cri.getSearchType())) title = "오늘의 급락 상품";
-    else if ("low".equals(cri.getSearchType())) title = "최저가 갱신";
-    else if ("analysis".equals(cri.getSearchType())) title = "자동 분석 리포트";
+    if (cri.getSearchType() != null) {
+        switch (cri.getSearchType()) {
+            case "name": title = "상품 검색 결과"; break;
+            case "drop": title = "오늘의 급락 상품"; break;
+            case "low": title = "최저가 갱신"; break;
+            case "analysis": title = "자동 분석 리포트"; break;
+        }
+    }
     
     model.addAttribute("boardTitle", title);
 
