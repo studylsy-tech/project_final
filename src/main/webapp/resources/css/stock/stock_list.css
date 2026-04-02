@@ -184,3 +184,21 @@
 
 
 .prod-img-wrapper { margin-right: 20px; }
+
+
+/* 모든 상품 이미지에 공통 적용 */
+.prod-img {
+    width: 80px !important;  /* 가로 크기 고정 */
+    height: 80px !important; /* 세로 크기 고정 */
+    object-fit: cover;        /* 비율 유지하며 꽉 채우기 */
+    border-radius: 8px;       /* 모서리 둥글게 */
+    display: block;           /* 레이아웃 정렬 최적화 */
+}
+
+/* 이미지를 감싸는 영역 (간격 조절) */
+.prod-img-wrapper {
+    width: 80px;
+    height: 80px;
+    margin-right: 20px;
+    flex-shrink: 0;           /* 부모 박스가 좁아져도 이미지는 유지 */
+}
