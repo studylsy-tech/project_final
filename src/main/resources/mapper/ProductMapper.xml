@@ -2,6 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.dao.ProductMapper">
 
+<<<<<<< HEAD
     <select id="findAllProducts" resultType="com.project.model.ProductDTO">
         SELECT
             PROD_ID as prodId,
@@ -15,7 +16,24 @@
         FROM Common_Product
         ORDER BY REG_DATE DESC
     </select>
+=======
+	<select id="findAllProducts"
+		resultType="com.project.model.ProductDTO">
+		SELECT
+		PROD_ID as prodId,
+		PROD_CODE as prodCode,
+		PROD_NAME as name,
+		PROD_PRICE as price,
+		IMAGE_URL as imageUrl,
+		SOURCE as source,
+		BOARD_TYPE as boardType,
+		REG_DATE as regDate
+		FROM Common_Product
+		ORDER BY REG_DATE DESC
+	</select>
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 
+<<<<<<< HEAD
     <select id="findDropProducts" resultType="com.project.model.ProductDTO">
         SELECT * FROM (
             SELECT
@@ -40,7 +58,34 @@
         ) WHERE dropRate >= 10 OR boardType = 'DROP'
         ORDER BY regDate DESC
     </select>
+=======
+	<select id="findDropProducts"
+		resultType="com.project.model.ProductDTO">
+		SELECT * FROM (
+		SELECT
+		p.PROD_ID as prodId,
+		p.PROD_NAME as name,
+		p.PROD_PRICE as price,
+		p.IMAGE_URL as imageUrl,
+		p.SOURCE as source,
+		p.BOARD_TYPE as boardType,
+		h.PREV_PRICE as prevPrice,
+		((h.PREV_PRICE - p.PROD_PRICE) / h.PREV_PRICE * 100) as dropRate
+		FROM Common_Product p
+		JOIN (
+		SELECT PROD_ID, PRICE as PREV_PRICE
+		FROM (
+		SELECT PROD_ID, PRICE,
+		ROW_NUMBER() OVER(PARTITION BY PROD_ID ORDER BY REG_DATE DESC) as rn
+		FROM PRICE_HISTORY
+		) WHERE rn = 2
+		) h ON p.PROD_ID = h.PROD_ID
+		) WHERE dropRate >= 10 OR boardType = 'DROP'
+		ORDER BY REG_DATE DESC
+	</select>
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 
+<<<<<<< HEAD
     <select id="listSearch" parameterType="com.project.util.SearchCriteria" resultType="com.project.model.ProductDTO">
         SELECT * FROM (
             SELECT rownum rnum, a.* FROM (
@@ -78,7 +123,26 @@
             ) a WHERE rownum &lt;= #{pageEnd}
         ) WHERE rnum &gt;= #{pageStart}
     </select>
+=======
+	<select id="selectIntegratedList"
+		resultType="com.project.model.ProductDTO">
+		SELECT * FROM (
+		SELECT rownum rnum, a.* FROM (
+		SELECT
+		PROD_ID as prodId,
+		PROD_NAME as name,
+		PROD_PRICE as price,
+		IMAGE_URL as imageUrl,
+		ORIGIN_URL as originUrl,
+		SOURCE as communityName,
+		BOARD_TYPE as boardType,
+		REG_DATE as regDate
+		FROM Common_Product
 
+		UNION ALL
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
+
+<<<<<<< HEAD
     <select id="listSearchCount" parameterType="com.project.util.SearchCriteria" resultType="int">
         SELECT (
             SELECT COUNT(*) FROM Common_Product
@@ -90,7 +154,20 @@
             <if test="searchType == 'name'.toString()">AND TITLE LIKE '%'||#{keyword}||'%'</if>
         ) FROM DUAL
     </select>
+=======
+		SELECT
+		DEAL_ID as prodId,
+		TITLE as name,
+		CURRENT_PRICE as price,
+		IMAGE_URL as imageUrl,
+		ORIGIN_URL as originUrl,
+		COMMUNITY_NAME as communityName,
+		'HOT' as boardType,
+		LAST_UPDATE_DATE as regDate
+		FROM TB_HOTDEAL_TRACKER
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 
+<<<<<<< HEAD
     <select id="findMainHotDeals" resultType="com.project.model.ProductDTO">
         SELECT * FROM (
             SELECT  
@@ -107,5 +184,77 @@
             ORDER BY LAST_UPDATE_DATE DESC
         ) WHERE rownum &lt;= 10
     </select>
+=======
+		ORDER BY regDate DESC
+		) a WHERE rownum &lt;= #{pageEnd}
+		) WHERE rnum &gt;= #{pageStart}
+	</select>
+<select id="listSearch"
+    parameterType="com.project.model.ProductDTO"
+    resultType="com.project.model.ProductDTO">
+    SELECT * FROM (
+        SELECT rownum rnum, a.* FROM (
+            SELECT
+                PROD_ID as prodId,
+                PROD_CODE as prodCode,
+                PROD_NAME as name,
+                PROD_PRICE as price,
+                IMAGE_URL as imageUrl,
+                ORIGIN_URL as originUrl,
+                SOURCE as communityName,
+                BOARD_TYPE as boardType,
+                REG_DATE as regDate
+            FROM Common_Product
+            WHERE 1=1
+            <if test="searchType != null">
+                <if test="searchType == 't'.toString()">AND PROD_NAME LIKE '%'||#{keyword}||'%'</if>
+                <if test="searchType == 'c'.toString()">AND PROD_CODE = #{keyword}</if>
+            </if>
+            ORDER BY REG_DATE DESC
+        ) a WHERE rownum &lt;= #{pageEnd}
+    ) WHERE rnum &gt;= #{pageStart}
+</select>
+	<select id="getIntegratedCount" resultType="int">
+		SELECT
+		(SELECT COUNT(*) FROM Common_Product) + (SELECT COUNT(*) FROM
+		TB_HOTDEAL_TRACKER)
+		FROM DUAL
+	</select>
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 
+<<<<<<< HEAD
+=======
+	
+
+	<select id="listSearchCount"
+	    parameterType="com.project.model.ProductDTO"
+	    resultType="int">
+	    SELECT COUNT(*)
+	    FROM Common_Product
+	    WHERE 1=1
+	    <if test="searchType != null">
+	        <if test="searchType == 't'.toString()">AND PROD_NAME LIKE '%'||#{keyword}||'%'</if>
+	        <if test="searchType == 'c'.toString()">AND PROD_CODE = #{keyword}</if>
+	    </if>
+	</select>
+	
+	<select id="findMainHotDeals" resultType="com.project.model.ProductDTO">
+        SELECT * FROM (
+            SELECT 
+                DEAL_ID as prodId,
+                TITLE as name,
+                CURRENT_PRICE as price,
+                START_PRICE as startPrice,
+                IMAGE_URL as imageUrl,
+                ORIGIN_URL as originUrl,
+                MALL_NAME as mallName,
+                COMMUNITY_NAME as communityName,
+                LAST_UPDATE_DATE as regDate
+            FROM TB_HOTDEAL_TRACKER
+            ORDER BY LAST_UPDATE_DATE DESC
+        ) WHERE rownum &lt;= 10
+    </select>
+
+
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 </mapper>

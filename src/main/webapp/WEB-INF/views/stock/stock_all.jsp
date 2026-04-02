@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 <!-- webapp/WEB-INF/views/stock/stock_all.jsp -->
+=======
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>

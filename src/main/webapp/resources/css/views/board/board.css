@@ -68,3 +68,30 @@
 .btn-dark:hover {
     background-color: #34495e; /* 호버 시 색상 변화 효과 */
 }
+
+/* 페이지네이션 스타일 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.pagination li {
+    margin: 0 5px;
+}
+
+.pagination li a {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    color: #333;
+    text-decoration: none;
+}
+
+.pagination li.active a {
+    background-color: #1a2a44;
+    color: #fff;
+    border-color: #1a2a44;
+}
