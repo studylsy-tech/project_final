@@ -52,7 +52,7 @@
 								</c:choose></td>
 							<td style="font-size: 15px; font-weight: 600; color: #2c3e50;"><c:out
 									value="${hotdeal.title}" /></td>
-							<td style="color: red; font-weight: bold;"><fmt:formatNumber
+							<td style="color: red; font-weight: bold; min-width:90px; white-space:nowrap;"><fmt:formatNumber
 									value="${hotdeal.currentPrice}" pattern="#,###" />원</td>
 							<td style="width: 80px; color: #1a2a44;"><c:out
 									value="${hotdeal.communityName}" /></td>
