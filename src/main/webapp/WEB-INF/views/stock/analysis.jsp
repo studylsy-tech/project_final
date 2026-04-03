@@ -12,14 +12,15 @@
 
 	<%-- analysis.jsp 수정된 검색 영역 --%>
 	<div style="margin-bottom: 20px; text-align: right;">
-		<select id="searchType" name="searchType" style="padding: 5px;">
-			<%-- SearchCriteria를 사용하면 아래와 같이 'selected' 처리가 가능해집니다 --%>
-			<option value="title"
-				${pageMaker.criteria['searchType'] eq 'title' ? 'selected' : ''}>상품명</option>
-		</select> <input type="text" id="keywordInput" name="keyword"
-			value="${pageMaker.criteria['keyword']}"
-			style="padding: 5px; width: 200px;">
-		<button id="searchBtn" style="padding: 5px 15px;">검색</button>
+	    <select id="searchType" style="padding: 5px;">
+	        <option value="title" ${scri.searchType eq 'title' ? 'selected' : ''}>상품명</option>
+	    </select>
+	    <%-- name="keyword"를 삭제했습니다 --%>
+	    <input type="text" id="keywordInput" 
+	           value="${scri.keyword}" 
+	           style="padding: 5px; width: 200px;" 
+	           placeholder="검색어를 입력하세요">
+	    <button type="button" id="searchBtn" style="padding: 5px 15px;">검색</button>
 	</div>
 
 	<div class="analysis-container">
@@ -51,7 +52,7 @@
 								</c:choose></td>
 							<td style="font-size: 15px; font-weight: 600; color: #2c3e50;"><c:out
 									value="${hotdeal.title}" /></td>
-							<td style="color: red; font-weight: bold;"><fmt:formatNumber
+							<td style="color: red; font-weight: bold; min-width:90px; white-space:nowrap;"><fmt:formatNumber
 									value="${hotdeal.currentPrice}" pattern="#,###" />원</td>
 							<td style="width: 80px; color: #1a2a44;"><c:out
 									value="${hotdeal.communityName}" /></td>
@@ -97,17 +98,32 @@
 </div>
 
 <script>
-	$(function() {
-		$('#searchBtn').on(
-				"click",
-				function(event) {
-					self.location = "analysis" + '${pageMaker.query(1)}'
-							+ "&searchType="
-							+ $("#searchType option:selected").val()
-							+ "&keyword="
-							+ encodeURIComponent($('#keywordInput').val());
-				});
-	});
+$(function() {
+    // 검색 버튼 클릭 시
+    $('#searchBtn').on("click", function(event) {
+        var keyword = $('#keywordInput').val().trim();
+        var searchType = $("#searchType option:selected").val();
+
+        // 쉼표 중복 방지를 위해 경로를 직접 빌드합니다.
+        // boardType=HOTDEAL이 있어야 Controller에서 핫딜 로직을 탑니다.
+        var url = "${path}/search/list"
+                + "?page=1"
+                + "&perPageNum=5"
+                + "&boardType=HOTDEAL"
+                + "&searchType=" + searchType
+                + "&keyword=" + encodeURIComponent(keyword);
+        
+        self.location = url;
+    });
+
+    // 엔터키 입력 시 검색 실행
+    $('#keywordInput').on("keypress", function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault(); // 기본 동작 방지
+            $('#searchBtn').click();
+        }
+    });
+});
 </script>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>

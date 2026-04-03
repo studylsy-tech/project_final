@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<!-- webapp/WEB-INF/views/stock/stock_all.jsp -->
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -27,6 +31,34 @@
             <button type="submit" id="searchBtn" style="padding: 5px 15px;">검색</button>
         </form>
     </div>
+<<<<<<< HEAD
+=======
+    <%-- 상품 리스트 영역 --%>
+<div class="stock-list-container">
+    <c:forEach var="s" items="${stockList}">
+        <div class="stock-card" onclick="location.href='${path}/dashboard/detail?prodId=${s.prodId}'" 
+             style="display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee; cursor: pointer;">
+            
+            <%-- 이미지 영역: 작성하신 로직 그대로 유지 --%>
+            <div class="prod-img-wrapper">
+    <c:choose>
+        <%-- 이미지 경로가 있는 경우 --%>
+        <c:when test="${not empty s.imageUrl}">
+            <img src="${s.imageUrl}" 
+                 alt="${s.name}" 
+                 class="prod-img"
+                 onerror="this.onerror=null; this.src='${path}/resources/images/no-image.png';">
+        </c:when>
+        
+        <%-- 이미지가 없는 경우 --%>
+        <c:otherwise>
+            <img src="${path}/resources/images/no-image.png" 
+                 alt="No Image"
+                 class="prod-img">
+        </c:otherwise>
+    </c:choose>
+</div>
+>>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 
     <%-- 2. 상품 리스트 영역 --%>
     <div class="stock-list-container">
