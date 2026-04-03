@@ -1,0 +1,129 @@
+/* board_write.css */
+.board-wrapper {
+    padding: 60px 0;
+    max-width: 900px; /* 약간 더 넓게 */
+    margin: 0 auto;
+    font-family: 'Pretendard', -apple-system, sans-serif;
+}
+
+.board-title-area {
+    margin-bottom: 40px;
+    text-align: left;
+}
+
+.board-title-area h2 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 12px;
+}
+
+.board-title-area p {
+    color: #888;
+    font-size: 15px;
+}
+
+.write-hr {
+    margin: 30px 0;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+
+/* 테이블 폼 스타일 최적화 */
+.board-table {
+    width: 100%;
+    border-collapse: separate; /* 보더 겹침 방지 */
+    border-spacing: 0;
+    border-top: 3px solid #333;
+}
+
+.board-table th {
+    width: 18%;
+    padding: 20px;
+    background: #fcfcfc;
+    border-bottom: 1px solid #efefef;
+    text-align: left;
+    color: #444;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.board-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #efefef;
+    background: #fff;
+}
+
+/* 입력 요소 스타일 대폭 수정 */
+.form-control {
+    width: 100%;
+    border: 1px solid #ddd;
+    padding: 12px 15px; /* 안쪽 여백 증가 */
+    box-sizing: border-box;
+    font-size: 15px;
+    outline: none;
+    border-radius: 4px; /* 살짝 둥글게 */
+    transition: all 0.2s ease-in-out;
+    color: #333;
+}
+
+/* 마우스 올리거나 클릭했을 때 효과 */
+.form-control:hover {
+    border-color: #bbb;
+}
+
+.form-control:focus {
+    border-color: #2c3e50;
+    box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1); /* 푸르스름한 광채 */
+}
+
+/* 작성자 칸 (읽기 전용) */
+.form-readonly {
+    background-color: #f5f5f5 !important;
+    border-color: #eee !important;
+    color: #999;
+}
+
+/* 내용 입력창 높이 및 줄간격 */
+textarea.form-control {
+    min-height: 400px;
+    resize: vertical; /* 위아래로만 조절 가능 */
+    line-height: 1.6;
+}
+
+/* 하단 버튼 영역 */
+.board-footer {
+    margin-top: 40px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.btn-submit {
+    min-width: 140px;
+    padding: 14px 0;
+    background: #2c3e50; /* 신뢰감 있는 네이비 */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.btn-cancel {
+    min-width: 140px;
+    padding: 14px 0;
+    background: #95a5a6; /* 차분한 그레이 */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.btn-submit:hover { background: #1a252f; }
+.btn-cancel:hover { background: #7f8c8d; }

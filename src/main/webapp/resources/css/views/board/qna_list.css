@@ -1,0 +1,101 @@
+/* qna_list.css */
+.board-wrapper {
+    width: 80%;
+    margin: 50px auto;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.board-title-area {
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+}
+
+.board-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-top: 2px solid #2c3e50;
+    table-layout: fixed; /* 컬럼 너비 고정 */
+}
+
+.board-table th {
+    background-color: #f8f9fa;
+    padding: 15px 10px;
+    border-bottom: 1px solid #ddd;
+    font-weight: 600;
+    color: #333;
+}
+
+.board-table td {
+    padding: 15px 10px;
+    border-bottom: 1px solid #eee;
+    text-align: center; /* 기본 가운데 정렬 */
+    vertical-align: middle;
+}
+
+/* 제목 열만 왼쪽 정렬 + 말줄임 처리 */
+.title-cell {
+    text-align: left !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.title-cell a {
+    text-decoration: none;
+    color: #3498db;
+    font-weight: 500;
+}
+
+.title-cell a:hover {
+    text-decoration: underline;
+}
+
+/* 상태 배지 */
+.badge {
+    display: inline-block;
+    min-width: 50px;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.bg-blue { background-color: #3498db; }
+.bg-green { background-color: #2ecc71; }
+
+/* 페이징 영역 */
+.pagination-area {
+    margin-top: 40px;
+}
+
+.pagination-area ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    padding: 0;
+    gap: 10px;
+}
+
+.pagination-area a {
+    text-decoration: none;
+    color: #666;
+    padding: 5px 10px;
+}
+
+/* 질문하기 버튼 */
+.btn-dark {
+    display: inline-block;
+    background-color: #2c3e50;
+    color: #fff !important;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+.btn-dark:hover {
+    background-color: #1a252f;
+}

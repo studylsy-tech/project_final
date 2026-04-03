@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <c:set var="path" value="${pageContext.request.contextPath}" />
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
-<link rel="stylesheet" href="${path}/resources/css/views/board/board.css">
+<link rel="stylesheet" href="${path}/resources/css/views/board/notice_list.css">
 
 <div class="board-wrapper">
 	<div class="board-title-area">

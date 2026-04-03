@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-<!-- webapp/WEB-INF/views/stock/stock_all.jsp -->
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -20,7 +16,6 @@
 
     <%-- 1. 통합 검색 영역 --%>
     <div style="margin-bottom: 20px; text-align: right;">
-        <%-- 검색 시에도 현재의 URI(/all, /drop 등)를 유지하도록 action 설정 --%>
         <form action="${currentUri}" method="get" id="searchForm">
             <select name="searchType" style="padding: 5px;">
                 <option value="name" ${pageMaker.criteria.searchType eq 'name' ? 'selected' : ''}>상품명</option>
@@ -31,34 +26,6 @@
             <button type="submit" id="searchBtn" style="padding: 5px 15px;">검색</button>
         </form>
     </div>
-<<<<<<< HEAD
-=======
-    <%-- 상품 리스트 영역 --%>
-<div class="stock-list-container">
-    <c:forEach var="s" items="${stockList}">
-        <div class="stock-card" onclick="location.href='${path}/dashboard/detail?prodId=${s.prodId}'" 
-             style="display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee; cursor: pointer;">
-            
-            <%-- 이미지 영역: 작성하신 로직 그대로 유지 --%>
-            <div class="prod-img-wrapper">
-    <c:choose>
-        <%-- 이미지 경로가 있는 경우 --%>
-        <c:when test="${not empty s.imageUrl}">
-            <img src="${s.imageUrl}" 
-                 alt="${s.name}" 
-                 class="prod-img"
-                 onerror="this.onerror=null; this.src='${path}/resources/images/no-image.png';">
-        </c:when>
-        
-        <%-- 이미지가 없는 경우 --%>
-        <c:otherwise>
-            <img src="${path}/resources/images/no-image.png" 
-                 alt="No Image"
-                 class="prod-img">
-        </c:otherwise>
-    </c:choose>
-</div>
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
 
     <%-- 2. 상품 리스트 영역 --%>
     <div class="stock-list-container">
@@ -107,7 +74,6 @@
     <%-- 3. 페이징 처리 영역 --%>
     <div style="text-align: center; margin: 30px 0; font-size: 16px;">
         <c:if test="${pageMaker.prev}">
-            <%-- ? 중복 방지를 위해 currentUri 바로 뒤에 makeSearch 연결 --%>
             <a href="${currentUri}${pageMaker.makeSearch(pageMaker.startPage - 1)}" style="text-decoration:none; color:#333;">[이전]</a>
         </c:if>
 
@@ -133,7 +99,6 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(function() {
-        // 검색 버튼 클릭 시 현재 URI 경로를 유지하면서 쿼리스트링 생성
         $('#searchBtn').on("click", function(event) {
             event.preventDefault();
             var uri = "${currentUri}";
