@@ -10,20 +10,8 @@
 <link rel="stylesheet" href="${path}/resources/css/views/index.css">
 
 <div class="main-content">
-	<c:choose>
-		<c:when test="${not empty sessionScope.loginUser}">
-			<h2>
-				<c:out
-					value="${not empty loginUser.nickname ? loginUser.nickname : loginUser.name}" />
-				님, 환영합니다!
-			</h2>
-		</c:when>
-		<c:otherwise>
-			<h2>가격 추적 플랫폼에 오신 것을 환영합니다!</h2>
-		</c:otherwise>
-	</c:choose>
-
-	<div class="search-ticker-wrapper">
+	<h2>가격 추적 플랫폼에 오신 것을 환영합니다!</h2>
+<div class="search-ticker-wrapper">
 		<form action="${path}/dashboard/search" method="get"
 			style="flex: 6; display: flex; align-items: center;">
 			<input type="text" name="query" placeholder="관심 상품 URL 또는 상품명 검색"
