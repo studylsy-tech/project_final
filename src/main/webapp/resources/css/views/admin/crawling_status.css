@@ -1,0 +1,116 @@
+/* 공통 레이아웃 */
+.admin-container { padding: 20px; max-width: 1200px; margin: 0 auto; }
+.admin-title { margin-bottom: 20px; color: #333; }
+.status-card { background: #fff; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 20px; margin-bottom: 20px; }
+
+/* 마스터 카드 (전체 관리) */
+.master-card { border-left: 5px solid #2c3e50; }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+.section-title { margin: 0; font-size: 20px; }
+.interval-container { margin-top: 10px; }
+.interval-label { font-size: 12px; font-weight: bold; color: #2c3e50; display: block; margin-bottom: 5px; }
+.card-footer { display: flex; gap: 40px; border-top: 1px solid #eee; padding-top: 15px; margin-top: 10px; }
+
+/* 그리드 레이아웃 */
+.status-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.hotdeal-card { border-top: 4px solid #e67e22; }
+.normal-card { border-top: 4px solid #3498db; }
+.grid-title { margin: 0; font-size: 18px; }
+.grid-actions { display: flex; flex-direction: column; gap: 5px; }
+.label-width { width: 90px; display: inline-block; }
+.last-record { margin-bottom: 15px; }
+
+/* 버튼 공통 스타일 */
+.btn-group-mini { display: flex; gap: 3px; }
+.btn-int { flex: 1; padding: 5px 0; font-size: 11px; background: #fff; border: 1px solid #ddd; border-radius: 3px; cursor: pointer; transition: 0.2s; }
+.btn-int:hover { background: #f0f0f0; }
+.btn-int.active { background: #333 !important; color: #fff !important; font-weight: bold; }
+
+/* 개별 버튼 색상 */
+.btn-main-save { background: #2c3e50; color: #fff; border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+.btn-main-refresh { background: #95a5a6; color: #fff; border: none; padding: 10px 18px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+
+.btn-grid-save { color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: bold; }
+.hotdeal-card .btn-grid-save { background: #e67e22; }
+.normal-card .btn-grid-save { background: #3498db; }
+
+.btn-grid-refresh { color: #fff; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+.hotdeal-card .btn-grid-refresh { background: #f39c12; }
+.normal-card .btn-grid-refresh { background: #2980b9; }
+
+/* 인터벌 박스 (자동 주기) */
+.interval-box { padding: 8px; border-radius: 5px; border: 1px solid; }
+.box-label { font-size: 11px; font-weight: bold; display: block; margin-bottom: 5px; }
+
+.hotdeal-interval { background: #fff9f4; border-color: #ffeada; }
+.hotdeal-interval .box-label { color: #d35400; }
+.normal-interval { background: #f0f7ff; border-color: #ddecff; }
+.normal-interval .box-label { color: #2980b9; }
+/* 주기 설정 버튼 그룹 레이아웃 */
+.btn-group-mini { 
+    display: flex; 
+    gap: 4px; 
+    width: 100%;
+    margin-top: 5px;
+}
+
+/* 모든 주기/정지 버튼 공통 스타일 */
+.btn-int { 
+    flex: 1; 
+    padding: 6px 0; 
+    font-size: 11px; 
+    background: #ffffff; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+/* 정지 버튼 공통 (폰트 굵게 및 테두리 제거) */
+.btn-stop-all, .btn-stop-hot, .btn-stop-normal {
+    font-weight: bold !important;
+    border: none !important;
+}
+
+/* 1. 전체 중단 (짙은 회색) */
+.btn-stop-all { 
+    background: #555555 !important; 
+    color: #ffffff !important; 
+}
+
+/* 2. 핫딜 중단 (짙은 주황) */
+.btn-stop-hot { 
+    background: #d35400 !important; 
+    color: #ffffff !important; 
+}
+
+/* 3. 일반 중단 (짙은 파랑) */
+.btn-stop-normal { 
+    background: #2980b9 !important; 
+    color: #ffffff !important; 
+}
+
+/* 마우스 오버 시 피드백 */
+.btn-int:hover {
+    background: #f0f0f0;
+}
+
+.btn-stop-all:hover, .btn-stop-hot:hover, .btn-stop-normal:hover {
+    filter: brightness(1.2); /* 약간 밝게 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* 활성화 상태 (현재 동작 중인 주기 표시용) */
+.btn-int.active {
+    background: #333 !important;
+    color: #fff !important;
+    border-color: #333;
+}
+
+/* 정지 버튼 활성화 시 스타일 */
+.btn-stop-active {
+    background-color: #dc3545 !important; /* Crimson Red */
+    border-color: #dc3545 !important;
+    color: white !important;
+}

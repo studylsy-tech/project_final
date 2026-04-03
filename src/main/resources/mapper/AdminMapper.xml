@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.dao.AdminMapper">
+
+    <select id="getDashboardStats" resultType="map">
+        SELECT 
+            /* 1. 전체 항목 수 */
+            (SELECT (SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER) + (SELECT COUNT(*) FROM Common_Product) FROM DUAL) AS TOTALCOUNT,
+            
+            /* 2. 핫딜 상품 수 */
+            (SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER) AS HOTDEALCOUNT,
+            
+            /* 3. 일반 상품 수 */
+            (SELECT COUNT(*) FROM Common_Product) AS NORMALCOUNT,
+            
+            /* 4. 핫딜 최종 동기화 시각 */
+            (SELECT TO_CHAR(MAX(LAST_UPDATE_DATE), 'YYYY-MM-DD HH24:MI:SS') FROM TB_HOTDEAL_TRACKER) AS HOTDEALLASTSYNC,
+            
+            /* 5. 일반 상품 최종 동기화 시각 */
+            (SELECT TO_CHAR(MAX(REG_DATE), 'YYYY-MM-DD HH24:MI:SS') FROM Common_Product) AS NORMALLASTSYNC,
+            
+            /* 6. 전체 최종 동기화 시각 (두 테이블의 MAX 중 더 큰 값) */
+            (SELECT TO_CHAR(GREATEST(
+                NVL((SELECT MAX(LAST_UPDATE_DATE) FROM TB_HOTDEAL_TRACKER), TO_DATE('1900-01-01', 'YYYY-MM-DD')),
+                NVL((SELECT MAX(REG_DATE) FROM Common_Product), TO_DATE('1900-01-01', 'YYYY-MM-DD'))
+            ), 'YYYY-MM-DD HH24:MI:SS') FROM DUAL) AS TOTALLASTSYNC
+        FROM DUAL
+    </select>
+<update id="upsertHotDeal" parameterType="com.project.model.HotDealDTO">
+    MERGE INTO TB_HOTDEAL_TRACKER t
+    USING DUAL ON (t.ORIGIN_URL = #{originUrl})
+    WHEN MATCHED THEN
+        UPDATE SET t.CURRENT_PRICE = #{currentPrice}, t.LAST_UPDATE_DATE = SYSDATE
+    WHEN NOT MATCHED THEN
+        INSERT (ORIGIN_URL, TITLE, CURRENT_PRICE, START_PRICE, MALL_NAME, COMMUNITY_NAME, IMAGE_URL)
+        VALUES (#{originUrl}, #{title}, #{currentPrice}, #{currentPrice}, #{mallName}, #{communityName}, #{imageUrl})
+</update>
+
+<select id="getHotDealList" resultType="com.project.model.HotDealDTO">
+    SELECT DEAL_ID, TITLE FROM TB_HOTDEAL_TRACKER
+</select>
+
+<update id="upsertHotDealAndGetId" parameterType="com.project.model.HotDealDTO">
+    MERGE INTO TB_HOTDEAL_TRACKER t
+    USING DUAL ON (t.ORIGIN_URL = #{originUrl})
+    WHEN MATCHED THEN
+        UPDATE SET 
+            t.CURRENT_PRICE = #{currentPrice}, 
+            t.LAST_UPDATE_DATE = SYSDATE
+    WHEN NOT MATCHED THEN
+        INSERT (ORIGIN_URL, TITLE, CURRENT_PRICE, START_PRICE, MALL_NAME, COMMUNITY_NAME, IMAGE_URL)
+        VALUES (#{originUrl}, #{title}, #{currentPrice}, #{currentPrice}, #{mallName}, #{communityName}, #{imageUrl})
+</update>
+
+<insert id="insertHotDealPriceHistory">
+    INSERT INTO TB_PRICE_HISTORY (DEAL_ID, PRICE, RECORD_DATE)
+    SELECT DEAL_ID, #{price}, SYSDATE 
+    FROM TB_HOTDEAL_TRACKER 
+    WHERE DEAL_ID = #{dealId}
+</insert>
+
+<update id="updateHotDealPrice">
+    UPDATE TB_HOTDEAL_TRACKER 
+    SET CURRENT_PRICE = #{price}, 
+        LAST_UPDATE_DATE = SYSDATE 
+    WHERE DEAL_ID = #{dealId}
+</update>
+</mapper>

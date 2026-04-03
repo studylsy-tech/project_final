@@ -37,20 +37,28 @@
 			</div>
 
 			<%-- 상단 현황판 --%>
-			<div class="summary-container">
-				<div class="summary-card">
-					<h3>크롤링 상태</h3>
-					<p class="count">정상 작동 중</p>
-				</div>
-				<div class="summary-card">
-					<h3>미처리 오류</h3>
-					<p class="count" style="color: #dc3545;">5건</p>
-				</div>
-				<div class="summary-card">
-					<h3>신규 Q&A</h3>
-					<p class="count">2건</p>
-				</div>
-			</div>
+<div class="summary-container">
+    <%-- '정상 작동 중' 클릭 시 크롤링 정책 관리 페이지로 이동 --%>
+    <div class="summary-card" 
+         onclick="location.href='${path}/admin/crawling_status'" 
+         style="cursor: pointer;">
+        <h3>크롤링 상태</h3>
+        <p class="count">정상 작동 중</p>
+    </div>
+    
+    <%-- '미처리 오류' 클릭 시 오류 로그 관리 페이지로 이동 (추가 권장) --%>
+    <div class="summary-card" 
+         onclick="location.href='${path}/admin/error_logs'" 
+         style="cursor: pointer;">
+        <h3>미처리 오류</h3>
+        <p class="count" style="color: #dc3545;">5건</p>
+    </div>
+    
+    <div class="summary-card">
+        <h3>신규 Q&A</h3>
+        <p class="count">2건</p>
+    </div>
+</div>
 
 			<%-- 메뉴 그리드 --%>
 			<div class="admin-menu-grid">

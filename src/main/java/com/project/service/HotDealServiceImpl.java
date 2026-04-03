@@ -7,6 +7,7 @@ import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,14 +23,17 @@ import com.project.util.Criteria;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import com.project.crawling.PriceTracker;
+import com.project.dao.AdminMapper; // 패키지 경로가 실제 파일 위치와 일치해야 함
 @Slf4j
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor // final이 붙은 필드를 생성자 주입으로 처리
 public class HotDealServiceImpl implements HotDealService {
 
     private final ProductMapper productMapper;
     private final HotDealMapper hotDealMapper;
-
+    private final AdminMapper adminMapper;
+    
     @Override
     @Transactional
     public int fetchAndStoreDeals(int limit) {
@@ -158,5 +162,24 @@ public class HotDealServiceImpl implements HotDealService {
 	public void updateCount(int noticeNo) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	
+
+	
+	@Autowired
+	private PriceTracker priceTracker;
+
+	@Override
+	public int fetchAndRecordNormalProducts() {
+	    // 이제 복잡한 크롤링 로직을 여기서 직접 짜지 않고 분리된 컴포넌트에 맡깁니다.
+	    return priceTracker.updateRegisteredProductPrices();
+	}
+
+	@Override
+	@Transactional
+	public int fetchAndRecordHotDeals() {
+	    // 핫딜 전용 가격 추적 및 이력 기록 로직 호출
+	    return priceTracker.updateRegisteredHotDealPrices();
 	}
 }

@@ -85,4 +85,6 @@ public interface ProductMapper {
 	int findAllIntegratedCount(SearchCriteria cri);
 	
 	ProductDTO getProductSummary(int prodId);
+
+	void updateProductPrice(ProductDTO product);
 }

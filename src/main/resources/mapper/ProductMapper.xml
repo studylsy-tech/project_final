@@ -155,6 +155,22 @@
     FROM Common_Product
     WHERE PROD_ID = #{prodId}
 </select>
+<select id="findIdByCode" parameterType="string" resultType="java.lang.Integer">
+    SELECT PROD_ID 
+    FROM Common_Product 
+    WHERE PROD_CODE = #{prodCode}
+</select>
 
+<update id="updateProductPrice" parameterType="com.project.model.ProductDTO">
+    UPDATE Common_Product 
+    SET PROD_PRICE = #{price}, 
+        REG_DATE = SYSDATE 
+    WHERE PROD_ID = #{prodId}
+</update>
+
+<insert id="insertPriceHistory" parameterType="com.project.model.ProductDTO">
+    INSERT INTO PRICE_HISTORY (PROD_ID, PRICE, REG_DATE)
+    VALUES (#{prodId}, #{price}, SYSDATE)
+</insert>
 
 </mapper>
