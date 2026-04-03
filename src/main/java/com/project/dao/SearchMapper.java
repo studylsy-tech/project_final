@@ -1,6 +1,8 @@
 package com.project.dao;
 
 import java.util.List;
+
+import com.project.model.HotDealDTO;
 import com.project.model.ProductDTO; // 본인의 ProductDTO 경로 확인
 import com.project.util.SearchCriteria;
 
@@ -11,5 +13,11 @@ public interface SearchMapper {
 
     // 2. 검색 결과 전체 개수 가져오기 (페이징 계산용)
     public int getSearchCount(SearchCriteria scri) throws Exception;
+    
+    // 핫딜 검색 리스트 조회
+    List<HotDealDTO> getHotDealSearchList(SearchCriteria scri) throws Exception;
+
+    // 핫딜 검색 결과 총 개수
+    int getHotDealSearchCount(SearchCriteria scri) throws Exception;
     
 }

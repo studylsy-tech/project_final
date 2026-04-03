@@ -40,8 +40,9 @@
 }
 
 .summary-card:hover {
+    background: #f0fff4;        /* 연두색 */
+    box-shadow: 0 8px 20px rgba(40, 167, 69, 0.35);  /* 연두빛 그림자 */
     transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
 }
 
 .summary-card h3 {
@@ -96,8 +97,8 @@
 
 .menu-item:hover, 
 .admin-menu-grid button:hover {
-    background: #f8f9fa;
-    border-color: #343a40;
+    background: #f0fff4;        /* 연두색 계열 */
+    border-color: #28a745;
     transform: translateX(5px);
 }
 

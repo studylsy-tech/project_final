@@ -83,4 +83,6 @@ public interface ProductMapper {
 	List<ProductDTO> findAllIntegratedList(String searchType, String keyword, int pageStart, int pageEnd);
 
 	int findAllIntegratedCount(SearchCriteria cri);
+	
+	ProductDTO getProductSummary(int prodId);
 }

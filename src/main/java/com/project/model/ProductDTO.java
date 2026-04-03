@@ -27,5 +27,8 @@ public class ProductDTO {
     
     private int viewCount;         
     private String category;       
+    
+    private long targetPrice;
+
 
 }

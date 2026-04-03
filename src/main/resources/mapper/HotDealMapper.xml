@@ -60,5 +60,23 @@
         SELECT NVL(TO_CHAR(MAX(LAST_UPDATE_DATE), 'YYYY-MM-DD HH24:MI:SS'), '-') 
         FROM TB_HOTDEAL_TRACKER
     </select>
+<select id="getHotDealDetail" parameterType="int" resultType="com.project.model.HotDealDTO">
+    SELECT 
+        DEAL_ID          as dealId,
+        TITLE            as title,        CURRENT_PRICE    as currentPrice, IMAGE_URL        as imageUrl,
+        ORIGIN_URL       as originUrl,
+        MALL_NAME        as mallName,
+        START_PRICE      as startPrice,   LAST_UPDATE_DATE as lastUpdateDate FROM TB_HOTDEAL_TRACKER
+    WHERE DEAL_ID = #{dealId}
+</select>
 
+    <select id="getHotDealPriceHistory" parameterType="int" resultType="map">
+        SELECT 
+            TO_CHAR(REG_DATE, 'YYYY-MM-DD') as REG_DATE,
+            PRICE as PRICE
+        FROM PRICE_HISTORY 
+        WHERE PROD_ID = #{dealId} 
+        /* 핫딜 상품과 일반 상품의 이력이 같은 테이블을 쓴다면 구분자가 필요할 수 있습니다 */
+        ORDER BY REG_DATE ASC
+    </select>
 </mapper>

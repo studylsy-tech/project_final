@@ -24,7 +24,6 @@ VALUES ('입고 알림 문의', '품절 상품 재입고 시 알림이 오나요
 commit
 
 
-<<<<<<< HEAD
 --공지사항 및 Q&A 대량 생성 SQL
 BEGIN
     -- 1. 공지사항(NOTICE) 50개 생성
@@ -41,7 +40,8 @@ BEGIN
 
     COMMIT;
 END;
-=======
+
+
 -- 게시판 더미데이터(페이징 확인용도)
 INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
 VALUES ('두 번째 공지사항입니다.', '테스트 내용입니다.', '관리자', 'NOTICE');
@@ -58,6 +58,43 @@ VALUES ('신규 기능 소개', '새로운 기능이 추가되었습니다.', '�
 
 COMMIT
 
+INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
+VALUES ('샘플 공지사항', '샘플 내용입니다.', '관리자', 'NOTICE');
+COMMIT;
 
+<<<<<<< HEAD
+SELECT COUNT(*) FROM BOARD WHERE BOARD_TYPE = 'QNA';
 
+SELECT * FROM (
+    SELECT rownum rnum, a.* FROM (
+        SELECT 
+            NOTICE_NO as notice_no,
+            TITLE as title,
+            CONTENT as content,
+            WRITER as writer,  
+            BOARD_TYPE as board_type,
+            COUNT as count,
+            TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
+        FROM BOARD
+        WHERE BOARD_TYPE = 'QNA'
+        ORDER BY NOTICE_NO DESC
+    ) a WHERE rownum <= 10
+) WHERE rnum >= 1;
+
+SELECT * FROM (
+    SELECT rownum rnum, a.* FROM (
+        SELECT 
+            NOTICE_NO as notice_no,
+            TITLE as title,
+            CONTENT as content,
+            WRITER as writer,
+            BOARD_TYPE as board_type,
+            COUNT as count,
+            TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
+        FROM BOARD 
+        WHERE BOARD_TYPE = 'QNA'
+        ORDER BY NOTICE_NO DESC
+    ) a WHERE rownum <= 10
+) WHERE rnum >= 1;
+=======
 >>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git

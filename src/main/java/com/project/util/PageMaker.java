@@ -92,4 +92,8 @@ public class PageMaker {
 	            .build();
 	    return uriComponents.toUriString();
 	}
+	public void setCri(Criteria cri) {
+	    this.criteria = cri;
+	    calcPaging();
+	}
 }

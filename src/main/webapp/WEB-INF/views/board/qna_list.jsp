@@ -24,6 +24,7 @@
             <%-- Controller에서 보낸 'list'가 비어있지 않을 때 출력 --%>
             <c:forEach items="${list}" var="board">
                 <tr>
+                    <%-- 소문자 필드 참조로 수정 --%>
                     <td>${board.notice_no}</td>
                     <td class="title-cell text-left">
                         <a href="${path}/board/detail?notice_no=${board.notice_no}">${board.title}</a>
@@ -47,8 +48,7 @@
         </tbody>
     </table>
 
-
-    <%-- 페이징 처리 영역 추가 --%>
+    <%-- 페이징 처리 영역 --%>
     <div class="pagination-area" style="text-align: center; margin-top: 20px;">
         <ul class="pagination" style="display: inline-flex; list-style: none; padding: 0;">
             <%-- '이전' 버튼 --%>
@@ -60,9 +60,9 @@
 
             <%-- 페이지 번호 목록 --%>
             <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
-                <li style="margin: 0 5px; ${pageMaker.criteria.page == idx ? 'font-weight: bold;' : ''}">
+                <li style="margin: 0 5px;">
                     <a href="${path}/board/qna${pageMaker.query(idx)}" 
-                       style="${pageMaker.criteria.page == idx ? 'color: #000; text-decoration: underline;' : 'color: #666;'}">
+                       style="${pageMaker.criteria.page == idx ? 'font-weight: bold; color: #000; text-decoration: underline;' : 'color: #666;'}">
                         ${idx}
                     </a>
                 </li>
@@ -77,7 +77,6 @@
         </ul>
     </div>
 
-    
     <div class="board-footer" style="width: 75%; margin-left: auto; margin-top: 20px; display: flex; justify-content: flex-end;">
         <a href="${path}/board/qnaWrite" class="btn-dark">질문하기</a>
     </div>

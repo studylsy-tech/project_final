@@ -3,23 +3,26 @@
 
 <mapper namespace="com.project.dao.BoardMapper">
 
-<sql id="boardSearch">
-    <if test="searchType != null">
-        <if test="searchType == 't'.toString()">AND TITLE LIKE '%' || #{keyword} || '%'</if>
-        <if test="searchType == 'c'.toString()">AND CONTENT LIKE '%' || #{keyword} || '%'</if>
-        <if test="searchType == 'w'.toString()">AND WRITER LIKE '%' || #{keyword} || '%'</if>
-    </if>
-</sql>
-<select id="selectBoardList" parameterType="com.project.util.SearchCriteria" resultType="com.project.model.BoardDTO">
-    SELECT * FROM BOARD 
-    WHERE BOARD_TYPE = #{boardType} 
-    ORDER BY NOTICE_NO DESC
-</select>
+    <sql id="boardSearch">
+        <if test="searchType != null">
+            <if test="searchType == 't'.toString()">AND TITLE LIKE '%' || #{keyword} || '%'</if>
+            <if test="searchType == 'c'.toString()">AND CONTENT LIKE '%' || #{keyword} || '%'</if>
+            <if test="searchType == 'w'.toString()">AND WRITER LIKE '%' || #{keyword} || '%'</if>
+        </if>
+    </sql>
 
     <select id="selectBoardListPaging" resultType="com.project.model.BoardDTO">
     SELECT * FROM (
         SELECT rownum rnum, a.* FROM (
-            SELECT * FROM BOARD 
+            SELECT 
+                NOTICE_NO as notice_no,
+                TITLE as title,
+                CONTENT as content,
+                WRITER as writer,
+                BOARD_TYPE as board_type,
+                COUNT as count,
+                TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
+            FROM BOARD 
             WHERE BOARD_TYPE = #{boardType}
             <include refid="boardSearch" />
             ORDER BY NOTICE_NO DESC
@@ -27,14 +30,17 @@
     ) WHERE rnum &gt;= #{pageStart}
 </select>
 
-<select id="getBoardCount" resultType="int"> 
-    SELECT COUNT(*) FROM BOARD 
-    WHERE BOARD_TYPE = #{boardType}
-    <include refid="boardSearch" />
-</select>
-  
     <select id="selectBoardDetail" parameterType="int" resultType="com.project.model.BoardDTO">
-        SELECT * FROM BOARD WHERE NOTICE_NO = #{notice_no}
+        SELECT 
+            NOTICE_NO as notice_no, 
+            TITLE as title, 
+            CONTENT as content, 
+            WRITER as writer, 
+            BOARD_TYPE as board_type, 
+            COUNT as count, 
+            TO_CHAR(INDATE, 'YYYY-MM-DD') as indate 
+        FROM BOARD 
+        WHERE NOTICE_NO = #{notice_no}
     </select>
 
     <insert id="insertBoard" parameterType="com.project.model.BoardDTO">
@@ -45,5 +51,11 @@
     <update id="updateCount" parameterType="int">
         UPDATE BOARD SET COUNT = COUNT + 1 WHERE NOTICE_NO = #{notice_no}
     </update>
+
+    <select id="getBoardCount" resultType="int"> 
+        SELECT COUNT(*) FROM BOARD 
+        WHERE BOARD_TYPE = #{boardType}
+        <include refid="boardSearch" />
+    </select>
 
 </mapper>

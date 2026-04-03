@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.crawling.SeleniumDriver;
 import com.project.model.ProductDTO;
-import com.project.service.ProductService; // 1. Import 확인
+import com.project.service.ProductService;
 
 @Controller
 @RequestMapping("/dashboard")
@@ -58,10 +58,14 @@ public class DashboardController {
 
 	@GetMapping("/detail")
 	public String productDetail(@RequestParam("prodId") int prodId, Model model) {
-		// 상품 기본 정보와 가격 이력을 조회해서 모델에 담습니다.
-		model.addAttribute("product", productService.getProductById(prodId));
-		model.addAttribute("history", productService.getPriceHistory(prodId));
+	    // 1. 서비스에서 데이터를 가져옴
+	    ProductDTO product = productService.getProductById(prodId);
+	    List<Map<String, Object>> history = productService.getPriceHistory(prodId);
 
-		return "dashboard/history_detail"; // WEB-INF/views/dashboard/history_detail.jsp
+	    // 2. JSP에서 사용할 변수명을 "product", "history"로 정확히 지정
+	    model.addAttribute("product", product);
+	    model.addAttribute("history", history);
+
+	    return "dashboard/history_detail";
 	}
 }

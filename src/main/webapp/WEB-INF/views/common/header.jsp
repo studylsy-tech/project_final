@@ -9,9 +9,9 @@
         <a href="${path}/">STOCK ALARM</a>
         <ul class="dropdown-menu">
             <li><a href="${path}/stock/all">전체</a></li>
-            <li><a href="${path}/stock/list?searchType=drop">오늘의 급락</a></li>
+            <li><a href="${path}/stock/drop">오늘의 급락</a></li>
             <li><a href="${path}/stock/analysis">핫딜 자동분석</a></li>
-            <li><a href="${path}/stock/list?searchType=low">최저가 갱신</a></li>
+            <li><a href="${path}/stock/low">최저가 갱신</a></li>
         </ul>
     </div>
     <nav class="nav-group">

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.project.dao.BoardMapper;
 import com.project.dao.SearchMapper;
+import com.project.model.HotDealDTO;
 import com.project.model.ProductDTO;
 import com.project.util.SearchCriteria;
 import com.project.util.SearchPageMaker;
@@ -41,7 +42,20 @@ public class SearchPageController {
             
             return "board/notice_list"; // 게시판 JSP로 보냄
             
-        } else {
+        }else if (boardType != null && boardType.equals("HOTDEAL")) {
+            // [핫딜 분석 모드] 추가된 부분!
+            int totalCount = searchMapper.getHotDealSearchCount(scri); // 핫딜용 카운트 매퍼 필요
+            SearchPageMaker pageMaker = new SearchPageMaker(scri, totalCount, 5);
+            
+            // 여기서 반환되는 리스트 타입을 HotDealDTO로 인식하게 합니다.
+            List<HotDealDTO> list = searchMapper.getHotDealSearchList(scri);
+            
+            model.addAttribute("hotDealList", list);
+            model.addAttribute("pageMaker", pageMaker);
+            
+            return "stock/analysis"; // 핫딜 분석 JSP로 보냄
+            
+        }else {
             // [상품 모드] 기존 코드 유지
             List<ProductDTO> list = searchMapper.getSearchList(scri);
             int totalCount = searchMapper.getSearchCount(scri);

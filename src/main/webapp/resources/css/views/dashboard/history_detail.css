@@ -1,0 +1,51 @@
+/* 제목 강조 */
+.detail-title {
+    margin: 0 0 15px 0;
+    font-size: 24px;
+    color: #1a2a44;
+    line-height: 1.4;
+    font-weight: 700;
+}
+
+/* 가격 정보 컨테이너 */
+.price-container {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    border-top: 1px solid #e1e4e8;
+    padding-top: 20px;
+    margin-top: 10px;
+}
+
+.price-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.price-label {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.price-value {
+    font-size: 22px;
+    font-weight: 800;
+}
+
+/* 현재가는 빨간색, 목표가(시작가)는 청록색 */
+.current-p { color: #e74c3c; }
+.target-p { color: #26a69a; }
+
+.divider {
+    border-left: 1px solid #e1e4e8;
+    height: 35px;
+}
+
+.info-footer {
+    margin-top: 15px;
+    padding-top: 10px;
+    border-top: 1px dashed #e1e4e8;
+    color: #888;
+    font-size: 13px;
+}
