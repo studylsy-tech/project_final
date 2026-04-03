@@ -35,7 +35,7 @@
 =======
     <%-- 상품 리스트 영역 --%>
 <div class="stock-list-container">
-    <c:forEach var="s" items="${stockList}">
+    <c:forEach var="s" items="${stockList}"> </c:forEach>
         <div class="stock-card" onclick="location.href='${path}/dashboard/detail?prodId=${s.prodId}'" 
              style="display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee; cursor: pointer;">
             
