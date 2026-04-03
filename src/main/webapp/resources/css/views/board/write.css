@@ -1,7 +1,7 @@
-/* board_write.css */
+/* board_write.css 
 .board-wrapper {
     padding: 60px 0;
-    max-width: 900px; /* 약간 더 넓게 */
+    max-width: 900px; 약간 더 넓게
     margin: 0 auto;
     font-family: 'Pretendard', -apple-system, sans-serif;
 }
@@ -29,10 +29,10 @@
     border-top: 1px solid #eee;
 }
 
-/* 테이블 폼 스타일 최적화 */
+테이블 폼 스타일 최적화
 .board-table {
     width: 100%;
-    border-collapse: separate; /* 보더 겹침 방지 */
+    border-collapse: separate; 보더 겹침 방지
     border-spacing: 0;
     border-top: 3px solid #333;
 }
@@ -54,44 +54,44 @@
     background: #fff;
 }
 
-/* 입력 요소 스타일 대폭 수정 */
+입력 요소 스타일 대폭 수정
 .form-control {
     width: 100%;
     border: 1px solid #ddd;
-    padding: 12px 15px; /* 안쪽 여백 증가 */
+    padding: 12px 15px; 안쪽 여백 증가
     box-sizing: border-box;
     font-size: 15px;
     outline: none;
-    border-radius: 4px; /* 살짝 둥글게 */
+    border-radius: 4px; 살짝 둥글게
     transition: all 0.2s ease-in-out;
     color: #333;
 }
 
-/* 마우스 올리거나 클릭했을 때 효과 */
+마우스 올리거나 클릭했을 때 효과
 .form-control:hover {
     border-color: #bbb;
 }
 
 .form-control:focus {
     border-color: #2c3e50;
-    box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1); /* 푸르스름한 광채 */
+    box-shadow: 0 0 0 3px rgba(44, 62, 80, 0.1); 푸르스름한 광채
 }
 
-/* 작성자 칸 (읽기 전용) */
+작성자 칸 (읽기 전용)
 .form-readonly {
     background-color: #f5f5f5 !important;
     border-color: #eee !important;
     color: #999;
 }
 
-/* 내용 입력창 높이 및 줄간격 */
+내용 입력창 높이 및 줄간격
 textarea.form-control {
     min-height: 400px;
-    resize: vertical; /* 위아래로만 조절 가능 */
+    resize: vertical; 위아래로만 조절 가능
     line-height: 1.6;
 }
 
-/* 하단 버튼 영역 */
+하단 버튼 영역
 .board-footer {
     margin-top: 40px;
     display: flex;
@@ -102,7 +102,7 @@ textarea.form-control {
 .btn-submit {
     min-width: 140px;
     padding: 14px 0;
-    background: #2c3e50; /* 신뢰감 있는 네이비 */
+    background: #2c3e50; 신뢰감 있는 네이비
     color: #fff;
     border: none;
     cursor: pointer;
@@ -115,7 +115,7 @@ textarea.form-control {
 .btn-cancel {
     min-width: 140px;
     padding: 14px 0;
-    background: #95a5a6; /* 차분한 그레이 */
+    background: #95a5a6; 차분한 그레이
     color: #fff;
     border: none;
     cursor: pointer;
@@ -126,4 +126,161 @@ textarea.form-control {
 }
 
 .btn-submit:hover { background: #1a252f; }
-.btn-cancel:hover { background: #7f8c8d; }
+.btn-cancel:hover { background: #7f8c8d; } */
+
+
+
+
+
+
+
+
+
+
+/* STOCK ALARM - 1:1 문의하기 전용 스타일 */
+
+/* 1. 전체 배경 및 컨테이너 (아이보리 & 라운드) */
+.board-wrapper {
+    padding: 50px 40px;
+    max-width: 850px; 
+    margin: 40px auto;
+    background-color: #fffaf0; /* 부드러운 아이보리 배경 */
+    border-radius: 25px;       /* 몽글몽글한 대형 라운드 */
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06); /* 부드러운 입체감 */
+    font-family: 'NanumSquareRound', 'Pretendard', sans-serif;
+}
+
+/* 2. 타이틀 영역 (블루 포인트) */
+.board-title-area {
+    margin-bottom: 35px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+.board-title-area h2 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #2196f3;            /* 메인 블루 컬러 */
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+}
+
+.board-title-area p {
+    color: #88a0b5;            /* 차분한 블루 그레이 */
+    font-size: 16px;
+    font-weight: 500;
+}
+
+/* 3. 테이블 폼 스타일 (세련된 레이아웃) */
+.board-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-top: 3px solid #2196f3; /* 상단 강조선 블루로 변경 */
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;          /* 테이블 모서리 둥글게 유지 */
+}
+
+.board-table th {
+    width: 20%;
+    padding: 25px 20px;
+    background: #fdfaf5;       /* 아주 연한 아이보리 */
+    border-bottom: 1px solid #f0f0f0;
+    text-align: left;
+    color: #555;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.board-table td {
+    padding: 15px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    background: #fff;
+}
+
+/* 4. 입력 요소 (라운드 & 포커스 효과) */
+.form-control {
+    width: 100%;
+    border: 1.5px solid #eee;
+    padding: 14px 18px;
+    box-sizing: border-box;
+    font-size: 15px;
+    outline: none;
+    border-radius: 12px;       /* 4px에서 12px로 더 둥글게 */
+    transition: all 0.3s ease;
+    color: #333;
+    background-color: #fafafa;
+}
+
+/* 마우스 올리거나 클릭했을 때 - 블루 광채 */
+.form-control:hover {
+    border-color: #2196f3;
+}
+
+.form-control:focus {
+    border-color: #2196f3;
+    background-color: #fff;
+    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.15);
+}
+
+/* 작성자 칸 (읽기 전용 - 차분하게) */
+.form-readonly {
+    background-color: #f1f3f5 !important;
+    border-color: #e9ecef !important;
+    color: #adb5bd;
+    font-weight: 600;
+}
+
+/* 내용 입력창 높이 및 줄간격 */
+textarea.form-control {
+    min-height: 350px;
+    resize: vertical;
+    line-height: 1.8;
+}
+
+/* 5. 하단 버튼 영역 (둥글고 큼직하게) */
+.board-footer {
+    margin-top: 45px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn-submit {
+    min-width: 160px;
+    padding: 16px 0;
+    background: #2196f3;       /* 메인 블루 */
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 17px;
+    border-radius: 35px;       /* 완전 둥근 알약 형태 */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+}
+
+.btn-cancel {
+    min-width: 160px;
+    padding: 16px 0;
+    background: #e9ecef;       /* 더 연하고 차분한 그레이 */
+    color: #777;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 17px;
+    border-radius: 35px;
+    transition: all 0.3s;
+}
+
+.btn-submit:hover { 
+    background: #1976d2; 
+    transform: translateY(-3px); /* 슥- 올라가는 효과 */
+    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+}
+
+.btn-cancel:hover { 
+    background: #dee2e6; 
+    color: #444;
+}

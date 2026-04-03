@@ -72,8 +72,8 @@
 
 /* 핫딜 그리드 */
 .hotdeal-grid-container h3{
-	font-size: 18px;
-	font-weight:800;
+	font-size: 32px;
+	font-weight:900;
     flex: 7.5;
     color: #2196f3;
     background: #f0f4f9;
@@ -121,11 +121,12 @@
 .drop-rank-container {
     flex: 2.5;
     background: #FDFBF0;
-    padding: 25px;
+    padding: 30px 80px;
     border-radius: 12px;
     border: 1px solid #eee;
     position: sticky;
     top: 20px;
+
 }
 
 .rank-list-item {

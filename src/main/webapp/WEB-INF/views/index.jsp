@@ -38,7 +38,7 @@
 <section class="main-top-integrated-section">
 	<%-- 실시간 인기 핫딜 섹션 --%>
 	<div class="hotdeal-grid-container">
-		<h3 style="color: #2196f3; margin-top: 0;">✨ 실시간 인기 핫딜</h3>
+		<h3 style="color: #2196f3; margin-top: 0; ">✨✨  실시간 인기 핫딜  ✨✨ </h3>
 		<div class="hotdeal-grid">
 			<%-- analysis.jsp와 동일한 items 명칭인 hotDealList 사용 --%>
 			<c:forEach var="deal" items="${hotDealList}" varStatus="status">
@@ -82,10 +82,22 @@
 
 	<%-- 우측: 급락 순위 --%>
 	<div class="drop-rank-container">
-		<h3
-			style="margin-bottom: 20px; border-bottom: 2px solid #2196f3; padding-bottom: 10px; text-align: center; color: #2196f3; margin-top: 0;">📉
-			급락 순위</h3>
-		<ul style="list-style: none; padding: 0; margin: 0;">
+      <h3 style="
+                width: 100%; 
+                margin-top: -15px; 
+                margin-bottom: 15px; 
+                border-bottom: 2px solid #2196f3; 
+                padding-bottom: 10px; 
+                color: #2196f3; 
+                font-size: 30px; 
+                font-weight: 800; 
+                text-align: justify; 
+                text-align-last: justify; 
+                display: block;">
+               📉 급 락 순 위
+     </h3>
+       
+	<ul style="list-style: none; padding: 0; margin: 0;">
 			<c:forEach var="i" begin="1" end="10">
 				<li class="rank-list-item"><span class="rank-num">${i}</span> <span
 					style="flex: 1; margin: 0 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">테스트
