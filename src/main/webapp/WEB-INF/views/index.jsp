@@ -113,20 +113,44 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-	$(function() {
-		var ticker = $('#mainTicker');
-		var tickerHeight = 40;
+//기존 script 부분을 아래 내용으로 교체하십시오.
+const labels = [];
+const prices = [];
 
-		function moveTicker() {
-			ticker.animate({
-				marginTop : -tickerHeight
-			}, 600, function() {
-				ticker.find('li:first').appendTo(ticker);
-				ticker.css('margin-top', 0);
-			});
-		}
-		setInterval(moveTicker, 3500);
-	});
+// 데이터 반복문 처리
+<c:forEach var="h" items="${history}">
+    labels.push('${h.REG_DATE}');
+    prices.push(${h.PRICE != null ? h.PRICE : 0});
+</c:forEach>
+
+// 1. 데이터가 없을 경우 차트가 깨지지 않도록 빈 배열 방지
+if (labels.length === 0) {
+    labels.push('데이터 없음');
+    prices.push(0);
+}
+
+// 2. targetPrice가 null일 경우를 대비한 기본값 처리
+const targetPrice = ${product.targetPrice != null ? product.targetPrice : 0};
+
+const ctx = document.getElementById('priceChart').getContext('2d');
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: '수집 가격',
+            data: prices,
+            borderColor: '#26a69a',
+            backgroundColor: 'rgba(38, 166, 154, 0.1)',
+            borderWidth: 3,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false
+    }
+});
 </script>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>

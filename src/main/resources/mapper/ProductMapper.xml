@@ -42,76 +42,119 @@
     </select>
 
     <select id="listSearch" parameterType="com.project.util.SearchCriteria" resultType="com.project.model.ProductDTO">
-        SELECT * FROM (
-            SELECT rownum rnum, a.* FROM (
-                SELECT
-                    PROD_ID as prodId,
-                    PROD_NAME as name,
-                    PROD_PRICE as price,
-                    IMAGE_URL as imageUrl,
-                    ORIGIN_URL as originUrl,
-                    SOURCE as communityName,
-                    BOARD_TYPE as boardType,
-                    REG_DATE as regDate
-                FROM Common_Product
-                WHERE 1=1
-                <if test="searchType != null and searchType == 'name'.toString()">
+    SELECT * FROM (
+        SELECT rownum rnum, a.* FROM (
+            SELECT 
+                PROD_ID as prodId,
+                PROD_NAME as name,
+                PROD_PRICE as price,
+                IMAGE_URL as imageUrl,
+                ORIGIN_URL as originUrl,
+                SOURCE as communityName,
+                BOARD_TYPE as boardType,
+                REG_DATE as regDate
+            FROM Common_Product
+            WHERE 1=1
+            <choose>
+                <when test="searchType == 'name'.toString()">
                     AND PROD_NAME LIKE '%'||#{keyword}||'%'
-                </if>
+                </when>
+                <when test="searchType == 'drop'.toString()">
+                    AND BOARD_TYPE = 'DROP'
+                </when>
+                <when test="searchType == 'low'.toString()">
+                    AND BOARD_TYPE = 'NORMAL' 
+                </when>
+            </choose>
 
-                UNION ALL
-
-                SELECT
-                    DEAL_ID as prodId,
-                    TITLE as name,
-                    CURRENT_PRICE as price,
-                    IMAGE_URL as imageUrl,
-                    ORIGIN_URL as originUrl,
-                    COMMUNITY_NAME as communityName,
-                    'HOT' as boardType,
-                    LAST_UPDATE_DATE as regDate
-                FROM TB_HOTDEAL_TRACKER
-                WHERE 1=1
-                <if test="searchType != null and searchType == 'name'.toString()">
-                    AND TITLE LIKE '%'||#{keyword}||'%'
-                </if>
-
-                ORDER BY regDate DESC
-            ) a WHERE rownum &lt;= #{pageEnd}
-        ) WHERE rnum &gt;= #{pageStart}
-    </select>
-
-    <select id="listSearchCount" parameterType="com.project.util.SearchCriteria" resultType="int">
-        SELECT (
-            SELECT COUNT(*) FROM Common_Product
-            WHERE 1=1
-            <if test="searchType != null and searchType == 'name'.toString()">
-                AND PROD_NAME LIKE '%'||#{keyword}||'%'
-            </if>
-        ) + (
-            SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
-            WHERE 1=1
-            <if test="searchType != null and searchType == 'name'.toString()">
-                AND TITLE LIKE '%'||#{keyword}||'%'
-            </if>
-        ) FROM DUAL
-    </select>
-
-    <select id="findMainHotDeals" resultType="com.project.model.ProductDTO">
-        SELECT * FROM (
-            SELECT  
+            <if test="searchType == null or searchType == 'name'.toString() or searchType == 'hot'.toString()">
+            UNION ALL
+            SELECT
                 DEAL_ID as prodId,
                 TITLE as name,
                 CURRENT_PRICE as price,
-                START_PRICE as startPrice,
                 IMAGE_URL as imageUrl,
                 ORIGIN_URL as originUrl,
-                MALL_NAME as mallName,
                 COMMUNITY_NAME as communityName,
+                'HOT' as boardType,
                 LAST_UPDATE_DATE as regDate
             FROM TB_HOTDEAL_TRACKER
-            ORDER BY LAST_UPDATE_DATE DESC
-        ) WHERE rownum &lt;= 10
-    </select>
+            WHERE 1=1
+            <if test="searchType == 'name'.toString()">
+                AND TITLE LIKE '%'||#{keyword}||'%'
+            </if>
+            <if test="searchType == 'hot'.toString()">
+                </if>
+            </if>
+
+            ORDER BY regDate DESC
+        ) a WHERE rownum &lt;= #{pageEnd}
+    ) WHERE rnum &gt;= #{pageStart}
+</select>
+
+<select id="listSearchCount" parameterType="com.project.util.SearchCriteria" resultType="int">
+    SELECT (
+        SELECT COUNT(*) FROM Common_Product
+        WHERE 1=1
+        <choose>
+            <when test="searchType == 'name'.toString()">
+                AND PROD_NAME LIKE '%'||#{keyword}||'%'
+            </when>
+            <when test="searchType == 'drop'.toString()">
+                AND BOARD_TYPE = 'DROP'
+            </when>
+            <when test="searchType == 'low'.toString()">
+                AND BOARD_TYPE = 'NORMAL'
+            </when>
+        </choose>
+    ) + (
+        <choose>
+            <when test="searchType == null or searchType == 'name'.toString() or searchType == 'hot'.toString()">
+                SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
+                WHERE 1=1
+                <if test="searchType == 'name'.toString()">
+                    AND TITLE LIKE '%'||#{keyword}||'%'
+                </if>
+            </when>
+            <otherwise>
+                0
+            </otherwise>
+        </choose>
+    ) FROM DUAL
+</select>
+
+    
+
+<select id="getProductDetail" parameterType="int" resultType="com.project.model.ProductDTO">
+    SELECT 
+        PROD_ID as prodId,
+        PROD_NAME as name,
+        PROD_PRICE as price,
+        TARGET_PRICE as targetPrice,
+        IMAGE_URL as imageUrl,
+        SOURCE as communityName,
+        REG_DATE as regDate
+    FROM Common_Product
+    WHERE PROD_ID = #{prodId}
+</select>
+
+<select id="getPriceHistory" resultType="map">
+    SELECT 
+        PRICE as price,
+        REG_DATE as regDate
+    FROM PRICE_HISTORY
+    WHERE PROD_ID = #{prodId}
+    ORDER BY REG_DATE DESC
+</select>
+
+<select id="getProductSummary" resultType="com.project.model.ProductDTO">
+    SELECT
+        PROD_NAME as name,
+        PROD_PRICE as price,
+        TARGET_PRICE as targetPrice
+    FROM Common_Product
+    WHERE PROD_ID = #{prodId}
+</select>
+
 
 </mapper>

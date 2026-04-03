@@ -58,6 +58,40 @@ VALUES ('신규 기능 소개', '새로운 기능이 추가되었습니다.', '�
 
 COMMIT
 
+INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
+VALUES ('샘플 공지사항', '샘플 내용입니다.', '관리자', 'NOTICE');
+COMMIT;
 
+SELECT COUNT(*) FROM BOARD WHERE BOARD_TYPE = 'QNA';
 
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
+SELECT * FROM (
+    SELECT rownum rnum, a.* FROM (
+        SELECT 
+            NOTICE_NO as notice_no,
+            TITLE as title,
+            CONTENT as content,
+            WRITER as writer,  
+            BOARD_TYPE as board_type,
+            COUNT as count,
+            TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
+        FROM BOARD
+        WHERE BOARD_TYPE = 'QNA'
+        ORDER BY NOTICE_NO DESC
+    ) a WHERE rownum <= 10
+) WHERE rnum >= 1;
+
+SELECT * FROM (
+    SELECT rownum rnum, a.* FROM (
+        SELECT 
+            NOTICE_NO as notice_no,
+            TITLE as title,
+            CONTENT as content,
+            WRITER as writer,
+            BOARD_TYPE as board_type,
+            COUNT as count,
+            TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
+        FROM BOARD 
+        WHERE BOARD_TYPE = 'QNA'
+        ORDER BY NOTICE_NO DESC
+    ) a WHERE rownum <= 10
+) WHERE rnum >= 1;

@@ -1,6 +1,8 @@
 package com.project.dao;
 
 import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.project.model.HotDealDTO;
@@ -27,4 +29,10 @@ public interface HotDealMapper {
     );
     
     List<ProductDTO> findMainHotDeals();
+
+ // 핫딜 상세 정보 조회
+    HotDealDTO getHotDealDetail(int dealId);
+    
+    // 핫딜 가격 이력 조회
+    List<Map<String, Object>> getHotDealPriceHistory(int dealId);
 }
