@@ -136,15 +136,6 @@
     padding-bottom: 5px;
 }
 
-
-
-/* .rank-num {
-    font-weight: 800;
-    color: #2196f3;
-    width: 20px;
-   
-}
- */
 /* 1. 숫자만 하늘색 동그라미로 만들기 */
 .rank-num {
     display: inline-flex;  /* 글자들 사이에서 위치를 잡기 위해 */
@@ -164,8 +155,6 @@
     margin-right: 12px;    /* 뒤에 오는 상품명과의 간격 */
     flex-shrink: 0;        /* 원이 찌그러지지 않게 고정 */
 } 
- 
- 
  
 /* 티커 박스 */
 .ticker-box {
