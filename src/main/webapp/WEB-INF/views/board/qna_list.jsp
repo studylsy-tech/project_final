@@ -9,6 +9,46 @@
         <h2>Q&A</h2>
         <p>궁금하신 점을 남겨주시면 답변해 드립니다.</p>
     </div>
+	
+	<!-- 검색기능(수정 파악 쉽게 주석처리, 끝나면 제거 예정) -->
+	<div class="search-area">
+	    <select id="searchType">
+	        <option value="t" <c:out value="${pageMaker.criteria.searchType == 't' ? 'selected' : ''}"/>>제목</option>
+	        <option value="w" <c:out value="${pageMaker.criteria.searchType == 'w' ? 'selected' : ''}"/>>작성자</option>
+	        <option value="tc" <c:out value="${pageMaker.criteria.searchType == 'tc' ? 'selected' : ''}"/>>제목+내용</option>
+	    </select>
+	    
+	    <input type="text" id="keywordInput" value="${pageMaker.criteria.keyword}" placeholder="문의 내용을 검색하세요">
+	    
+	    <button id="searchBtn">검색</button>
+	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+	$(function() {
+	    $('#searchBtn').on("click", function(event) {
+	        var sType = $("#searchType").val();
+	        var sKeyword = $('#keywordInput').val();
+	        
+	        // 경로(/board/qna)는 본인의 Controller 매핑에 맞게 수정하세요.
+	        var url = "${path}/board/qna"
+	                + "?page=1"
+	                + "&perPageNum=10"
+	                + "&searchType=" + sType 
+	                + "&keyword=" + encodeURIComponent(sKeyword);
+	        
+	        location.href = url;
+	    });
+	
+	    $('#keywordInput').on("keydown", function(event) {
+	        if (event.keyCode === 13) {
+	            $('#searchBtn').click();
+	        }
+	    });
+	});
+	</script>
+
+<!-- 검색기능 끝(수정 파악 쉽게 주석처리, 끝나면 제거 예정) -->
 
     <table class="board-table">
         <thead>

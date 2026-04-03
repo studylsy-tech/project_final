@@ -46,4 +46,76 @@
         UPDATE BOARD SET COUNT = COUNT + 1 WHERE NOTICE_NO = #{notice_no}
     </update>
 
+	<sql id="noticeSearch">
+    AND BOARD_TYPE = 'NOTICE'
+    
+    <if test="searchType != null">
+        <choose>
+            <when test="searchType == 't'.toString()">
+                AND TITLE LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="searchType == 'w'.toString()">
+                AND WRITER LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="searchType == 'tc'.toString()">
+                AND (TITLE LIKE '%' || #{keyword} || '%' OR CONTENT LIKE '%' || #{keyword} || '%')
+            </when>
+        </choose>
+    </if>
+</sql>
+	
+	<!-- 검색기능(수정 확인 용도 - 끝나면 제거) -->
+	<select id="noticeListPaging" resultType="com.project.model.BoardDTO">
+	    SELECT 
+	        NOTICE_NO as notice_no,
+	        TITLE as title,
+	        WRITER as writer,
+	        INDATE as indate,
+	        COUNT as count,
+	        BOARD_TYPE as board_type
+	    FROM BOARD
+	    WHERE 1=1
+	    <include refid="noticeSearch" />
+	    ORDER BY NOTICE_NO DESC
+	    OFFSET #{pageStart} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
+	</select>
+	
+	<select id="noticeCount" resultType="int">
+	    SELECT COUNT(*) FROM BOARD
+	    WHERE 1=1
+	    <include refid="noticeSearch" />
+	</select>
+	
+	<sql id="qnaSearch">
+	    AND BOARD_TYPE = 'QNA'
+	    <if test="searchType != null">
+	        <choose>
+	            <when test="searchType == 't'.toString()">
+	                AND TITLE LIKE '%' || #{keyword} || '%'
+	            </when>
+	            <when test="searchType == 'w'.toString()">
+	                AND WRITER LIKE '%' || #{keyword} || '%'
+	            </when>
+	            <when test="searchType == 'tc'.toString()">
+	                AND (TITLE LIKE '%' || #{keyword} || '%' OR CONTENT LIKE '%' || #{keyword} || '%')
+	            </when>
+	        </choose>
+	    </if>
+	</sql>
+	
+	<select id="qnaListPaging" resultType="com.project.model.BoardDTO">
+	    SELECT * FROM BOARD
+	    WHERE 1=1
+	    <include refid="qnaSearch" />
+	    ORDER BY NOTICE_NO DESC
+	    OFFSET #{pageStart} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
+	</select>
+	
+	<select id="qnaCount" resultType="int">
+	    SELECT COUNT(*) FROM BOARD
+	    WHERE 1=1
+	    <include refid="qnaSearch" />
+	</select>
+	<!-- 검색기능 끝(수정 확인 용도 - 끝나면 제거) -->
+
 </mapper>

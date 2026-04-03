@@ -12,16 +12,19 @@
 
     <%-- 검색 영역 --%>
     <div style="margin-bottom: 20px; text-align: right;">
-        <form action="${path}/board/list" method="get">
-            <select name="searchType" style="padding: 5px;">
-                <option value="name" ${pageMaker.criteria.searchType eq 'name' ? 'selected' : ''}>상품명</option>
-                <option value="drop" ${pageMaker.criteria.searchType eq 'drop' ? 'selected' : ''}>급락상품</option>
-                <option value="low" ${pageMaker.criteria.searchType eq 'low' ? 'selected' : ''}>최저가</option>
-            </select>
-            <input type="text" name="keyword" value="${pageMaker.criteria.keyword}" style="padding: 5px; width: 200px;">
-            <button type="submit" style="padding: 5px 15px;">검색</button>
-        </form>
-    </div>
+	    <%-- onsubmit을 막아서 중복 전송 방지 --%>
+	    <form action="${path}/stock/list" method="get" onsubmit="return false;">
+	        <select id="searchTypeSelect" name="searchType" style="padding: 5px;">
+	            <option value="name" ${pageMaker.criteria.searchType eq 'name' ? 'selected' : ''}>상품명</option>
+	            <option value="drop" ${pageMaker.criteria.searchType eq 'drop' ? 'selected' : ''}>급락상품</option>
+	            <option value="low" ${pageMaker.criteria.searchType eq 'low' ? 'selected' : ''}>최저가</option>
+	        </select>
+	        <%-- id="keywordInput" 추가 --%>
+	        <input type="text" id="keywordInput" name="keyword" value="${pageMaker.criteria.keyword}" style="padding: 5px; width: 200px;">
+	        <%-- id="searchBtn" 추가 --%>
+	        <button type="button" id="searchBtn" style="padding: 5px 15px;">검색</button>
+	    </form>
+	</div>
 
     <div class="stock-list-container">
         <c:choose>
@@ -89,12 +92,24 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(function() {
-        // 하단 검색 버튼 클릭 이벤트 (기존 유지)
         $('#searchBtn').on("click", function(event) {
-            self.location = "list"
-                + '${pageMaker.query(1)}' 
-                + "&searchType=" + $("#searchType option:selected").val()
+            // 선택한 검색 타입과 키워드 가져오기
+            var sType = $("#searchTypeSelect").val();
+            var sKeyword = $('#keywordInput').val();
+            
+            // self.location을 통해 정확한 파라미터 구성
+            self.location = "${path}/search/list"
+                + "?page=1" // 검색 시 무조건 1페이지로 이동
+                + "&perPageNum=${pageMaker.criteria.perPageNum}"
+                + "&searchType=" + $("#searchTypeSelect").val()
                 + "&keyword=" + encodeURIComponent($('#keywordInput').val());
+        });
+
+        // 엔터키 지원 (입력창에서 엔터 눌러도 검색되게)
+        $("#keywordInput").on("keypress", function(e) {
+            if (e.keyCode == 13) {
+                $('#searchBtn').click();
+            }
         });
     });
 </script>

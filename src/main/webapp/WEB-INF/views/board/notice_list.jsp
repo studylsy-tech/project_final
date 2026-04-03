@@ -12,6 +12,44 @@
 		<h2>공지사항</h2>
 		<p>플랫폼의 새로운 소식을 전해드립니다.</p>
 	</div>
+	
+<!-- 검색기능(수정 파악 쉽게 주석처리, 끝나면 제거 예정) -->
+	<div class="board-search">
+	    <select id="searchType" name="searchType">
+	        <option value="t" <c:out value="${pageMaker.cri.searchType == 't' ? 'selected':''}"/>>제목</option>
+	        <option value="c" <c:out value="${pageMaker.cri.searchType == 'c' ? 'selected':''}"/>>내용</option>
+	        <option value="tc" <c:out value="${pageMaker.cri.searchType == 'tc' ? 'selected':''}"/>>제목+내용</option>
+	    </select>
+	    
+	    <input type="text" id="keywordInput" name="keyword" 
+	           value="${pageMaker.cri.keyword}" placeholder="검색어 입력">
+	    
+	    <button id="searchBtn">검색</button>
+	</div>
+
+<script>
+	$(function() {
+	    // 검색 버튼 클릭 시
+	    $('#searchBtn').on("click", function(event) {
+	        var sType = $("#searchType").val();
+	        var sKeyword = $('#keywordInput').val();
+	        
+	        var url = "noticeListPaging?page=1&perPageNum=10"
+	                + "&searchType=" + sType 
+	                + "&keyword=" + encodeURIComponent(sKeyword);
+	        
+	        self.location = url;
+	    });
+	
+	    // 엔터키 지원
+	    $('#keywordInput').on("keydown", function(event) {
+	        if (event.keyCode === 13) {
+	            $('#searchBtn').click();
+	        }
+	    });
+	});
+</script>
+<!-- 검색기능 끝(수정 파악 쉽게 주석처리, 끝나면 제거 예정) -->
 
 	<table class="board-table">
 		<thead>
