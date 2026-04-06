@@ -4,9 +4,10 @@
 <link rel="stylesheet" href="${path}/resources/css/views/common/header.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <header class="main-header">
     <div class="header-logo dropdown-container">
-        <a href="${path}/">STOCK ALARM</a>
+        <a href="${path}/">득템</a>
         <ul class="dropdown-menu">
             <li><a href="${path}/stock/all">전체</a></li>
             <li><a href="${path}/stock/drop">오늘의 급락</a></li>
@@ -24,6 +25,11 @@
                         <c:out value="${sessionScope.loginUser.nickname}" />
                     </span>님 반갑습니다.
                 </span>
+                
+                <c:if test="${sessionScope.loginUser.memberType == 0}">
+                    <a href="${path}/admin/main" class="nav-item admin-link" style="color: #ff4d4f; font-weight: bold;">관리자</a>
+                </c:if>
+                
                 <a href="${path}/member/info" class="nav-item info-link">내 정보</a>
                 <a href="${path}/member/logout" class="nav-item">로그아웃</a>
             </c:when>

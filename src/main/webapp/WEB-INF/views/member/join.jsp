@@ -4,6 +4,16 @@
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <link rel="stylesheet" href="${path}/resources/css/views/member/join_full.css">
 
+<c:if test="${not empty msg}">
+    <script>
+        alert("${msg}");
+        // 필요한 경우 특정 탭(정회원 가입)이 바로 보이도록 설정 가능
+        window.onload = function() {
+            showForm('full');
+        };
+    </script>
+</c:if>
+
 <div class="join-container">
     <h2>회원가입</h2>
      
@@ -12,22 +22,29 @@
         <div class="tab-item" onclick="showForm('full')">정회원 가입</div>
     </div>
 
-    <%-- 준회원(SEMI) 폼: 번호와 비밀번호만 입력 --%>
-    <div id="semi-form" class="form-content active">
-        <form action="${path}/member/joinSemi" method="post">
-            <div class="form-group">
-                <label for="semi_phone">휴대폰 번호</label>
-                <input type="text" name="phone" id="semi_phone" placeholder="'-' 제외 번호만 입력" required>
-            </div>
-            <div class="form-group">
-                <label for="semi_pw">비밀번호</label>
-                <input type="password" name="pw" id="semi_pw" required>
-            </div>
-            <button type="submit" class="login-btn">알림 신청하기</button>
-        </form>
-    </div>
+    <%-- 준회원(SEMI) 폼 수정: 이메일 입력란 추가 --%>
+<div id="semi-form" class="form-content active">
+    <form action="${path}/member/joinSemi" method="post">
+        <div class="form-group">
+            <label for="semi_phone">휴대폰 번호</label>
+            <input type="text" name="phone" id="semi_phone" placeholder="'-' 제외 번호만 입력" required>
+        </div>
+        <div class="form-group">
+            <label for="semi_pw">비밀번호</label>
+            <input type="password" name="pw" id="semi_pw" required>
+        </div>
+        
+        <%-- 추가된 이메일 입력란 --%>
+        <div class="form-group">
+            <label for="semi_email">이메일</label>
+            <input type="email" name="email" id="semi_email" placeholder="알림을 받을 이메일을 입력하세요" required>
+        </div>
+        
+        <button type="submit" class="login-btn">알림 신청하기</button>
+    </form>
+</div>
 
-    <%-- 정회원(FULL) 폼: 상세 정보 입력 --%>
+    <%-- 정회원(FULL) 폼: 상세 정보 입력 (이메일 필수 추가) --%>
     <div id="full-form" class="form-content">
         <form action="${path}/member/joinFull" method="post">
             <div class="form-group">
@@ -43,21 +60,17 @@
                 <input type="text" name="name" id="name" placeholder="실명을 입력하세요" required>
             </div>
             <div class="form-group">
-                <label for="nickname">별명</label>
-                <input type="text" name="nickname" id="nickname" placeholder="메인 페이지 노출용 별명">
+                <label for="email">이메일</label>
+                <input type="email" name="email" id="email" placeholder="example@email.com" required>
             </div>
-            <%-- 정회원(FULL) 폼 내 별명 부분 --%>
-<div class="form-group">
-    <label for="nickname">별명</label>
-    <input type="text" name="nickname" id="nickname" 
-           placeholder="미입력 시 실명이 노출됩니다.">
-</div>
+            <div class="form-group">
+                <label for="nickname">별명</label>
+                <input type="text" name="nickname" id="nickname" placeholder="미입력 시 실명이 노출됩니다.">
+            </div>
             <div class="form-group">
                 <label for="address">주소</label>
                 <input type="text" name="address" id="address" placeholder="상세 주소를 입력하세요">
             </div>
-            
-            <%-- 생년월일(birth)과 성별(gender)은 테이블 설계에 따라 삭제되었습니다. --%>
             
             <button type="submit" class="login-btn">정회원 가입하기</button>
         </form>

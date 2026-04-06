@@ -18,8 +18,7 @@
         문제가 지속될 경우 관리자에게 문의 바랍니다.
     </p>
     <div class="btn-group">
-        <a href="${path}/index.jsp" class="start-btn" style="text-decoration: none;">메인으로 돌아가기</a>
-    </div>
+<a href="${path}/" class="start-btn" style="text-decoration: none;">메인으로 돌아가기</a>    </div>
 </div>
 
 <%-- 푸터 불러오기 --%>

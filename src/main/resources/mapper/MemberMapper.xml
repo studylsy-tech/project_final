@@ -15,25 +15,34 @@
         <result property="createdAt" column="CREATED_AT" />
     </resultMap>
     
-    <insert id="insertSemi" parameterType="com.project.model.MemberDTO">
+    <insert id="insertSemiMember" parameterType="com.project.model.MemberDTO">
     INSERT INTO MEMBERS (
-        PHONE, 
-        PW, 
-        NICKNAME, 
-        MEMBER_TYPE, 
-        CREATED_AT
-    ) VALUES (
+        PHONE,         PW,            EMAIL,         MEMBER_TYPE,   CREATED_AT     ) VALUES (
         #{phone}, 
         #{pw}, 
-        #{nickname}, -- Controller에서 세팅한 phone 값이 일로 들어감
-        'SEMI', 
-        SYSDATE
+        #{email, jdbcType=VARCHAR}, 
+        1,             SYSDATE
     )
 </insert>
     
     <insert id="insertFull" parameterType="com.project.model.MemberDTO">
-        INSERT INTO MEMBERS(PHONE, PW, NAME, NICKNAME, EMAIL, ADDRESS, MEMBER_TYPE)
-        VALUES(#{phone}, #{pw}, #{name}, #{nickname}, #{email}, #{address}, 'FULL')
+        INSERT INTO MEMBERS (
+            PHONE, 
+            PW, 
+            NAME, 
+            NICKNAME, 
+            EMAIL, 
+            ADDRESS, 
+            MEMBER_TYPE
+        ) VALUES (
+            #{phone}, 
+            #{pw}, 
+            #{name}, 
+            #{nickname}, 
+            #{email}, 
+            #{address}, 
+            2
+        )
     </insert>
     
     <select id="loginCheck" parameterType="com.project.model.MemberDTO" resultMap="MemberResultMap">
@@ -44,7 +53,7 @@
         UPDATE MEMBERS 
         SET 
             PW = #{pw}
-            <if test="memberType == 'FULL' or memberType == 'ADMIN'">
+            <if test="memberType == 2 or memberType == 0">
                 , NAME = #{name}
                 , NICKNAME = #{nickname}
                 , ADDRESS = #{address}
@@ -52,4 +61,8 @@
         WHERE EMAIL = #{email}
     </update>
     
+    <delete id="deleteMember" parameterType="string">
+        DELETE FROM MEMBERS WHERE PHONE = #{phone}
+    </delete>
+
 </mapper>

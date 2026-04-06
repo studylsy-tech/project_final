@@ -18,8 +18,7 @@
     </p>
     <div class="btn-group">
         <a href="javascript:history.go(-1)" class="start-btn secondary" style="text-decoration: none; margin-right: 10px;">이전으로</a>
-        <a href="${path}/index.jsp" class="start-btn" style="text-decoration: none;">메인으로 이동</a>
-    </div>
+<a href="${path}/" class="start-btn" style="text-decoration: none;">메인으로 돌아가기</a>    </div>
 </div>
 
 <%-- 푸터 불러오기 --%>
