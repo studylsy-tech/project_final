@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.project.model.MemberDTO;
 import com.project.service.AdminService;
 import com.project.service.HotDealService;
+import com.project.service.BoardService; // 추가
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,24 +25,30 @@ public class AdminController {
     private AdminService adminService;
 
     @Autowired
+    private BoardService boardService; // BoardService 주입
+
+    @Autowired
     private com.project.crawling.PriceTracker priceTracker; 
 
-    // [핵심] 관리자 공통 권한 체크 로직
+    // 관리자 권한 체크 로직
     private boolean isAdmin(HttpSession session) {
         MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
         return loginUser != null && loginUser.getMemberType() == 0;
     }
 
-    // 관리자 메인 (대시보드)
+    // [수정] 관리자 메인 (대시보드)
     @GetMapping("/main")
     public String adminMain(HttpSession session, Model model) {
-        if (!isAdmin(session)) return "redirect:/"; // 권한 없으면 메인으로
-        
-        // 초기 대시보드 데이터 필요 시 추가
-        Map<String, Object> stats = adminService.getDashboardStats();
-        model.addAttribute("stats", stats);
-        
-        return "admin/main";
+        if (!isAdmin(session)) return "redirect:/";
+
+        // 1. 미처리 오류 개수 (기존 로직이 있다면 adminService 등에서 호출)
+        // model.addAttribute("errorCount", 5);
+
+        // 2. 미답변 Q&A 개수 조회 (실시간 연동)
+        int unansweredCount = boardService.getUnansweredCount();
+        model.addAttribute("unansweredCount", unansweredCount);
+
+        return "admin/main"; 
     }
 
     // 크롤링 상태 관리 페이지 이동
@@ -65,14 +72,16 @@ public class AdminController {
         return "admin/notice_manage";
     }
 
-    // AJAX: 통계 새로고침
+    // AJAX: 통계 새로고침 (이곳에도 미답변 개수를 포함하면 좋습니다)
     @GetMapping("/refreshStats.do")
     @ResponseBody
-    public Map<String, Object> refreshStats(@RequestParam(required = false) String type) {
-        return adminService.getDashboardStats(); 
+    public Map<String, Object> refreshStats() {
+        Map<String, Object> stats = adminService.getDashboardStats();
+        stats.put("unansweredCount", boardService.getUnansweredCount());
+        return stats; 
     }
 
-    // AJAX: 크롤링 시작
+    // --- 이하 크롤링 관련 AJAX 로직 유지 ---
     @PostMapping("/startPriceUpdate.do")
     @ResponseBody
     public Map<String, Object> startPriceUpdate(@RequestParam String target) {
@@ -94,7 +103,6 @@ public class AdminController {
         return result;
     }
 
-    // AJAX: 크롤링 정지
     @PostMapping("/stopPriceUpdate.do")
     @ResponseBody
     public Map<String, Object> stopUpdate() {
