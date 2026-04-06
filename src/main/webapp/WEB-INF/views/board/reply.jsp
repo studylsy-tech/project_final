@@ -10,7 +10,7 @@
         <h2>문의사항 답변하기</h2>
         <p style="color: #666;">원글의 내용을 확인하고 답변을 작성해 주세요.</p>
     </div>
-    <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+    <hr class="write-hr" style="margin: 20px 0; border: 0; height:10px;background-color: #E6E6FA;">
 
     <form action="${path}/board/write" method="post">
     <input type="hidden" name="board_type" value="QNA">
@@ -29,7 +29,7 @@
                     <strong>[게시글 번호]:</strong> ${parentBoard.notice_no}<br>
                     <strong>[질문자]:</strong> ${parentBoard.writer}<br>
                     <strong>[제목]:</strong> ${parentBoard.title}
-                    <div style="margin-top:10px; padding:10px; background:#fff; border:1px solid #eee; white-space: pre-wrap;">${parentBoard.content}</div>
+                    <div style="margin-top:10px; padding:15px; background:#fff; border:2px solid #8A2BE2; border-radius:8px; white-space: pre-wrap;">${parentBoard.content}</div>
                 </td>
             </tr>
             <tr>
@@ -37,7 +37,7 @@
                 <td style="padding: 10px; border-bottom: 1px solid #ddd;">
                     <input type="text" name="writer" value="${loginUser.nickname}" 
                            class="form-control" readonly 
-                           style="width: 100%; border: 1px solid #ccc; padding: 8px; background: #eee;">
+                           style="width: 100%; border: 2px solid #8A2BE2; padding: 8px; background:#fdfaf5;">
                 </td>
             </tr>
             <tr>
@@ -45,14 +45,14 @@
                 <td style="padding: 10px; border-bottom: 1px solid #ddd;">
                     <input type="text" name="title" class="form-control" 
                            value="[답변] ${parentBoard.title}" required
-                           style="width: 100%; border: 1px solid #ccc; padding: 8px;">
+                           style="width: 100%; border: 2px solid #8A2BE2; padding: 15px; ">
                 </td>
             </tr>
             <tr>
                 <th style="padding: 15px; background: #f9f9f9; border-bottom: 1px solid #ddd; text-align: left;">답변 내용</th>
                 <td style="padding: 10px; border-bottom: 1px solid #ddd;">
                     <textarea name="content" rows="12" class="form-control" required 
-                              style="width: 100%; border: 1px solid #ccc; padding: 10px; resize: none;">안녕하세요. 관리자입니다.&#10;&#10;</textarea>
+                              style="width: 100%; border: 2px solid #8A2BE2; padding: 15px; border-radius: 8px; background: #FFFAF0; line-height: 1.6; box-sizing: border-box;;">안녕하세요. 관리자입니다.&#10;&#10;</textarea>
                 </td>
             </tr>
         </table>

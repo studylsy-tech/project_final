@@ -9,6 +9,7 @@
 .board-title-area {
     margin-bottom: 40px;
     text-align: left;
+    
 }
 
 .board-title-area h2 {
@@ -176,7 +177,7 @@ textarea.form-control {
     width: 100%;
     border-collapse: separate;
     border-spacing: 0;
-    border-top: 3px solid #2196f3; /* 상단 강조선 블루로 변경 */
+    border: 2px solid #2196f3; /* 상단 강조선 블루로 변경 */
     background: #fff;
     border-radius: 15px;
     overflow: hidden;          /* 테이블 모서리 둥글게 유지 */
@@ -202,7 +203,7 @@ textarea.form-control {
 /* 4. 입력 요소 (라운드 & 포커스 효과) */
 .form-control {
     width: 100%;
-    border: 1.5px solid #eee;
+    border: 1.5px solid #2196f3;
     padding: 14px 18px;
     box-sizing: border-box;
     font-size: 15px;
