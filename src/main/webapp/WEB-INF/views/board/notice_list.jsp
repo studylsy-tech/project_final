@@ -11,7 +11,7 @@
         <p>플랫폼의 새로운 소식을 전해드립니다.</p>
     </div>
 
-    <%-- 검색 영역 --%>
+    <%-- 검색 영역 (상단) --%>
     <div class="search-area">
         <select id="searchType" class="search-select">
             <option value="title" ${pageMaker.cri.searchType eq 'title' ? 'selected' : ''}>제목</option>
@@ -62,7 +62,7 @@
         </tbody>
     </table>
 
-    <%-- 페이징 영역 --%>
+    <%-- 페이징 영역 (다른 작업자의 query/makeSearch 통합) --%>
     <div class="pagination-container">
         <ul class="pagination">
             <c:if test="${pageMaker.prev}">
@@ -88,6 +88,7 @@
         </ul>
     </div>
 
+    <%-- 관리자 권한 확인 및 등록 버튼 --%>
     <c:if test="${loginUser.memberType == 0}">
         <div class="board-footer">
             <a href="${path}/board/write?type=NOTICE" class="btn-dark">공지등록</a>
@@ -98,7 +99,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-    // 1. 버튼 클릭 이벤트
+    // 1. 검색 버튼 클릭 이벤트
     $(document).on("click", "#searchBtn", function(e) {
         e.preventDefault();
         
@@ -107,11 +108,7 @@ $(document).ready(function() {
         const perPageNum = "${pageMaker.cri.perPageNum}";
         const contextPath = "${path}";
 
-        console.log("--- [검색 실행] ---");
-        console.log("Type:", searchType);
-        console.log("Keyword:", keyword);
-
-        // URL 생성
+        // URL 생성 (기존 search/list 경로 유지)
         let url = contextPath + "/search/list"
                 + "?page=1"
                 + "&perPageNum=" + (perPageNum || 10)
@@ -119,9 +116,6 @@ $(document).ready(function() {
                 + "&searchType=" + searchType
                 + "&keyword=" + encodeURIComponent(keyword);
 
-        console.log("Move to:", url);
-        
-        // 실제 이동 (테스트가 끝났다면 아래 주석을 해제하세요)
         location.href = url;
     });
 

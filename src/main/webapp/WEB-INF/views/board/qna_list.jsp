@@ -11,7 +11,7 @@
         <p>궁금하신 점을 남겨주시면 답변해 드립니다.</p>
     </div>
 
-    <%-- 검색 영역 --%>
+    <%-- 검색 영역 (상단 고정) --%>
     <div class="search-area">
         <select id="searchType" class="search-select">
             <option value="title" ${pageMaker.cri.searchType eq 'title' ? 'selected' : ''}>제목</option>
@@ -78,7 +78,7 @@
         </tbody>
     </table>
 
-    <%-- 페이징 처리 영역 --%>
+    <%-- 페이징 처리 영역 (다른 작업자의 query/makeSearch 로직 통합) --%>
     <div class="pagination-container">
         <ul class="pagination">
             <c:if test="${pageMaker.prev}">
@@ -104,6 +104,7 @@
         </ul>
     </div>
 
+    <%-- 버튼 영역 --%>
     <div class="board-footer">
         <a href="${path}/board/qnaWrite" class="btn-dark">질문하기</a>
     </div>

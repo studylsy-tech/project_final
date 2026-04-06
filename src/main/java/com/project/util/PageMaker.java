@@ -23,7 +23,7 @@ public class PageMaker {
 	protected Criteria criteria;		// 요청 페이지 , 한번에 보여줄 게시물 수
 	
 	public PageMaker() {
-		this(new Criteria(),0, 5);
+		this(new Criteria(),0, 10);
 	}
 	
 	public PageMaker(Criteria criteria, int totalCount, int displayPageNum) {

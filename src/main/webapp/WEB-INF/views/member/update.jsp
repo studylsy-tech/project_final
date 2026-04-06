@@ -21,9 +21,9 @@
         <div class="tab-container">
             <a href="${path}/member/info" class="tab-item">내 정보 확인</a>
             <a href="${path}/member/notification" class="tab-item">알림 설정</a>
-            <c:if test="${sessionScope.loginUser.memberType eq 'ADMIN'}">
-                <a href="${path}/admin/main" class="tab-item admin-tab">관리자 모드</a>
-            </c:if>
+            <c:if test="${sessionScope.loginUser.memberType eq 0}">
+			    <a href="${path}/admin/main" class="tab-item admin-tab">관리자 모드</a>
+			</c:if>
         </div>
     </div>
 
@@ -56,7 +56,7 @@
                     </tr>
 
                     <c:choose>
-                        <c:when test="${loginUser.memberType eq 'FULL' || loginUser.memberType eq 'ADMIN'}">
+                        <c:when test="${loginUser.memberType eq 2 || loginUser.memberType eq 0}">
                             <tr>
                                 <th>이름</th>
                                 <td><input type="text" name="name" value="${loginUser.name}" class="form-control"></td>
@@ -78,17 +78,11 @@
                 </tbody>
             </table>
 
-            <div class="action-buttons" style="margin-top: 30px; justify-content: center;">
-                <button type="submit" class="btn-solid">수정 완료</button>
-                <button type="button" onclick="history.back()" class="btn-outline">취소</button>
-            </div>
             <div class="action-buttons" style="margin-top: 30px; justify-content: center; display: flex; gap: 10px;">
-    <button type="submit" class="btn-solid">수정 완료</button>
-    <button type="button" onclick="deleteMember()" class="btn-outline" style="color: red; border-color: red;">회원 탈퇴</button>
-    <button type="button" onclick="history.back()" class="btn-outline">취소</button>
-</div>
-
-
+			    <button type="submit" class="btn-solid">수정 완료</button>
+			    <button type="button" onclick="deleteMember()" class="btn-outline" style="color: red; border-color: red;">회원 탈퇴</button>
+			    <button type="button" onclick="history.back()" class="btn-outline">취소</button>
+			</div>
         </form>
     </div>
 </div>
