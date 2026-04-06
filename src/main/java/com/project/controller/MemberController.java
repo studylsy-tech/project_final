@@ -58,11 +58,16 @@ public class MemberController {
     }
 
     // 로그인 처리 (누락된 부분 추가)
+ // 로그인 처리 (7일 유지 설정 추가)
     @PostMapping("/login")
     public String login(MemberDTO member, HttpSession session, Model model, HttpServletResponse response, String rememberMe) {
         MemberDTO loginUser = memberService.loginCheck(member);
         if (loginUser != null) {
             session.setAttribute("loginUser", loginUser);
+            
+            // 세션 유지 시간을 7일(604800초)로 설정
+            session.setMaxInactiveInterval(604800); 
+            
             memberService.handleCookie(loginUser.getPhone(), rememberMe, response);
             return "redirect:/";
         } else {
