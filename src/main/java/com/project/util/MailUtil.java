@@ -35,7 +35,7 @@ public class MailUtil {
         session.setDebug(true); 
 
         try {
-            // 4. 메세지 객체 생성 및 설정
+        	// 4. 메세지 객체 생성 및 설정
             Message message = new MimeMessage(session);
             
             // 보내는 사람 (Authenticator에서 읽어온 발신 계정)
@@ -44,11 +44,12 @@ public class MailUtil {
             // 받는 사람
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
             
-            // 제목
-            message.setSubject(subject);
+            // [수정] 제목: MimeUtility를 사용하여 한글 인코딩 강제 지정 (빨간 줄 해결)
+            // 상단에 import javax.mail.internet.MimeUtility; 가 필요합니다.
+            message.setSubject(javax.mail.internet.MimeUtility.encodeText(subject, "UTF-8", "B"));
             
-            // 내용 (HTML 형식 지정)
-            message.setContent(content, "text/html;");
+            // [수정] 내용: HTML 형식과 UTF-8 문자셋을 한꺼번에 지정
+            message.setContent(content, "text/html; charset=UTF-8");
 
             // 5. 실제 메일 발송
             Transport.send(message);

@@ -1,7 +1,5 @@
 package com.project.controller;
 
-import java.io.PrintWriter;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -12,10 +10,13 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.project.model.MemberDTO;
 import com.project.service.MemberService;
+import com.project.util.MailUtil;
 
 @Controller
 @RequestMapping("/member")
@@ -23,6 +24,9 @@ public class MemberController {
 
     @Autowired
     private MemberService memberService;
+    
+    @Autowired
+    private MailUtil mailUtil; // 이메일 인증
 
     // 정회원 가입 처리 (POST)
     @PostMapping("/joinFull")
@@ -179,4 +183,102 @@ public class MemberController {
         // (prefix: /WEB-INF/views/, suffix: .jsp 가 설정되어 있다고 가정)
         return "member/notification"; 
     }
+    
+    // 이메일 인증번호 발송 요청
+    @GetMapping("/mailCheck")
+    @ResponseBody // 페이지 이동이 아닌 데이터를 리턴하기 위해 필수!
+    public String mailCheck(@RequestParam("email") String email) {
+        
+        // 6자리 랜덤 인증번호 생성
+        int authCode = (int)(Math.random() * 899999) + 100000;
+        String code = String.valueOf(authCode);
+        
+        // 이메일 제목 및 내용 (HTML 지원되므로 예쁘게 꾸밀 수 있다고 함!)
+        String subject = "회원가입 인증번호 안내";
+        String content = "<div style='margin:20px; border:1px solid #ddd; padding:20px;'>"
+                       + "<h3>안녕하세요! 회원가입 인증번호입니다.</h3>"
+                       + "<p>아래의 인증번호를 복사하여 입력창에 붙여넣어 주세요.</p>"
+                       + "<div style='font-size:24px; font-weight:bold; color:blue;'>" + code + "</div>"
+                       + "</div>";
+
+        try {
+            // MailUtil의 sendMail 메서드 호출
+            mailUtil.sendMail(email, subject, content);
+            System.out.println("인증번호 발송 성공! 이메일: " + email + ", 번호: " + code);
+            
+            return code; // 브라우저 Ajax의 success 결과값으로 전달됨
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+    
+    // 비밀번호 찾기용 인증번호 발송  
+    @GetMapping("/find_pw")
+    public String findPwPage() {
+        return "member/find_pw"; 
+    }
+    
+    @PostMapping("/findPwCheck")
+    @ResponseBody
+    public String findPwCheck(MemberDTO dto) {
+        // DB 조회 (서비스 호출)
+        // int count = memberService.checkMemberForPw(dto);
+        int count = 1; // 테스트용: DB 연결 전이라면 1로 가정
+
+        if (count > 0) {
+            // 2. 인증번호 생성
+            String code = String.valueOf((int)(Math.random() * 899999) + 100000);
+            
+            // 3. 메일 발송 (MailUtil 재사용)
+            String subject = "비밀번호 찾기 인증번호 안내";
+            String content = "<div style='border:1px solid #ddd; padding:20px; font-family:sans-serif;'>"
+                           + "  <h2 style='color:#2c3e50;'>비밀번호 찾기 인증</h2>"
+                           + "  <p>요청하신 인증번호는 아래와 같습니다.</p>"
+                           + "  <div style='font-size:30px; font-weight:bold; color:#e74c3c; margin:20px 0;'>" + code + "</div>"
+                           + "  <p>인증창에 해당 번호를 입력해 주세요.</p>"
+                           + "</div>";
+            
+            try {
+                mailUtil.sendMail(dto.getEmail(), subject, content);
+                return code; // 성공 시 JS로 인증번호 전달
+            } catch (Exception e) {
+                return "error";
+            }
+        } else {
+            // 일치하는 정보가 없을 때
+            return "not_found";
+        }
+    }
+    
+    // 비밀번호 재설정 페이지 띄우기 (인증 성공 후 이동하는 곳)
+    @GetMapping("/resetPwPage")
+    public String resetPwPage(@RequestParam("phone") String phone, Model model) {
+        model.addAttribute("phone", phone);
+        
+        // /WEB-INF/views/member/reset_pw.jsp 를 찾아가서 새 비밀번호로 변경하기.
+        return "member/reset_pw"; 
+    }
+    
+    // 실제 비밀번호를 DB에 업데이트하는 로직 (Ajax POST 요청 처리)
+    @PostMapping("/updatePw")
+    @ResponseBody // 페이지 이동이 아닌 "success"라는 결과값만 보낼 때 필수!
+    public String updatePw(MemberDTO dto) {
+        
+        System.out.println("비밀번호 변경 요청 폰번호: " + dto.getPhone());
+        
+        try {
+            int result = memberService.updatePassword(dto); 
+
+            if (result > 0) {
+                return "success"; // 성공 시 Ajax의 success: function(result) 로 전달
+            } else {
+                return "fail";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "error";
+        }
+    }
+    
 }
