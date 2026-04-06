@@ -45,7 +45,7 @@
 				<%-- 메인 페이지이므로 상위 10개만 깔끔하게 노출 --%>
 				<c:if test="${status.index < 10}">
 					<div class="hotdeal-item"
-						onclick="location.href='${deal.originUrl}'"
+						onclick="location.href='${path}/hotdeal/detail?dealId=${deal.dealId}'"
 						style="cursor: pointer;">
 						<div class="img-wrapper">
 							<c:choose>

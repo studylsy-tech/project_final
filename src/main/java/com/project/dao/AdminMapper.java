@@ -40,5 +40,7 @@ public interface AdminMapper {
 	void insertCommonPriceHistory(int prodId, int currentPrice);
 
 	List<ProductDTO> getNormalProductList();
+
+	void deleteHotDeals();
     
 }

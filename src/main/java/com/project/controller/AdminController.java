@@ -144,4 +144,20 @@ public class AdminController {
         // 실제 파일명이 members.jsp라면 아래와 같이 수정해야 합니다.
         return "admin/members"; 
     }
+    /**
+     * 핫딜 수집 엔진 설정 페이지 이동
+     * 기존 '크롤링 정책'에서 서비스 성격에 맞게 '핫딜 수집 엔진'으로 명칭 변경
+     */
+    @GetMapping("/hotdeal_engine")
+    public String hotdealEnginePage(HttpSession session, Model model) {
+        // 1. 관리자 권한 확인 (memberType == 0)
+        if (!isAdmin(session)) return "redirect:/";
+        
+        // 2. 필요 시 DB에서 현재 수집 사이트 목록 및 설정값을 조회하여 model에 담는 로직 확장 가능
+        // 예: List<HotdealSourceDTO> engineSettings = adminService.getEngineSettings();
+        // model.addAttribute("settings", engineSettings);
+        
+        // 3. 핫딜 전용 엔진 설정 JSP 반환
+        return "admin/hotdeal_engine"; 
+    }
 }

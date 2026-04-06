@@ -27,28 +27,25 @@
     <div class="info-content-box">
         <div class="admin-wrapper">
             
-            <%-- 1. 상단 현황판 (CSS의 summary-container 클래스 사용) --%>
+            <%-- 1. 상단 현황판 --%>
             <div class="summary-container">
-                <%-- 크롤링 상태 --%>
                 <div class="summary-card" onclick="location.href='${path}/admin/crawling_status'">
                     <h3>크롤링 상태</h3>
                     <p class="count">정상</p>
                 </div>
                 
-                <%-- 전체 회원 수 (CSS 순서상 2번째인 빨간색 강조 적용됨) --%>
                 <div class="summary-card" onclick="location.href='${path}/admin/members'">
                     <h3>전체 회원 수</h3>
                     <p class="count">${totalMemberCount}명</p>
                 </div>
                 
-                <%-- 미답변 Q&A (CSS 순서상 3번째인 파란색 강조 적용됨) --%>
                 <div class="summary-card" onclick="location.href='${path}/board/qna'">
                     <h3>미답변 Q&A</h3>
                     <p class="count">${unansweredCount}건</p>
                 </div>
             </div>
 
-            <%-- 2. 관리 메뉴 (CSS의 admin-menu-grid 및 menu-item 클래스 사용) --%>
+            <%-- 2. 관리 메뉴 (중첩된 grid 태그를 하나로 통합) --%>
             <div class="admin-menu-grid">
                 <%-- 오류 로그 관리 --%>
                 <div class="menu-item" onclick="location.href='${path}/admin/error_logs'">
@@ -56,11 +53,16 @@
                     <p>시스템에서 발생한 크롤링 및 서버 오류 내역을 확인하고 관리합니다.</p>
                 </div>
                 
-                <%-- 크롤링 정책 관리 --%>
-                <div class="menu-item" onclick="location.href='${path}/admin/crawling_manage'">
-                    <h4>크롤링 정책 관리</h4>
-                    <p>사이트별 데이터 수집 주기, 수집 규칙 및 대상 URL을 설정합니다.</p>
-                </div>
+                <%-- 핫딜 수집 엔진 설정 (개수 강조형) --%>
+    <div class="menu-item engine-card" onclick="location.href='${path}/admin/hotdeal_engine'">
+        <h4>🔥 핫딜 엔진 상태</h4>
+        <div class="engine-status-box">
+            <span class="status-label">현재 수집된 핫딜</span>
+            <div class="main-count">
+                <span id="menu-hotdeal-count">0</span><small>개</small>
+            </div>
+        </div>
+    </div>
                 
                 <%-- 공지사항 관리 --%>
                 <div class="menu-item" onclick="location.href='${path}/admin/notice_manage'">
@@ -72,5 +74,29 @@
         </div>
     </div>
 </div>
+<script>
+$(document).ready(function() {
+    // 대시보드 진입 시 즉시 개수 로드
+    updateDashboardHotDealCount();
+    
+    // 필요 시 10초마다 자동 갱신 (선택 사항)
+    // setInterval(updateDashboardHotDealCount, 10000);
+});
 
+function updateDashboardHotDealCount() {
+    $.ajax({
+        url: "${path}/admin/getHotDealStatus.do",
+        type: "GET",
+        dataType: "json",
+        success: function(res) {
+            // Controller 응답 키값(HOTDEALCOUNT)에 맞춰 매핑
+            const count = res.HOTDEALCOUNT !== undefined ? res.HOTDEALCOUNT : (res.count || 0);
+            $("#menu-hotdeal-count").text(count.toLocaleString());
+        },
+        error: function() {
+            $("#menu-hotdeal-count").text("Error");
+        }
+    });
+}
+</script>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>
