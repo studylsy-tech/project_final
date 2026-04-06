@@ -11,7 +11,6 @@
 </c:if>
 
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-<%-- 기존 스타일 시트 유지 --%>
 <link rel="stylesheet" href="${path}/resources/css/views/member/info.css">
 <link rel="stylesheet" href="${path}/resources/css/admin/admin_main.css">
 
@@ -27,41 +26,49 @@
 
     <div class="info-content-box">
         <div class="admin-wrapper">
-            <%-- 상단 현황판 --%>
-            <div class="summary-container" style="display: flex; gap: 20px; margin-bottom: 30px;">
-                <div class="summary-card" onclick="location.href='${path}/admin/crawling_status'" style="flex: 1; padding: 20px; background: #f8f9fa; border-radius: 8px; cursor: pointer; text-align: center;">
-                    <h3 style="font-size: 16px; color: #666;">크롤링 상태</h3>
-                    <p class="count" style="font-size: 24px; font-weight: bold; color: #28a745;">정상 작동 중</p>
-                </div>
-                <div class="summary-card" onclick="location.href='${path}/admin/error_logs'" style="flex: 1; padding: 20px; background: #f8f9fa; border-radius: 8px; cursor: pointer; text-align: center;">
-                    <h3 style="font-size: 16px; color: #666;">미처리 오류</h3>
-                    <p class="count" style="font-size: 24px; font-weight: bold; color: #dc3545;">5건</p>
+            
+            <%-- 1. 상단 현황판 (CSS의 summary-container 클래스 사용) --%>
+            <div class="summary-container">
+                <%-- 크롤링 상태 --%>
+                <div class="summary-card" onclick="location.href='${path}/admin/crawling_status'">
+                    <h3>크롤링 상태</h3>
+                    <p class="count">정상</p>
                 </div>
                 
-<%-- 관리자 대시보드 - 신규 Q&A 카드 --%>
-<div class="summary-card" onclick="location.href='${path}/board/qna'" style="flex: 1; padding: 20px; background: #f8f9fa; border-radius: 8px; cursor: pointer; text-align: center;">
-    <h3 style="font-size: 16px; color: #666;">미답변 Q&A</h3>
-    <p class="count" style="font-size: 24px; font-weight: bold; color: #007bff;">
-        ${unansweredCount}건
-    </p>
-</div>
+                <%-- 전체 회원 수 (CSS 순서상 2번째인 빨간색 강조 적용됨) --%>
+                <div class="summary-card" onclick="location.href='${path}/admin/members'">
+                    <h3>전체 회원 수</h3>
+                    <p class="count">${totalMemberCount}명</p>
+                </div>
+                
+                <%-- 미답변 Q&A (CSS 순서상 3번째인 파란색 강조 적용됨) --%>
+                <div class="summary-card" onclick="location.href='${path}/board/qna'">
+                    <h3>미답변 Q&A</h3>
+                    <p class="count">${unansweredCount}건</p>
+                </div>
             </div>
 
-            <%-- 관리 메뉴 --%>
-            <div class="admin-menu-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-                <div class="menu-item" onclick="location.href='${path}/admin/error_logs'" style="padding: 20px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">
-                    <h4 style="margin-bottom: 10px;">오류 로그 관리</h4>
-                    <p style="font-size: 13px; color: #777;">크롤링 중 발생한 오류 내역을 확인합니다.</p>
+            <%-- 2. 관리 메뉴 (CSS의 admin-menu-grid 및 menu-item 클래스 사용) --%>
+            <div class="admin-menu-grid">
+                <%-- 오류 로그 관리 --%>
+                <div class="menu-item" onclick="location.href='${path}/admin/error_logs'">
+                    <h4>오류 로그 관리</h4>
+                    <p>시스템에서 발생한 크롤링 및 서버 오류 내역을 확인하고 관리합니다.</p>
                 </div>
-                <div class="menu-item" onclick="location.href='${path}/admin/crawling_manage'" style="padding: 20px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">
-                    <h4 style="margin-bottom: 10px;">크롤링 정책 관리</h4>
-                    <p style="font-size: 13px; color: #777;">사이트별 수집 주기 및 규칙을 설정합니다.</p>
+                
+                <%-- 크롤링 정책 관리 --%>
+                <div class="menu-item" onclick="location.href='${path}/admin/crawling_manage'">
+                    <h4>크롤링 정책 관리</h4>
+                    <p>사이트별 데이터 수집 주기, 수집 규칙 및 대상 URL을 설정합니다.</p>
                 </div>
-                <div class="menu-item" onclick="location.href='${path}/admin/notice_manage'" style="padding: 20px; border: 1px solid #ddd; border-radius: 8px; cursor: pointer;">
-                    <h4 style="margin-bottom: 10px;">공지사항 관리</h4>
-                    <p style="font-size: 13px; color: #777;">사용자 공지사항을 작성하고 관리합니다.</p>
+                
+                <%-- 공지사항 관리 --%>
+                <div class="menu-item" onclick="location.href='${path}/admin/notice_manage'">
+                    <h4>공지사항 관리</h4>
+                    <p>전체 사용자에게 노출되는 공지사항을 작성, 수정 및 삭제합니다.</p>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

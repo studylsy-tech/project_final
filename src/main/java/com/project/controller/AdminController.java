@@ -1,6 +1,7 @@
 package com.project.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import com.project.model.MemberDTO;
 import com.project.service.AdminService;
 import com.project.service.HotDealService;
-import com.project.service.BoardService; // 추가
+import com.project.service.BoardService;
+import com.project.service.MemberService; // 추가
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -25,7 +27,10 @@ public class AdminController {
     private AdminService adminService;
 
     @Autowired
-    private BoardService boardService; // BoardService 주입
+    private BoardService boardService;
+
+    @Autowired
+    private MemberService memberService; // MemberService 주입
 
     @Autowired
     private com.project.crawling.PriceTracker priceTracker; 
@@ -36,19 +41,33 @@ public class AdminController {
         return loginUser != null && loginUser.getMemberType() == 0;
     }
 
-    // [수정] 관리자 메인 (대시보드)
+    // 관리자 메인 (회원 관리 대시보드 통합)
     @GetMapping("/main")
     public String adminMain(HttpSession session, Model model) {
         if (!isAdmin(session)) return "redirect:/";
 
-        // 1. 미처리 오류 개수 (기존 로직이 있다면 adminService 등에서 호출)
-        // model.addAttribute("errorCount", 5);
+        // 1. 전체 회원 수 조회
+        int totalMemberCount = memberService.getTotalMemberCount();
+        model.addAttribute("totalMemberCount", totalMemberCount);
 
-        // 2. 미답변 Q&A 개수 조회 (실시간 연동)
+        // 2. 전체 회원 목록 조회
+        List<MemberDTO> memberList = memberService.selectAllMembers();
+        model.addAttribute("memberList", memberList);
+
+        // 3. 미답변 Q&A 개수 조회
         int unansweredCount = boardService.getUnansweredCount();
         model.addAttribute("unansweredCount", unansweredCount);
 
         return "admin/main"; 
+    }
+
+    // 회원 강제 탈퇴 처리
+    @GetMapping("/memberDelete")
+    public String memberDelete(@RequestParam("phone") String phone, HttpSession session) {
+        if (!isAdmin(session)) return "redirect:/";
+        
+        memberService.deleteMember(phone); // 기존 탈퇴 로직 재활용
+        return "redirect:/admin/main";
     }
 
     // 크롤링 상태 관리 페이지 이동
@@ -58,13 +77,6 @@ public class AdminController {
         return "admin/crawling_status";
     }
 
-    // 오류 로그 페이지 이동
-    @GetMapping("/error_logs")
-    public String errorLogs(HttpSession session) {
-        if (!isAdmin(session)) return "redirect:/";
-        return "admin/error_logs";
-    }
-
     // 공지사항 관리 페이지 이동
     @GetMapping("/notice_manage")
     public String noticeManage(HttpSession session) {
@@ -72,16 +84,16 @@ public class AdminController {
         return "admin/notice_manage";
     }
 
-    // AJAX: 통계 새로고침 (이곳에도 미답변 개수를 포함하면 좋습니다)
+    // AJAX: 통계 새로고침
     @GetMapping("/refreshStats.do")
     @ResponseBody
     public Map<String, Object> refreshStats() {
         Map<String, Object> stats = adminService.getDashboardStats();
         stats.put("unansweredCount", boardService.getUnansweredCount());
+        stats.put("totalMemberCount", memberService.getTotalMemberCount()); // 회원 수 추가
         return stats; 
     }
 
-    // --- 이하 크롤링 관련 AJAX 로직 유지 ---
     @PostMapping("/startPriceUpdate.do")
     @ResponseBody
     public Map<String, Object> startPriceUpdate(@RequestParam String target) {
@@ -116,5 +128,20 @@ public class AdminController {
             res.put("message", e.getMessage());
         }
         return res;
+    }
+ // [수정] 상세 회원 관리 페이지 이동
+ // AdminController.java 수정
+    @GetMapping("/members")
+    public String memberManagePage(HttpSession session, Model model) {
+        if (!isAdmin(session)) return "redirect:/";
+
+        List<MemberDTO> memberList = memberService.selectAllMembers();
+        model.addAttribute("memberList", memberList);
+        
+        int totalMemberCount = memberService.getTotalMemberCount();
+        model.addAttribute("totalMemberCount", totalMemberCount);
+
+        // 실제 파일명이 members.jsp라면 아래와 같이 수정해야 합니다.
+        return "admin/members"; 
     }
 }

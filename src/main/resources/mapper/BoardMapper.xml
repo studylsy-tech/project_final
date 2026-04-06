@@ -4,12 +4,20 @@
 <mapper namespace="com.project.dao.BoardMapper">
 
     <sql id="boardSearch">
-        <if test="searchType != null">
-            <if test="searchType == 't'.toString()">AND TITLE LIKE '%' || #{keyword} || '%'</if>
-            <if test="searchType == 'c'.toString()">AND CONTENT LIKE '%' || #{keyword} || '%'</if>
-            <if test="searchType == 'w'.toString()">AND WRITER LIKE '%' || #{keyword} || '%'</if>
-        </if>
-    </sql>
+    <if test="searchType != null">
+        <choose>
+            <when test="searchType == 'title'.toString()">
+                AND TITLE LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="searchType == 'content'.toString()">
+                AND CONTENT LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="searchType == 'writer'.toString()">
+                AND WRITER LIKE '%' || #{keyword} || '%'
+            </when>
+        </choose>
+    </if>
+</sql>
 
     <select id="selectBoardListPaging" resultType="com.project.model.BoardDTO">
 SELECT * FROM (

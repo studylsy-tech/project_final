@@ -1,245 +1,136 @@
- /* notice_list.css 
+/* board-wrapper 상단 여백 및 중앙 정렬 */
 .board-wrapper {
-    width: 80%;
+    max-width: 1200px;
     margin: 50px auto;
-    font-family: 'Pretendard', sans-serif;
+    padding: 0 20px;
 }
 
 .board-title-area {
-    border-bottom: 2px solid #333;
-    padding-bottom: 20px;
     margin-bottom: 30px;
 }
 
+.board-title-area h2 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+/* 검색 영역 스타일 */
+.search-area {
+    text-align: right;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.search-select, .search-input, .btn-search {
+    height: 35px;
+    box-sizing: border-box;
+}
+
+.search-input {
+    width: 250px;
+    padding: 0 10px;
+    border: 1px solid #ddd;
+}
+
+.btn-search {
+    padding: 0 20px;
+    background: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+/* 테이블 공통 스타일 */
 .board-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 15px;
+    margin-bottom: 20px;
 }
 
 .board-table th {
-    background-color: #f8f9fa;
+    background: #f8f9fa;
+    border-top: 2px solid #333;
     border-bottom: 1px solid #ddd;
-    padding: 15px;
-    color: #333;
+    padding: 12px;
 }
 
 .board-table td {
-    padding: 15px;
+    padding: 12px;
     border-bottom: 1px solid #eee;
     text-align: center;
 }
 
- 제목 왼쪽 정렬 및 호버 효과 
+/* 컬럼 너비 클래스 */
+.col-no { width: 10%; }
+.col-title { width: 50%; }
+.col-writer { width: 15%; }
+.col-date { width: 15%; }
+.col-count { width: 10%; }
+
 .title-cell {
     text-align: left !important;
-}
-
-.title-cell a {
-    text-decoration: none;
-    color: #444;
-    transition: color 0.2s;
-}
-
-.title-cell a:hover {
-    color: #e74c3c;  공지사항 포인트 컬러: 레드 
-    text-decoration: underline;
-}
-
-공지 배지 스타일 
-.badge-notice {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 3px;
-    font-size: 12px;
-    font-weight: bold;
-    color: #fff;
-    background-color: #e74c3c;
-}
-
- 페이징 스타일 
-.pagination a {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    color: #666;
-    text-decoration: none;
-}
-
-.btn-dark {
-    display: inline-block;
-    background: #333;
-    color: #fff;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 4px;
-}*/
-
-
-
-
-
-
-
-/* board_notice.css - STOCK ALARM 스타일 */
-
-/* 1. 전체 컨테이너 (아이보리 배경 & 라운드) */
-.board-wrapper {
-    width: 85%; /* 조금 더 넓게 */
-    margin: 50px auto;
-    padding: 40px;
-    background-color: #fffaf0; /* 부드러운 아이보리 배경 */
-    border-radius: 25px;       /* 몽글몽글한 대형 라운드 */
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-    font-family: 'NanumSquareRound', 'Pretendard', sans-serif;
-}
-
-/* 2. 타이틀 영역 */
-.board-title-area {
-    border-bottom: 3px solid #2196f3; /* 검정색 대신 메인 블루 */
-    padding-bottom: 25px;
-    margin-bottom: 35px;
-}
-
-.board-title-area h2 {
-    font-size: 32px;
-    font-weight: 800;
-    color: #2196f3;
-    margin-bottom: 10px;
-}
-
-.board-title-area p {
-    color: #88a0b5;
-    font-size: 16px;
-}
-
-/* 3. 테이블 스타일 (카드형 리스트 레이아웃) */
-.board-table {
-    width: 100%;
-    border-collapse: separate; /* 행 간격을 위해 separate 설정 */
-    border-spacing: 0 12px;    /* 행 사이의 수직 간격 */
-    font-size: 16px;
-}
-
-/* 테이블 헤더 */
-.board-table th {
-    background-color: transparent;
-    border-bottom: 2px solid rgba(33, 150, 243, 0.1);
-    padding: 15px;
-    color: #2196f3;
-    font-weight: 800;
-    text-align: center;
-}
-
-/* 테이블 각 행 (흰색 카드 느낌) */
-.board-table tbody tr {
-    background-color: #ffffff;
-    transition: all 0.3s ease;
-    cursor: pointer;
-}
-
-.board-table td {
-    padding: 18px 15px;
-    border-top: 1px solid #f0f0f0;
-    border-bottom: 1px solid #f0f0f0;
-    text-align: center;
-    color: #555;
-}
-
-/* 행의 좌우 끝 둥글게 */
-.board-table td:first-child { border-radius: 15px 0 0 15px; border-left: 1px solid #f0f0f0; }
-.board-table td:last-child { border-radius: 0 15px 15px 0; border-right: 1px solid #f0f0f0; }
-
-/* 마우스 올렸을 때 효과 */
-.board-table tbody tr:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(33, 150, 243, 0.12);
-}
-
-/* 4. 제목 셀 & 공지 배지 스타일 */
-.title-cell {
-    text-align: left !important;
-    padding-left: 25px !important;
-    font-weight: 600;
 }
 
 .title-cell a {
     text-decoration: none;
     color: #333;
-    transition: color 0.2s;
-}
-
-.title-cell a:hover {
-    color: #2196f3;
-    text-decoration: none;
 }
 
 .badge-notice {
     display: inline-block;
-    padding: 4px 12px;
-    border-radius: 20px;       /* 3px에서 20px로 (몽글몽글하게) */
-    font-size: 12px;
-    font-weight: 800;
+    padding: 2px 8px;
+    background-color: #e74c3c;
     color: #fff;
-    background-color: #ff4d4d; /* 선명한 레드 */
-    margin-right: 10px;
-    vertical-align: middle;
+    font-size: 12px;
+    border-radius: 3px;
+    margin-right: 5px;
 }
 
-/* 5. 페이징 스타일 (라운드 블루) */
+.empty-row {
+    text-align: center;
+    padding: 50px 0 !important;
+    color: #999;
+}
+
+/* 페이징 스타일 */
+.pagination-container {
+    text-align: center;
+    margin-top: 30px;
+}
+
 .pagination {
-    margin-top: 40px;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
+    display: inline-flex;
+    list-style: none;
+    padding: 0;
+    gap: 10px;
 }
 
 .pagination a {
-    width: 38px;
-    height: 38px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 12px;
-    border: 1px solid #eee;
-    color: #777;
-    background: #fff;
     text-decoration: none;
-    font-weight: 700;
-    transition: all 0.3s;
+    color: #333;
+    padding: 5px 10px;
 }
 
 .pagination a.active {
-    background-color: #2196f3;
-    color: #fff;
-    border-color: #2196f3;
+    font-weight: bold;
+    color: red;
+    border-bottom: 2px solid red;
 }
 
-.pagination a:hover:not(.active) {
-    background-color: rgba(33, 150, 243, 0.1);
-    color: #2196f3;
+/* 게시판 하단 버튼 영역 */
+.board-footer {
+    text-align: right;
+    margin-top: 20px;
 }
 
-/* 6. 공지 등록 버튼 */
 .btn-dark {
     display: inline-block;
-    background: #2196f3;       /* 검정에서 블루로 */
+    padding: 10px 20px;
+    background: #333;
     color: #fff;
-    padding: 13px 28px;
     text-decoration: none;
-    border-radius: 30px;       /* 완전 둥근 버튼 */
-    font-weight: 700;
-    transition: all 0.3s;
-    box-shadow: 0 4px 15px rgba(33, 150, 243, 0.2);
+    border-radius: 4px;
 }
-
-.btn-dark:hover {
-    background: #1976d2;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(33, 150, 243, 0.3);
-}
-
-
-
-
-
-

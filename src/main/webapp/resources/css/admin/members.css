@@ -1,0 +1,93 @@
+/* 회원 관리 페이지 전용 스타일 */
+
+.admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+}
+
+.member-count {
+    font-size: 14px;
+    color: #666;
+}
+
+.member-count strong {
+    color: #28a745;
+}
+
+/* 테이블 레이아웃 */
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+    border: 1px solid #eee;
+    border-radius: 8px;
+}
+
+.member-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+}
+
+.member-table th {
+    background: #fcfcfc;
+    padding: 15px;
+    font-size: 13px;
+    color: #333;
+    border-bottom: 2px solid #f1f1f1;
+}
+
+.member-table td {
+    padding: 15px;
+    font-size: 14px;
+    color: #555;
+    border-bottom: 1px solid #f9f9f9;
+    text-align: center;
+}
+
+.u-name { font-weight: 600; color: #1a1a1a; }
+.u-email { color: #888; font-size: 13px; }
+
+/* 권한 배지 */
+.badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+}
+.badge.admin { background: #343a40; color: #fff; }
+.badge.full { background: #e7f5ff; color: #007bff; }
+.badge.semi { background: #f8f9fa; color: #6c757d; }
+
+/* 버튼 스타일 */
+.kick-btn {
+    background: #fff;
+    border: 1px solid #dc3545;
+    color: #dc3545;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: 0.2s;
+}
+
+.kick-btn:hover {
+    background: #dc3545;
+    color: #fff;
+}
+
+.admin-footer {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.back-btn {
+    background: #343a40;
+    color: #fff;
+    border: none;
+    padding: 10px 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+}

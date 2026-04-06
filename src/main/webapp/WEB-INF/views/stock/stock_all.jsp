@@ -13,19 +13,17 @@
 <div class="board-wrapper">
     <h2>${boardTitle}</h2>
 
-    <%-- 1. 통합 검색 영역 --%>
-    <div style="margin-bottom: 20px; text-align: right;">
-        <form action="${currentUri}" method="get" id="searchForm">
-            <select name="searchType" style="padding: 5px;">
-                <option value="name" ${pageMaker.criteria.searchType eq 'name' ? 'selected' : ''}>상품명</option>
-                <option value="drop" ${pageMaker.criteria.searchType eq 'drop' ? 'selected' : ''}>급락상품</option>
-                <option value="low" ${pageMaker.criteria.searchType eq 'low' ? 'selected' : ''}>최저가</option>
-            </select>
-            <input type="text" name="keyword" id="keywordInput" value="${pageMaker.criteria.keyword}" style="padding: 5px; width: 200px;">
-            <button type="submit" id="searchBtn" style="padding: 5px 15px;">검색</button>
-        </form>
-    </div>
-
+    
+<%-- 1. 통합 검색 영역 --%>
+    <form action="${pageContext.request.contextPath}/stock/all" method="get">
+        <select name="searchType" id="searchType"> <%-- ID 추가 --%>
+            <option value="title" ${scri.searchType eq 'title' ? 'selected' : ''}>제목</option>
+            <option value="url" ${scri.searchType eq 'url' ? 'selected' : ''}>URL</option>
+            <option value="content" ${scri.searchType eq 'content' ? 'selected' : ''}>내용</option>
+        </select>
+        <input type="text" name="keyword" id="keywordInput" value="${scri.keyword}" /> <%-- ID 추가 및 기존값 유지 --%>
+        <button type="button" id="searchBtn">검색</button> <%-- ID 추가 및 type을 button으로 변경 --%>
+    </form>
     <%-- 2. 상품 리스트 영역 --%>
     <div class="stock-list-container">
         <c:choose>
@@ -95,7 +93,7 @@
         </c:if>
     </div>
 </div>
-
+<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(function() {
@@ -103,7 +101,7 @@
             event.preventDefault();
             const uri = "${currentUri}";
             const keyword = $('#keywordInput').val();
-            const searchType = $("select[name='searchType']").val();
+            const searchType = $("#searchType").val(); // ID 기반으로 변경
             
             // 검색 시 1페이지로 리셋하여 이동
             location.href = uri + "?page=1" 
@@ -111,3 +109,5 @@
                           + "&searchType=" + searchType
                           + "&keyword=" + encodeURIComponent(keyword);
         });
+    });
+</script>
