@@ -119,7 +119,8 @@
 
 /* 급락 순위 */
 .drop-rank-container {
-    flex: 2.5;
+
+    flex: 2.5; 
     background: #FDFBF0;
     padding: 30px 80px;
     border-radius: 12px;
@@ -135,6 +136,7 @@
     align-items: center;
     margin-bottom: 35px; 
     padding-bottom: 5px;
+   
 }
 
 /* 1. 숫자만 하늘색 동그라미로 만들기 */

@@ -3,7 +3,7 @@
 <c:set var="path" value="${pageContext.request.contextPath}" />
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 
-<link rel="stylesheet" href="${path}/resources/css/views/board/write.css">
+<link rel="stylesheet" href="${path}/resources/css/views/board/reply.css">
 
 <div class="board-wrapper" style="padding: 50px 0; max-width: 800px; margin: 0 auto;">
     <div class="board-title-area">
