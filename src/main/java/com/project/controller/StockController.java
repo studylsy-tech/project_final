@@ -5,102 +5,66 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import com.project.dao.SearchMapper;
 import com.project.model.HotDealDTO;
 import com.project.model.ProductDTO;
-import com.project.service.HotDealService;
-import com.project.service.ProductService;
 import com.project.util.SearchCriteria;
 import com.project.util.SearchPageMaker;
-import com.project.util.Criteria;
 
 @Controller
 @RequestMapping("/stock")
 public class StockController {
 
     @Autowired
-    private ProductService productService;
+    private SearchMapper searchMapper;
 
-    @Autowired
-    private HotDealService hotDealService;
-
-    // 1. 전체 상품 (Common_Product + HotDeal 통합)
+    // 1. 전체 상품 검색 (Common_Product 전체)
     @GetMapping("/all")
-    public String allStocks(SearchCriteria cri, Model model) throws Exception {
-        // [핵심 수정] 빈 문자열로 넘어오는 검색 조건을 null로 통합
-        if (cri.getSearchType() != null && cri.getSearchType().trim().isEmpty()) {
-            cri.setSearchType(null);
-        }
-        if (cri.getKeyword() != null && cri.getKeyword().trim().isEmpty()) {
-            cri.setKeyword(null);
-        }
-
-        // 이제 totalCount가 첫 접속 때와 동일하게 (일반+핫딜) 모두 집계됩니다.
-        int totalCount = productService.listSearchCount(cri);
-        SearchPageMaker pageMaker = new SearchPageMaker((Criteria) cri, totalCount, 10);
-
-        List<ProductDTO> list = productService.listSearch(cri); 
-
+    public String searchAll(@ModelAttribute("scri") SearchCriteria scri, Model model) throws Exception {
+        scri.setBoardType("ALL"); // Mapper에서 전체 조회를 위해 구분자 설정
+        List<ProductDTO> list = searchMapper.getSearchList(scri);
+        int totalCount = searchMapper.getSearchCount(scri);
+        
         model.addAttribute("stockList", list);
-        model.addAttribute("pageMaker", pageMaker);
-        model.addAttribute("boardTitle", "전체 상품 목록");
-
-        return "stock/stock_all";
+        model.addAttribute("pageMaker", new SearchPageMaker(scri, totalCount, 5));
+        return "stock/stock_all"; // stock_all.jsp
     }
 
-    // 2. 오늘의 급락 상품
+    // 2. 급락 상품 검색 (BOARD_TYPE = 'DROP')
     @GetMapping("/drop")
-    public String dropStocks(SearchCriteria cri, Model model) throws Exception {
-        cri.setSearchType("drop"); 
+    public String searchDrop(@ModelAttribute("scri") SearchCriteria scri, Model model) throws Exception {
+        scri.setBoardType("DROP");
+        List<ProductDTO> list = searchMapper.getSearchList(scri);
+        int totalCount = searchMapper.getSearchCount(scri);
         
-        int totalCount = productService.listSearchCount(cri);
-        
-        // 번호 개수 10개 설정
-        SearchPageMaker pageMaker = new SearchPageMaker((Criteria) cri, totalCount, 10);
-
-        List<ProductDTO> list = productService.listSearch(cri); 
-
         model.addAttribute("stockList", list);
-        model.addAttribute("pageMaker", pageMaker);
-        model.addAttribute("boardTitle", "오늘의 급락 상품");
-        
-        return "stock/stock_drop";
+        model.addAttribute("pageMaker", new SearchPageMaker(scri, totalCount, 5));
+        return "stock/stock_drop"; // stock_drop.jsp
     }
 
-    // 3. 최저가 갱신 상품
+    // 3. 최저가 상품 검색 (BOARD_TYPE = 'HOT')
     @GetMapping("/low")
-    public String newLowStocks(SearchCriteria cri, Model model) throws Exception {
-        cri.setSearchType("low");
-
-        int totalCount = productService.listSearchCount(cri);
-
-        // 번호 개수 10개 설정
-        SearchPageMaker pageMaker = new SearchPageMaker((Criteria) cri, totalCount, 10);
-
-        List<ProductDTO> list = productService.listSearch(cri); 
-
-        model.addAttribute("stockList", list);
-        model.addAttribute("pageMaker", pageMaker);
-        model.addAttribute("boardTitle", "최저가 갱신");
+    public String searchLow(@ModelAttribute("scri") SearchCriteria scri, Model model) throws Exception {
+        scri.setBoardType("LOW"); // DB의 'HOT' 구분을 최저가(low)로 매핑
+        List<ProductDTO> list = searchMapper.getSearchList(scri);
+        int totalCount = searchMapper.getSearchCount(scri);
         
-        return "stock/stock_low";
+        model.addAttribute("stockList", list);
+        model.addAttribute("pageMaker", new SearchPageMaker(scri, totalCount, 5));
+        return "stock/stock_low"; // stock_low.jsp
     }
 
-    // 4. 자동 분석 리포트
+    // 4. 핫딜 분석 검색 (TB_HOTDEAL_TRACKER 테이블)
     @GetMapping("/analysis")
-    public String analysisStocks(SearchCriteria cri, Model model) {
-        int totalCount = hotDealService.getTotalDealCount();
-
-        // 번호 개수 10개 설정
-        SearchPageMaker pageMaker = new SearchPageMaker((Criteria) cri, totalCount, 10);
-
-        List<HotDealDTO> hotDeals = hotDealService.getRecentDealsPaging(cri);
-
-        model.addAttribute("hotDealList", hotDeals);
-        model.addAttribute("pageMaker", pageMaker);
-        model.addAttribute("boardTitle", "실시간 핫딜 자동분석 리포트");
-
-        return "stock/analysis";
+    public String searchAnalysis(@ModelAttribute("scri") SearchCriteria scri, Model model) throws Exception {
+        scri.setBoardType("HOTDEAL");
+        List<HotDealDTO> list = searchMapper.getHotDealSearchList(scri);
+        int totalCount = searchMapper.getHotDealSearchCount(scri);
+        
+        model.addAttribute("hotDealList", list);
+        model.addAttribute("pageMaker", new SearchPageMaker(scri, totalCount, 5));
+        return "stock/analysis"; // analysis.jsp
     }
 }

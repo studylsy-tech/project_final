@@ -1,101 +1,150 @@
-/* qna_list.css */
+/* 기본 컨테이너 */
 .board-wrapper {
-    width: 80%;
+    width: 90%;
+    max-width: 1200px;
     margin: 50px auto;
-    font-family: 'Pretendard', sans-serif;
-}
-
-.board-title-area {
-    margin-bottom: 30px;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 20px;
-}
-
-.board-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-top: 2px solid #2c3e50;
-    table-layout: fixed; /* 컬럼 너비 고정 */
-}
-
-.board-table th {
-    background-color: #f8f9fa;
-    padding: 15px 10px;
-    border-bottom: 1px solid #ddd;
-    font-weight: 600;
+    font-family: 'Pretendard', -apple-system, sans-serif;
     color: #333;
 }
 
-.board-table td {
-    padding: 15px 10px;
-    border-bottom: 1px solid #eee;
-    text-align: center; /* 기본 가운데 정렬 */
-    vertical-align: middle;
+.board-title-area h2 {
+    font-size: 28px;
+    margin-bottom: 10px;
 }
 
-/* 제목 열만 왼쪽 정렬 + 말줄임 처리 */
+/* 검색 영역 레이아웃 수정 */
+.search-area {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.search-select, .search-input, .btn-search {
+    height: 38px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.search-input {
+    width: 200px;
+    padding: 0 10px;
+}
+
+.btn-search {
+    padding: 0 15px;
+    background: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+/* 테이블 스타일 강제 고정 */
+.board-table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    border-top: 2px solid #333;
+    table-layout: fixed;
+}
+
+.board-table th, .board-table td {
+    padding: 15px 10px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+}
+
+.board-table th {
+    background-color: #f9f9f9;
+    font-weight: bold;
+}
+
+/* 컬럼 너비 클래스 */
+.col-no { width: 60px; }
+.col-writer { width: 120px; }
+.col-status { width: 100px; }
+.col-date { width: 180px; }
+
+/* 제목 및 답변 들여쓰기 */
 .title-cell {
     text-align: left !important;
-    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .title-cell a {
     text-decoration: none;
-    color: #3498db;
-    font-weight: 500;
+    color: #333;
 }
 
-.title-cell a:hover {
-    text-decoration: underline;
+.reply-indent {
+    margin-left: 10px;
+    color: #999;
+    font-weight: normal;
 }
 
-/* 상태 배지 */
-.badge {
+/* 상태 배지 스타일 (태그 스타일) */
+.badge-status {
     display: inline-block;
-    min-width: 50px;
-    padding: 5px 12px;
-    border-radius: 20px;
+    padding: 4px 8px;
     font-size: 11px;
-    font-weight: bold;
-    color: #fff;
+    font-weight: 600;
+    border-radius: 4px;
+    min-width: 60px;
 }
 
-.bg-blue { background-color: #3498db; }
-.bg-green { background-color: #2ecc71; }
+.bg-gray { background-color: #f1f3f5; color: #495057; border: 1px solid #dee2e6; }
+.bg-success { background-color: #ebfbee; color: #2b8a3e; border: 1px solid #b2f2bb; }
+.bg-danger { background-color: #fff5f5; color: #c92a2a; border: 1px solid #ffc9c9; }
 
-/* 페이징 영역 */
-.pagination-area {
-    margin-top: 40px;
-}
-
-.pagination-area ul {
+/* 페이징 숫자 가로 정렬 (중요) */
+.pagination-container {
+    margin-top: 30px;
     display: flex;
     justify-content: center;
-    list-style: none;
-    padding: 0;
-    gap: 10px;
 }
 
-.pagination-area a {
+.pagination {
+    display: flex !important; /* 가로 정렬 강제 */
+    list-style: none !important;
+    padding: 0;
+    margin: 0;
+    gap: 5px;
+}
+
+.pagination li {
+    margin: 0;
+}
+
+.pagination a {
+    display: block;
+    padding: 8px 12px;
     text-decoration: none;
     color: #666;
-    padding: 5px 10px;
+    border: 1px solid #eee;
+    border-radius: 4px;
 }
 
-/* 질문하기 버튼 */
+.pagination a.active {
+    background-color: #333;
+    color: #fff;
+    border-color: #333;
+    font-weight: bold;
+}
+
+/* 하단 버튼 */
+.board-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
 .btn-dark {
-    display: inline-block;
-    background-color: #2c3e50;
+    padding: 10px 20px;
+    background: #333;
     color: #fff !important;
-    padding: 12px 25px;
     text-decoration: none;
     border-radius: 4px;
-    font-size: 14px;
-    transition: background 0.2s;
-}
-
-.btn-dark:hover {
-    background-color: #1a252f;
 }
