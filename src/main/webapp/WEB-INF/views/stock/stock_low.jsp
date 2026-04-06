@@ -7,7 +7,7 @@
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 
 <%-- 스타일시트 연결 --%>
-<link rel="stylesheet" href="${path}/resources/css/stock/stock_list.css">
+<link rel="stylesheet" href="${path}/resources/css/stock/stock_drop.css">
 
 <%-- 최저가 페이지 경로 고정 (?? 방지 및 경로 유실 차단) --%>
 <c:set var="targetUri" value="${path}/stock/low" />
@@ -38,31 +38,37 @@
                 <c:forEach var="s" items="${stockList}">
                     <%-- 상세 페이지 경로 설정 --%>
                     <c:set var="detailUrl" value="${path}/dashboard/detail?prodId=${s.prodId}" />
+				
+                    <div class="stock-card" onclick="location.href='${detailUrl}'">
 
-                    <div class="stock-card" onclick="location.href='${detailUrl}'" 
-                         style="display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee; cursor: pointer;">
-                        
-                        <div class="prod-img-wrapper" style="margin-right: 20px;">
-                            <img src="${not empty s.imageUrl ? s.imageUrl : path.concat('/resources/images/no-image.png')}" 
-                                 alt="${s.name}" class="prod-img"
-                                 style="width:100px; height:100px; object-fit:cover; border-radius: 8px;"
-                                 onerror="this.src='${path}/resources/images/no-image.png';">
-                        </div>
+    <div class="prod-img-wrapper">
+        <c:choose>
+            <c:when test="${not empty s.imageUrl}">
+                <img src="${s.imageUrl}" alt="${s.name}"
+                     onerror="this.src='${path}/resources/images/no-image.png'">
+            </c:when>
+            <c:otherwise>
+                <img src="${path}/resources/images/no-image.png" alt="이미지없음">
+            </c:otherwise>
+        </c:choose>
+    </div>
 
-                        <div class="prod-info-wrapper">
-                            <%-- 최저가 뱃지 고정 --%>
-                            <div class="badge bg-blue">최저가</div>
+    <div class="prod-info-wrapper">
+        <div class="prod-title-row">
+            <span class="badge bg-green">최저가</span>  <%-- bg-red → bg-blue, 급락 → 최저가 --%>
+            <span class="prod-main-text">
+                ${s.name} &mdash;
+                <span class="price-highlight">&#8361;<fmt:formatNumber value="${s.price}" pattern="#,###" /></span>
+            </span>
+        </div>
+        <div class="prod-sub-text">
+            <fmt:formatDate value="${s.regDate}" pattern="yyyy.MM.dd HH:mm" />
+            <c:if test="${not empty s.source}"> | ${s.source}</c:if>
+        </div>
+    </div>
 
-                            <div class="prod-info" style="margin-top: 8px;">
-                                <div class="prod-main-text" style="font-weight: bold; font-size: 1.1em;">
-                                    ${s.name} — <span class="price-highlight" style="color: #e74c3c;">₩<fmt:formatNumber value="${s.price}" pattern="#,###" /></span>
-                                </div>
-                                <div class="prod-sub-text" style="color: #888; font-size: 0.9em; margin-top: 4px;">
-                                    <fmt:formatDate value="${s.regDate}" pattern="yyyy.MM.dd HH:mm" /> | ${s.source}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+</div>
+                    
                 </c:forEach>
             </c:otherwise>
         </c:choose>

@@ -5,7 +5,7 @@
 
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 
-<link rel="stylesheet" href="${path}/resources/css/stock/stock_list.css">
+<link rel="stylesheet" href="${path}/resources/css/stock/stock_drop.css">
 
 <%-- 현재 접속 경로 저장 --%>
 <c:set var="currentUri" value="${requestScope['javax.servlet.forward.request_uri']}" />
@@ -52,20 +52,20 @@
 
                         <%-- 정보 영역 --%>
                         <div class="prod-info-wrapper">
-                            <c:set var="badgeClass" value="${s.boardType eq 'DROP' ? 'bg-red' : (s.boardType eq 'HOT' ? 'bg-orange' : 'bg-blue')}" />
-                            <c:set var="badgeText" value="${s.boardType eq 'DROP' ? '급락' : (s.boardType eq 'HOT' ? '핫딜' : '최저가')}" />
-                            <div class="badge ${badgeClass}">${badgeText}</div>
-
-                            <div class="prod-info" style="margin-top: 8px;">
-                                <div class="prod-main-text" style="font-weight: bold; font-size: 1.1em;">
-                                    ${s.name} — <span class="price-highlight" style="color: #e74c3c;">₩<fmt:formatNumber value="${s.price}" pattern="#,###" /></span>
-                                </div>
-                                <div class="prod-sub-text" style="color: #888; font-size: 0.9em; margin-top: 4px;">
-                                    <fmt:formatDate value="${s.regDate}" pattern="yyyy.MM.dd HH:mm" /> | ${s.source}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+   					 <div class="prod-title-row">
+      					  <c:set var="badgeClass" value="${s.boardType eq 'DROP' ? 'bg-red' : (s.boardType eq 'HOT' ? 'bg-orange' : 'bg-green')}" />
+       					 <c:set var="badgeText" value="${s.boardType eq 'DROP' ? '급락' : (s.boardType eq 'HOT' ? '핫딜' : '최저가')}" />
+       					 <span class="badge ${badgeClass}">${badgeText}</span>
+       					 <span class="prod-main-text">
+         				   ${s.name} &mdash;
+         				   <span class="price-highlight">&#8361;<fmt:formatNumber value="${s.price}" pattern="#,###" /></span>
+       					 </span>
+   					 </div>
+   						 <div class="prod-sub-text">
+       					 <fmt:formatDate value="${s.regDate}" pattern="yyyy.MM.dd HH:mm" /> | ${s.source}
+   						 </div>
+						</div>
+					</div>
                 </c:forEach>
             </c:otherwise>
         </c:choose>
