@@ -1,204 +1,215 @@
 @charset "UTF-8";
 
-/* [1] 기본 레이아웃 - 너비 800px 강제 적용 */
+/* [1] 기본 레이아웃 */
 .board-wrapper {
-    /* 다른 스타일보다 우선순위를 높이기 위해 !important를 추가했습니다. */
-    max-width: 900px !important; 
+    max-width: 900px !important;
     margin: 60px auto;
     padding: 0 20px;
     font-family: 'Pretendard', sans-serif;
+    box-sizing: border-box;
 }
 
+/* [2] 헤더 */
 .board-wrapper h2 {
-    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     color: #1a2a44;
     margin-bottom: 30px;
     border-bottom: 2px solid #1a2a44;
     padding-bottom: 15px;
+    font-size: 22px;
+    font-weight: 700;
 }
 
-/* [2] 카드 컨테이너 스타일 */
+.board-wrapper h2 .title-icon {
+    width: 32px;
+    height: 32px;
+}
+
+/* [3] 검색 영역 - 오른쪽 정렬 */
+.search-area {
+    margin-bottom: 20px;
+    text-align: right;   /* form이 block이므로 text-align으로 우측 정렬 */
+}
+
+.search-area form {
+    display: inline-flex;  /* inline-flex로 오른쪽 정렬 유지 */
+    align-items: center;
+    gap: 8px;
+}
+
+.search-area select {
+    padding: 8px 12px;
+    border: 1px solid #000;
+    border-radius: 0;
+    font-size: 14px;
+    color: #2c3e50;
+    background-color: #fff;
+    cursor: pointer;
+}
+
+.search-area input[type="text"] {
+    padding: 8px 14px;
+    border: 1px solid #000;
+    border-radius: 0;
+    font-size: 14px;
+    width: 200px;
+    color: #2c3e50;
+    outline: none;
+}
+
+.search-area input[type="text"]:focus {
+    border-color: #1a2a44;
+}
+
+.search-area input[type="text"]::placeholder {
+    color: #aab0b8;
+}
+
+.search-area button {
+    padding: 8px 20px;
+    background-color: #f0f2f5;
+    color: #2c3e50;
+    border: 1px solid #000;
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.search-area button:hover {
+    background-color: #e1e4e8;
+}
+
+/* [4] 카드 컨테이너 */
 .stock-list-container {
     display: flex;
     flex-direction: column;
-    gap: 0;          /* 간격 제거 */
-    border: 1px solid #e1e4e8;  /* 외곽선 한 번만 */
-    border-radius: 8px;
-    overflow: hidden; /* 모서리 둥글게 유지 */
+    gap: 12px;
 }
 
-/* [3] 개별 카드 - .stock-card 구조 유지 */
+/* [5] 개별 카드 */
 .stock-card {
     display: flex;
     align-items: center;
-    padding: 20px 25px;
+    gap: 16px;
+    padding: 16px 20px;
     background-color: #fff;
-    border: none;
-    border-bottom: 1px solid #e1e4e8;
-    border-radius: 0;
+    border: 1px solid #e1e4e8;
+    border-radius: 10px;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    box-sizing: border-box;
 }
 
 .stock-card:hover {
-    background-color: #fcfdfe;
     border-color: #1a2a44;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
 }
 
-/* [4] 배지 색상 연동 */
+/* [6] 이미지 - 크기 고정이 핵심 */
+.prod-img-wrapper {
+    width: 90px;
+    height: 90px;
+    min-width: 90px;   /* flex 환경에서 줄어들지 않게 */
+    min-height: 90px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    overflow: hidden;  /* 이미지가 삐져나오지 않게 */
+    background-color: #f0f2f5;
+}
+
+.prod-img-wrapper img {
+    width: 90px !important;
+    height: 90px !important;
+    max-width: 90px !important;   /* 최대 크기 강제 */
+    max-height: 90px !important;
+    object-fit: cover;
+    display: block;
+}
+
+/* [7] 카드 우측 정보 */
+.prod-info-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;  /* flex 자식 텍스트 넘침 방지 */
+}
+
+/* [8] 뱃지 + 제품명 한 줄 */
+.prod-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* [9] 배지 - 넉넉한 가로 폭 */
 .badge {
-    width: 65px;
-    padding: 8px 0;
-    text-align: center;
+    display: inline-block;
+    padding: 5px 22px;
     border-radius: 5px;
     font-size: 13px;
-    font-weight: bold;
+    font-weight: 700;
     color: #fff !important;
-    margin-right: 25px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
-/* 급락: 빨간색 */
-.bg-red { background-color: #e74c3c !important; }
+.bg-red    { background-color: #e74c3c !important; }
+.bg-green  { background-color: #27ae60 !important; }
+.bg-blue   { background-color: #2196f3 !important; }
+.bg-orange { background-color: #ff9800 !important; }
 
-/* 갱신: 초록색 */
-.bg-blue, .bg-green { background-color: #27ae60 !important; }
-
-/* [5] 상품 정보 영역 */
-.prod-info {
-    flex: 1;
-}
-
+/* [10] 제품명 */
 .prod-main-text {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
-    margin-bottom: 8px;
     color: #2c3e50;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
+/* [11] 가격 */
+.price-highlight {
+    color: #e74c3c !important;
+    font-weight: 800;
+}
+
+/* [12] 날짜/소스 */
 .prod-sub-text {
-    font-size: 14px;
+    font-size: 13px;
     color: #95a5a6;
 }
 
-/* [6] 가격 강조 - 연한 파란색 글씨만 적용 */
-.price-highlight {
-    background-color: transparent !important; 
-    color: #3498db !important;
-    font-weight: 800;
-    margin-left: 5px;
-    display: inline-block;
-}
-
-/* [7] 하단 질문하기 버튼 (75% 크기 및 오른쪽 정렬) */
-.board-footer {
-    margin-top: 30px;
-    display: flex;
-    justify-content: flex-end; 
-}
-
-.btn-dark {
-    background-color: #1a2a44;
-    color: #fff !important;
-    padding: 15px 0;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: 700;
-    
-    width: 75%;            
-    display: block;        
-    text-align: center;    
-    box-sizing: border-box; 
-    
-    transition: background-color 0.3s;
-}
-
-.btn-dark:hover {
-    background-color: #34495e;
-} 
-    
- /* [8] 테이블 스타일 - hotdeal 페이지용 */
-.analysis-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.card {
-    background-color: #fff;
+/* [13] 빈 데이터 */
+.empty-msg {
+    text-align: center;
+    padding: 50px;
+    color: #999;
     border: 1px solid #e1e4e8;
-    border-radius: 8px;
-    padding: 20px 25px;
+    border-radius: 10px;
+    background: #fff;
 }
 
-.card h3 {
-    color: #2c3e50;
-    margin-bottom: 16px;
+/* [14] 페이징 */
+.paging-area {
+    text-align: center;
+    margin: 30px 0;
     font-size: 16px;
 }
 
-.card table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
+.paging-area a {
+    text-decoration: none;
+    margin: 0 5px;
+    color: #666;
 }
 
-.card table th {
-    background-color: #f4f6f8;
-    color: #1a2a44;
-    padding: 10px 12px;
-    border: 1px solid #e1e4e8;
-    text-align: center;
-    font-weight: 600;
-}
-
-.card table td {
-    text-align: center;
-    vertical-align: middle;
-}
-
-.card table td {
-    padding: 10px 12px;
-    border: 1px solid #e1e4e8;
-    color: #2c3e50;
-}
-
-.card table tr:hover td {
-    background-color: #fcfdfe;
-}
-
-.start-btn {
-    background-color: #1a2a44;
-    color: #fff !important;
-    border-radius: 4px;
-    display: inline-block;
-    transition: background-color 0.3s;
-}
-
-.start-btn:hover {
-    background-color: #34495e;
-}   
-.bg-red { background-color: #ff4d4d; color: white; }    /* 급락 */
-.bg-orange { background-color: #ff9800; color: white; } /* 핫딜 */
-.bg-blue { background-color: #2196f3; color: white; }   /* 최저가/갱신 */
-
-
-.prod-img-wrapper { margin-right: 20px; }
-
-
-/* 모든 상품 이미지에 공통 적용 */
-.prod-img {
-    width: 80px !important;  /* 가로 크기 고정 */
-    height: 80px !important; /* 세로 크기 고정 */
-    object-fit: cover;        /* 비율 유지하며 꽉 채우기 */
-    border-radius: 8px;       /* 모서리 둥글게 */
-    display: block;           /* 레이아웃 정렬 최적화 */
-}
-
-/* 이미지를 감싸는 영역 (간격 조절) */
-.prod-img-wrapper {
-    width: 80px;
-    height: 80px;
-    margin-right: 20px;
-    flex-shrink: 0;           /* 부모 박스가 좁아져도 이미지는 유지 */
+.paging-area .current-page {
+    color: #e74c3c;
+    font-weight: bold;
+    border-bottom: 2px solid #e74c3c;
 }

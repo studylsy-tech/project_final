@@ -5,10 +5,9 @@
 
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 
-<%-- 스타일시트 연결 --%>
 <link rel="stylesheet" href="${path}/resources/css/stock/stock_list.css">
 
-<%-- 현재 접속 경로 저장 (all, drop, low 유지용) --%>
+<%-- 현재 접속 경로 저장 --%>
 <c:set var="currentUri" value="${requestScope['javax.servlet.forward.request_uri']}" />
 
 <div class="board-wrapper">
@@ -35,7 +34,7 @@
             </c:when>
             <c:otherwise>
                 <c:forEach var="s" items="${stockList}">
-                    <%-- 상세 페이지 URL 분기 --%>
+                    <%-- 상세 페이지 URL 분기 처리 --%>
                     <c:url var="detailUrl" value="${s.boardType eq 'HOT' ? '/hotdeal/detail' : '/dashboard/detail'}">
                         <c:param name="${s.boardType eq 'HOT' ? 'dealId' : 'prodId'}" value="${s.prodId}" />
                     </c:url>
@@ -43,15 +42,16 @@
                     <div class="stock-card" onclick="location.href='${detailUrl}'" 
                          style="display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee; cursor: pointer;">
                         
-                        <div class="prod-img-wrapper" style="margin-right: 20px;">
+                        <%-- 이미지 영역 --%>
+                        <div class="prod-img-wrapper" style="margin-right: 20px; flex-shrink: 0;">
                             <img src="${not empty s.imageUrl ? s.imageUrl : path.concat('/resources/images/no-image.png')}" 
                                  alt="${s.name}" class="prod-img"
                                  style="width:100px; height:100px; object-fit:cover; border-radius: 8px;"
                                  onerror="this.src='${path}/resources/images/no-image.png';">
                         </div>
 
+                        <%-- 정보 영역 --%>
                         <div class="prod-info-wrapper">
-                            <%-- 뱃지 로직 --%>
                             <c:set var="badgeClass" value="${s.boardType eq 'DROP' ? 'bg-red' : (s.boardType eq 'HOT' ? 'bg-orange' : 'bg-blue')}" />
                             <c:set var="badgeText" value="${s.boardType eq 'DROP' ? '급락' : (s.boardType eq 'HOT' ? '핫딜' : '최저가')}" />
                             <div class="badge ${badgeClass}">${badgeText}</div>
@@ -101,13 +101,13 @@
     $(function() {
         $('#searchBtn').on("click", function(event) {
             event.preventDefault();
-            var uri = "${currentUri}";
-            var queryString = "?page=1&perPageNum=${pageMaker.criteria.perPageNum}"
-                            + "&searchType=" + $("select[name='searchType']").val()
-                            + "&keyword=" + encodeURIComponent($('#keywordInput').val());
-            location.href = uri + queryString;
+            const uri = "${currentUri}";
+            const keyword = $('#keywordInput').val();
+            const searchType = $("select[name='searchType']").val();
+            
+            // 검색 시 1페이지로 리셋하여 이동
+            location.href = uri + "?page=1" 
+                          + "&perPageNum=${pageMaker.criteria.perPageNum}"
+                          + "&searchType=" + searchType
+                          + "&keyword=" + encodeURIComponent(keyword);
         });
-    });
-</script>
-
-<%@ include file="/WEB-INF/views/common/footer.jsp"%>
