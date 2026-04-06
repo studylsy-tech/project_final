@@ -16,7 +16,19 @@
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
+<beans:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <beans:property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+    <beans:property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
+    <beans:property name="username" value="your_username" />
+    <beans:property name="password" value="your_password" />
+</beans:bean>
 
+<beans:bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <beans:property name="dataSource" ref="dataSource" />
+    <beans:property name="mapperLocations" value="classpath*:/mappers/**/*Mapper.xml" />
+</beans:bean>
+
+<mybatis-spring:scan base-package="com.project.dao" />
 
 <resources mapping="/resources/**" location="/resources/" />
 </beans:beans>

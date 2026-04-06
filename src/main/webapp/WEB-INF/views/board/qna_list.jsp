@@ -2,7 +2,7 @@
 <%-- JSTL 사용을 위한 선언문 추가 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-<link rel="stylesheet" href="${path}/resources/css/views/board/board.css">
+<link rel="stylesheet" href="${path}/resources/css/views/board/qna_list.css">
 
 <div class="board-wrapper">
     <div class="board-title-area">

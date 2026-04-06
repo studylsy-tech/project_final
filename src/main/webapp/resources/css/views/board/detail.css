@@ -1,0 +1,74 @@
+/* detail.css */
+.board-wrapper {
+    padding: 60px 0;
+    max-width: 900px;
+    margin: 0 auto;
+    font-family: 'Pretendard', sans-serif;
+}
+
+.detail-header {
+    border-top: 3px solid #2c3e50;
+    border-bottom: 1px solid #ddd;
+    padding: 30px 20px;
+    background-color: #fcfcfc;
+}
+
+.detail-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 15px;
+}
+
+.detail-info {
+    display: flex;
+    gap: 20px;
+    color: #888;
+    font-size: 14px;
+}
+
+.detail-info span b {
+    color: #444;
+    margin-right: 5px;
+}
+
+/* 본문 영역 */
+.detail-content {
+    padding: 50px 20px;
+    min-height: 400px;
+    line-height: 1.8;
+    font-size: 16px;
+    color: #333;
+    word-break: break-all;
+    border-bottom: 1px solid #eee;
+}
+
+/* 하단 버튼 영역 */
+.detail-footer {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between; /* 목록은 왼쪽, 수정/삭제는 오른쪽 */
+}
+
+.btn-group {
+    display: flex;
+    gap: 10px;
+}
+
+/* 버튼 공통 스타일 */
+.btn-detail {
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-list { background: #95a5a6; color: #fff; }
+.btn-edit { background: #3498db; color: #fff; }
+.btn-delete { background: #e74c3c; color: #fff; }
+
+.btn-detail:hover { opacity: 0.8; }

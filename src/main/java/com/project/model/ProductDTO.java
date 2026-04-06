@@ -30,5 +30,10 @@ public class ProductDTO {
     
     private long targetPrice;
 
+	public String getProdName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

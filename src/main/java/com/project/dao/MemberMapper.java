@@ -20,4 +20,8 @@ public interface MemberMapper {
 
 	// 5. 내 정보 수정 (준회원/정회원 공통. 4번은 전환이라면 관리자 용도인가요..?)
 	int updateMember(MemberDTO member);
+
+	void deleteMember(String phone);
+
+	int insertSemiMember(MemberDTO member);
 }

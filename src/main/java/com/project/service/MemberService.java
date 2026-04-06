@@ -56,4 +56,14 @@ public class MemberService {
 		}
 	}
 
+	public void deleteMember(String phone) {
+	    memberMapper.deleteMember(phone);
+	}
+
+	public int insertSemiMember(MemberDTO member) {
+	    // 1. DAO 또는 Mapper를 호출하여 실제 DB 저장을 수행합니다.
+	    // 2. 이전에 Mapper XML에서 등록한 id="insertSemiMember"와 연결됩니다.
+	    return memberMapper.insertSemiMember(member); 
+	}
+
 }

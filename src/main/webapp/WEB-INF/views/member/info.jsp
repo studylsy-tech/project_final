@@ -18,8 +18,8 @@
         <div class="tab-container">
             <a href="${path}/member/info" class="tab-item active">내 정보 확인</a>
             <a href="${path}/member/notification" class="tab-item">알림 설정</a>
-            <%-- 관리자 권한이 있을 경우에만 탭 메뉴 노출 --%>
-            <c:if test="${sessionScope.loginUser.memberType eq 'ADMIN'}">
+            <%-- 관리자 권한(0) 확인 --%>
+            <c:if test="${sessionScope.loginUser.memberType == 0}">
                 <a href="${path}/admin/main" class="tab-item admin-tab">관리자 모드</a>
             </c:if>
         </div>
@@ -34,25 +34,39 @@
             <tbody>
                 <tr>
                     <th>아이디(전화번호)</th>
-                    <td>${sessionScope.loginUser.phone}</td>
+                    <td><c:out value="${sessionScope.loginUser.phone}" /></td>
                 </tr>
                 <tr>
                     <th>회원 등급</th>
                     <td class="status-text">
                         <c:choose>
-                            <c:when test="${sessionScope.loginUser.memberType eq 'ADMIN'}">시스템 관리자</c:when>
-                            <c:when test="${sessionScope.loginUser.memberType eq 'FULL'}">정회원</c:when>
+                            <c:when test="${sessionScope.loginUser.memberType == 0}">시스템 관리자</c:when>
+                            <c:when test="${sessionScope.loginUser.memberType == 2}">정회원</c:when>
                             <c:otherwise>준회원</c:otherwise>
                         </c:choose>
                     </td>
                 </tr>
+                <%-- 정회원(2) 또는 관리자(0)일 경우 추가 정보 표시 --%>
+                <c:if test="${sessionScope.loginUser.memberType != 1}">
+                    <tr>
+                        <th>이름</th>
+                        <td><c:out value="${sessionScope.loginUser.name}" /></td>
+                    </tr>
+                    <tr>
+                        <th>이메일</th>
+                        <td><c:out value="${sessionScope.loginUser.email}" /></td>
+                    </tr>
+                    <tr>
+                        <th>별명</th>
+                        <td><c:out value="${sessionScope.loginUser.nickname}" /></td>
+                    </tr>
+                </c:if>
             </tbody>
         </table>
 
         <div class="action-buttons">
             <button type="button" class="btn-outline" onclick="location.href='${path}/'">메인으로</button>
             <button type="button" class="btn-solid" onclick="location.href='${path}/member/update'">정보 수정</button>
-            <%-- 기존 하단 관리자 버튼은 삭제하거나 주석 처리 --%>
         </div>
     </div>
 </div>
