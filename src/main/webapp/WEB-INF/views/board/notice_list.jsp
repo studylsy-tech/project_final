@@ -55,27 +55,54 @@
 		<ul class="pagination" style="display: inline-flex; list-style: none; padding: 0;">
 			<c:if test="${pageMaker.prev}">
 				<li style="margin: 0 5px;">
-					<a href="${path}/board/noticeListPaging${pageMaker.makeSearch(pageMaker.startPage - 1)}">이전</a>
+					<a href="${path}/board/notice${pageMaker.query(pageMaker.startPage - 1)}">이전</a>
 				</li>
 			</c:if>
 
 			<c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
 				<li style="margin: 0 5px;">
-					<a href="${path}/board/noticeListPaging${pageMaker.makeSearch(idx)}" 
+					<a href="${path}/board/notice${pageMaker.query(idx)}" 
 					   style="${pageMaker.cri.page == idx ? 'font-weight: bold; color: red;' : 'color: #333;'}">
-						${idx}
+					    ${idx}
 					</a>
 				</li>
 			</c:forEach>
 
 			<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
 				<li style="margin: 0 5px;">
-					<a href="${path}/board/noticeListPaging${pageMaker.makeSearch(pageMaker.endPage + 1)}">다음</a>
+					<a href="${path}/board/notice${pageMaker.query(pageMaker.endPage + 1)}">다음</a>
 				</li>
 			</c:if>
 		</ul>
 	</div>
-
+	
+	<!-- 검색기능 -->
+	<div class="search-box">
+	    <select name="searchType" id="searchTypeSelect">
+	        <option value="t" ${pageMaker.cri.searchType eq 't' ? 'selected' : ''}>제목</option>
+	        <option value="c" ${pageMaker.cri.searchType eq 'c' ? 'selected' : ''}>내용</option>
+	        <option value="tc" ${pageMaker.cri.searchType eq 'tc' ? 'selected' : ''}>제목+내용</option>
+	    </select>
+	    
+	    <input type="text" name="keyword" id="keywordInput" value="${pageMaker.cri.keyword}" placeholder="공지 검색어 입력">
+	    <button id="searchBtn" class="btn-dark">검색</button>
+	</div>
+	
+<script>
+    $(function(){
+        $('#searchBtn').on("click", function(event){
+            // 주소를 noticeListPaging에서 notice로 변경!
+            var url = "notice?page=1"; 
+            
+            url += "&perPageNum=${pageMaker.cri.perPageNum}";
+            url += "&searchType=" + $("#searchTypeSelect").val();
+            url += "&keyword=" + encodeURIComponent($('#keywordInput').val());
+            
+            self.location = url;
+        });
+    });
+</script>	
+	
 	<c:if test="${loginUser.memberType == 'ADMIN'}">
 		<div class="board-footer" style="text-align: right; margin-top: 20px;">
 			<a href="${path}/board/write?type=NOTICE" class="btn-dark">공지등록</a>

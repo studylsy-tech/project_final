@@ -76,9 +76,41 @@
             </c:if>
         </ul>
     </div>
-
+	
+	<!-- 검색기능 -->
+	<div class="search-box">
+	    <select name="searchType" id="searchTypeSelect">
+	        <option value="t" ${pageMaker.criteria.searchType eq 't' ? 'selected' : ''}>제목</option>
+	        <option value="c" ${pageMaker.criteria.searchType eq 'c' ? 'selected' : ''}>내용</option>
+	        <option value="w" ${pageMaker.criteria.searchType eq 'w' ? 'selected' : ''}>작성자</option>
+	        <option value="tc" ${pageMaker.criteria.searchType eq 'tc' ? 'selected' : ''}>제목+내용</option>
+	    </select>
+	    
+	    <input type="text" name="keyword" id="keywordInput" value="${pageMaker.criteria.keyword}" placeholder="검색어 입력">
+	    <button id="searchBtn" class="btn-dark">검색</button>
+	</div>
+	
     <div class="board-footer" style="width: 75%; margin-left: auto; margin-top: 20px; display: flex; justify-content: flex-end;">
         <a href="${path}/board/qnaWrite" class="btn-dark">질문하기</a>
     </div>
 </div>
+
+<script>
+    $(function(){
+        $('#searchBtn').on("click", function(event){
+            // 1. 단순하게 기본 경로 설정
+            var url = "qna?page=1"; 
+            
+            // 2. perPageNum 유지
+            url += "&perPageNum=${pageMaker.criteria.perPageNum}";
+            
+            // 3. 현재 입력창에 적힌 새로운 값을 직접 붙임
+            url += "&searchType=" + $("#searchTypeSelect").val();
+            url += "&keyword=" + encodeURIComponent($('#keywordInput').val());
+            
+            // 4. 이동
+            self.location = url;
+        });
+    });
+</script>
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>

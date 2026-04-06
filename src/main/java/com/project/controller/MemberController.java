@@ -99,9 +99,11 @@ public class MemberController {
         } catch (DuplicateKeyException e) {
             // 중복된 번호일 경우 경고 메시지와 함께 가입 페이지로 리다이렉트
             ra.addFlashAttribute("msg", "이미 등록된 휴대폰 번호입니다. 번호를 확인해 주세요.");
+            e.printStackTrace();
             return "redirect:/member/join";
         } catch (Exception e) {
             ra.addFlashAttribute("msg", "오류가 발생했습니다.");
+            e.printStackTrace();
             return "redirect:/member/join";
         }
     }
@@ -165,7 +167,7 @@ public class MemberController {
             return "redirect:/member/update"; 
         }
     }
- // MemberController 내부
+    // MemberController 내부
     @GetMapping("notification") // 또는 전체 경로가 /member/notification 인지 확인
     public String notificationPage(HttpSession session) {
         // 1. 로그인 체크 (세션에 유저 정보가 없으면 로그인 페이지로)
