@@ -12,22 +12,26 @@
     </sql>
 
     <select id="selectBoardListPaging" resultType="com.project.model.BoardDTO">
-    SELECT * FROM (
-        SELECT rownum rnum, a.* FROM (
-            SELECT 
-                NOTICE_NO as notice_no,
-                TITLE as title,
-                CONTENT as content,
-                WRITER as writer,
-                BOARD_TYPE as board_type,
-                COUNT as count,
-                TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
-            FROM BOARD 
-            WHERE BOARD_TYPE = #{boardType}
-            <include refid="boardSearch" />
-            ORDER BY NOTICE_NO DESC
-        ) a WHERE rownum &lt;= #{pageEnd}
-    ) WHERE rnum &gt;= #{pageStart}
+SELECT * FROM (
+    SELECT rownum rnum, a.* FROM (
+        SELECT 
+            NOTICE_NO as notice_no,
+            TITLE as title,
+            WRITER as writer,
+            IS_REPLY as is_reply,
+            PARENT_NO as parent_no,
+            BOARD_TYPE as board_type,
+            TO_CHAR(INDATE, 'YYYY-MM-DD HH24:MI:SS') as indate,
+            /* 해당 글을 부모로 하는 답변의 개수를 세어옴 */
+            (SELECT COUNT(*) FROM BOARD WHERE PARENT_NO = B.NOTICE_NO) as reply_count
+        FROM BOARD B
+        WHERE BOARD_TYPE = #{boardType}
+        <include refid="boardSearch" />
+        ORDER BY 
+            CASE WHEN PARENT_NO = 0 THEN NOTICE_NO ELSE PARENT_NO END DESC,
+            INDATE ASC
+    ) a WHERE rownum &lt;= #{pageEnd}
+) WHERE rnum &gt;= #{pageStart}
 </select>
 
     <select id="selectBoardDetail" parameterType="int" resultType="com.project.model.BoardDTO">
@@ -38,14 +42,16 @@
             WRITER as writer, 
             BOARD_TYPE as board_type, 
             COUNT as count, 
-            TO_CHAR(INDATE, 'YYYY-MM-DD') as indate 
+            IS_REPLY as is_reply,
+            PARENT_NO as parent_no,
+            TO_CHAR(INDATE, 'YYYY-MM-DD HH24:MI:SS') as indate 
         FROM BOARD 
         WHERE NOTICE_NO = #{notice_no}
     </select>
 
     <insert id="insertBoard" parameterType="com.project.model.BoardDTO">
-        INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
-        VALUES (#{title}, #{content}, #{writer}, #{board_type})
+        INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE, PARENT_NO, IS_REPLY)
+        VALUES (#{title}, #{content}, #{writer}, #{board_type}, #{parent_no}, #{is_reply})
     </insert>
 
     <update id="updateCount" parameterType="int">
@@ -56,6 +62,22 @@
         SELECT COUNT(*) FROM BOARD 
         WHERE BOARD_TYPE = #{boardType}
         <include refid="boardSearch" />
+    </select>
+
+    <delete id="deleteBoard" parameterType="int">
+        DELETE FROM BOARD WHERE NOTICE_NO = #{notice_no}
+    </delete>
+
+    <select id="getUnansweredCount" resultType="int">
+        SELECT COUNT(*) 
+        FROM BOARD 
+        WHERE BOARD_TYPE = 'QNA' 
+          AND IS_REPLY = 0 
+          AND NOTICE_NO NOT IN (
+              SELECT DISTINCT PARENT_NO 
+              FROM BOARD 
+              WHERE PARENT_NO > 0
+          )
     </select>
 
 </mapper>

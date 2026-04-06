@@ -76,11 +76,11 @@
 		</ul>
 	</div>
 
-	<c:if test="${loginUser.memberType == 'ADMIN'}">
-		<div class="board-footer" style="text-align: right; margin-top: 20px;">
-			<a href="${path}/board/write?type=NOTICE" class="btn-dark">공지등록</a>
-		</div>
-	</c:if>
+<c:if test="${loginUser.memberType == 0}">
+    <div class="board-footer" style="text-align: right; margin-top: 20px;">
+        <a href="${path}/board/write?type=NOTICE" class="btn-dark">공지등록</a>
+    </div>
+</c:if>
 </div>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp"%>

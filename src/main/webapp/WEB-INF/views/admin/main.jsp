@@ -37,10 +37,14 @@
                     <h3 style="font-size: 16px; color: #666;">미처리 오류</h3>
                     <p class="count" style="font-size: 24px; font-weight: bold; color: #dc3545;">5건</p>
                 </div>
-                <div class="summary-card" style="flex: 1; padding: 20px; background: #f8f9fa; border-radius: 8px; text-align: center;">
-                    <h3 style="font-size: 16px; color: #666;">신규 Q&A</h3>
-                    <p class="count" style="font-size: 24px; font-weight: bold; color: #007bff;">2건</p>
-                </div>
+                
+<%-- 관리자 대시보드 - 신규 Q&A 카드 --%>
+<div class="summary-card" onclick="location.href='${path}/board/qna'" style="flex: 1; padding: 20px; background: #f8f9fa; border-radius: 8px; cursor: pointer; text-align: center;">
+    <h3 style="font-size: 16px; color: #666;">미답변 Q&A</h3>
+    <p class="count" style="font-size: 24px; font-weight: bold; color: #007bff;">
+        ${unansweredCount}건
+    </p>
+</div>
             </div>
 
             <%-- 관리 메뉴 --%>
