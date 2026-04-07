@@ -33,6 +33,7 @@
         </form>
 
         <div class="login-links">
+        	<a href="${path}/member/find_pw">비밀번호 찾기</a>
             <a href="${path}/member/join">회원가입</a> |
             <a href="${path}/">홈으로</a>
         </div>

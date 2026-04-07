@@ -30,14 +30,30 @@ PUBLIC "-//mybatis.org/DTD Mapper 3.0//EN"
     <select id="loginCheck" parameterType="com.project.model.MemberDTO" resultMap="MemberResultMap">
         SELECT * FROM MEMBERS WHERE PHONE = #{phone} AND PW = #{pw}
     </select>
-    <select id="getBoardList" parameterType="string" resultType="com.project.model.BoardDTO">
-    SELECT * FROM BOARD 
-    WHERE BOARD_TYPE = #{board_type} 
-    ORDER BY NOTICE_NO DESC
-</select>
+	    <select id="getBoardList" parameterType="string" resultType="com.project.model.BoardDTO">
+	    SELECT * FROM BOARD 
+	    WHERE BOARD_TYPE = #{board_type} 
+	    ORDER BY NOTICE_NO DESC
+	</select>
 
-<insert id="insertBoard" parameterType="com.project.model.BoardDTO">
-    INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
-    VALUES (#{title}, #{content}, #{writer}, #{board_type})
-</insert>
+	<insert id="insertBoard" parameterType="com.project.model.BoardDTO">
+	    INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
+	    VALUES (#{title}, #{content}, #{writer}, #{board_type})
+	</insert>
+	
+	<select id="checkUserForPw" parameterType="com.project.model.MemberDTO" resultType="int">
+	    SELECT COUNT(*) 
+	    FROM MEMBERS 
+	    WHERE PHONE = #{phone} 
+	      AND EMAIL = #{email}
+	      AND MEMBER_TYPE = 2
+	</select>
+	
+	<update id="updatePassword" parameterType="com.project.model.MemberDTO">
+	    UPDATE MEMBERS 
+	    SET PW = #{pw} 
+	    WHERE PHONE = #{phone}
+	</update>
+	
+	
 </mapper>
