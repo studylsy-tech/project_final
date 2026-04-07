@@ -32,6 +32,8 @@ BoardDTO selectBoardDetail(int noticeNo);
     void updateCount(int noticeNo);
 	int fetchAndRecordHotDeals();
 	int fetchAndRecordNormalProducts();
+	void deleteAllDeals();
+	void stopCrawling();
     
     
 }

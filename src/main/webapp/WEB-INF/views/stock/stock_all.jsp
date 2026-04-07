@@ -5,7 +5,7 @@
 
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 
-<link rel="stylesheet" href="${path}/resources/css/stock/stock_list.css">
+<link rel="stylesheet" href="${path}/resources/css/stock/stock_drop.css">
 
 <%-- 현재 접속 경로 저장 --%>
 <c:set var="currentUri" value="${requestScope['javax.servlet.forward.request_uri']}" />
@@ -13,19 +13,17 @@
 <div class="board-wrapper">
     <h2>${boardTitle}</h2>
 
-    <%-- 1. 통합 검색 영역 --%>
-    <div style="margin-bottom: 20px; text-align: right;">
-        <form action="${currentUri}" method="get" id="searchForm">
-            <select name="searchType" style="padding: 5px;">
-                <option value="name" ${pageMaker.criteria.searchType eq 'name' ? 'selected' : ''}>상품명</option>
-                <option value="drop" ${pageMaker.criteria.searchType eq 'drop' ? 'selected' : ''}>급락상품</option>
-                <option value="low" ${pageMaker.criteria.searchType eq 'low' ? 'selected' : ''}>최저가</option>
-            </select>
-            <input type="text" name="keyword" id="keywordInput" value="${pageMaker.criteria.keyword}" style="padding: 5px; width: 200px;">
-            <button type="submit" id="searchBtn" style="padding: 5px 15px;">검색</button>
-        </form>
-    </div>
-
+    
+<%-- 1. 통합 검색 영역 --%>
+    <form action="${pageContext.request.contextPath}/stock/all" method="get">
+        <select name="searchType" id="searchType"> <%-- ID 추가 --%>
+            <option value="title" ${scri.searchType eq 'title' ? 'selected' : ''}>제목</option>
+            <option value="url" ${scri.searchType eq 'url' ? 'selected' : ''}>URL</option>
+            <option value="content" ${scri.searchType eq 'content' ? 'selected' : ''}>내용</option>
+        </select>
+        <input type="text" name="keyword" id="keywordInput" value="${scri.keyword}" /> <%-- ID 추가 및 기존값 유지 --%>
+        <button type="button" id="searchBtn">검색</button> <%-- ID 추가 및 type을 button으로 변경 --%>
+    </form>
     <%-- 2. 상품 리스트 영역 --%>
     <div class="stock-list-container">
         <c:choose>
@@ -52,20 +50,20 @@
 
                         <%-- 정보 영역 --%>
                         <div class="prod-info-wrapper">
-                            <c:set var="badgeClass" value="${s.boardType eq 'DROP' ? 'bg-red' : (s.boardType eq 'HOT' ? 'bg-orange' : 'bg-blue')}" />
-                            <c:set var="badgeText" value="${s.boardType eq 'DROP' ? '급락' : (s.boardType eq 'HOT' ? '핫딜' : '최저가')}" />
-                            <div class="badge ${badgeClass}">${badgeText}</div>
-
-                            <div class="prod-info" style="margin-top: 8px;">
-                                <div class="prod-main-text" style="font-weight: bold; font-size: 1.1em;">
-                                    ${s.name} — <span class="price-highlight" style="color: #e74c3c;">₩<fmt:formatNumber value="${s.price}" pattern="#,###" /></span>
-                                </div>
-                                <div class="prod-sub-text" style="color: #888; font-size: 0.9em; margin-top: 4px;">
-                                    <fmt:formatDate value="${s.regDate}" pattern="yyyy.MM.dd HH:mm" /> | ${s.source}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+   					 <div class="prod-title-row">
+      					  <c:set var="badgeClass" value="${s.boardType eq 'DROP' ? 'bg-red' : (s.boardType eq 'HOT' ? 'bg-orange' : 'bg-green')}" />
+       					 <c:set var="badgeText" value="${s.boardType eq 'DROP' ? '급락' : (s.boardType eq 'HOT' ? '핫딜' : '최저가')}" />
+       					 <span class="badge ${badgeClass}">${badgeText}</span>
+       					 <span class="prod-main-text">
+         				   ${s.name} &mdash;
+         				   <span class="price-highlight">&#8361;<fmt:formatNumber value="${s.price}" pattern="#,###" /></span>
+       					 </span>
+   					 </div>
+   						 <div class="prod-sub-text">
+       					 <fmt:formatDate value="${s.regDate}" pattern="yyyy.MM.dd HH:mm" /> | ${s.source}
+   						 </div>
+						</div>
+					</div>
                 </c:forEach>
             </c:otherwise>
         </c:choose>
@@ -95,7 +93,7 @@
         </c:if>
     </div>
 </div>
-
+<%@ include file="/WEB-INF/views/common/footer.jsp"%>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(function() {
@@ -103,7 +101,7 @@
             event.preventDefault();
             const uri = "${currentUri}";
             const keyword = $('#keywordInput').val();
-            const searchType = $("select[name='searchType']").val();
+            const searchType = $("#searchType").val(); // ID 기반으로 변경
             
             // 검색 시 1페이지로 리셋하여 이동
             location.href = uri + "?page=1" 
@@ -111,3 +109,5 @@
                           + "&searchType=" + searchType
                           + "&keyword=" + encodeURIComponent(keyword);
         });
+    });
+</script>

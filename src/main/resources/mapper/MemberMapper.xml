@@ -16,14 +16,16 @@
     </resultMap>
     
     <insert id="insertSemiMember" parameterType="com.project.model.MemberDTO">
-    INSERT INTO MEMBERS (
-        PHONE,         PW,            EMAIL,         MEMBER_TYPE,   CREATED_AT     ) VALUES (
-        #{phone}, 
-        #{pw}, 
-        #{email, jdbcType=VARCHAR}, 
-        1,             SYSDATE
-    )
-</insert>
+        INSERT INTO MEMBERS (
+            PHONE, PW, EMAIL, MEMBER_TYPE, CREATED_AT
+        ) VALUES (
+            #{phone}, 
+            #{pw}, 
+            #{email, jdbcType=VARCHAR}, 
+            1, 
+            SYSDATE
+        )
+    </insert>
     
     <insert id="insertFull" parameterType="com.project.model.MemberDTO">
         INSERT INTO MEMBERS (
@@ -64,5 +66,23 @@
     <delete id="deleteMember" parameterType="string">
         DELETE FROM MEMBERS WHERE PHONE = #{phone}
     </delete>
+
+    <select id="getTotalMemberCount" resultType="int">
+        SELECT COUNT(*) FROM MEMBERS
+    </select>
+
+    <select id="selectAllMembers" resultMap="MemberResultMap">
+        SELECT 
+            PHONE, 
+            PW, 
+            NAME, 
+            NICKNAME, 
+            EMAIL, 
+            ADDRESS, 
+            MEMBER_TYPE, 
+            CREATED_AT 
+        FROM MEMBERS 
+        ORDER BY CREATED_AT DESC
+    </select>
 
 </mapper>

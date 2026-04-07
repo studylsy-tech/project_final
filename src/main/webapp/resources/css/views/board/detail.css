@@ -72,3 +72,37 @@
 .btn-delete { background: #e74c3c; color: #fff; }
 
 .btn-detail:hover { opacity: 0.8; }
+
+/* 버튼 그룹 정렬을 위한 컨테이너 설정 */
+.detail-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-group-left {
+    display: flex;
+    gap: 10px; /* 버튼 사이 간격 */
+}
+
+/* 원문 바로가기 버튼 스타일 */
+.btn-detail.btn-go {
+    background-color: #2196f3; /* 메인 테마 파란색 */
+    color: #ffffff;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-detail.btn-go:hover {
+    background-color: #1976d2; /* 호버 시 더 짙은 파란색 */
+    text-decoration: none;
+}
+
+/* 기존 목록 버튼과 통일감 유지 */
+.btn-list {
+    background-color: #777;
+    color: white;
+}

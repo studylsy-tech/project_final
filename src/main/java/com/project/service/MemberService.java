@@ -1,5 +1,7 @@
 package com.project.service;
 
+import java.util.List;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
@@ -18,15 +20,11 @@ public class MemberService {
 
 	// 회원 가입
 	public void registerMember(MemberDTO member) {
-		if ("SEMI".equals(member.getMemberType())) {
-			memberMapper.insertSemi(member); // 반회원
+		if (member.getMemberType() == 1) { // 준회원 타입 체크
+			memberMapper.insertSemiMember(member);
 		} else {
-			memberMapper.insertFull(member); // 정회원
+			memberMapper.insertFull(member);
 		}
-
-		// 본인의 확인용 로그 (추후 삭제 가능성 o)
-		// 아이디(폰) 로그인 타입
-		System.out.println("가입처리 완료 : " + member.getPhone() + " / 타입: " + member.getMemberType());
 	}
 
 	// 로그인 체크
@@ -36,20 +34,17 @@ public class MemberService {
 
 	// 회원 정보 수정
 	public int updateMember(MemberDTO member) {
-		// memberMapper를 호출해서 DB 수정을 요청 후, 수정 성공한 행의 개수 하나를 리턴 함.
 		return memberMapper.updateMember(member);
 	}
 
 	// 자동 로그인 쿠키 관리
 	public void handleCookie(String phone, String rememberMe, HttpServletResponse response) {
 		if ("on".equals(rememberMe)) {
-			// 체크했을 때: 7일짜리 쿠키 생성 => 설정 미지정 시 기본값은 session
 			Cookie cookie = new Cookie("rememberID", phone);
 			cookie.setMaxAge(60 * 60 * 24 * 7);
 			cookie.setPath("/");
 			response.addCookie(cookie);
 		} else {
-			// 체크 안 했거나 해제했을 때: 쿠키 삭제
 			Cookie cookie = new Cookie("rememberID", null);
 			cookie.setMaxAge(0);
 			cookie.setPath("/");
@@ -57,14 +52,26 @@ public class MemberService {
 		}
 	}
 
+	// 회원 삭제 (강제 탈퇴 포함)
 	public void deleteMember(String phone) {
-	    memberMapper.deleteMember(phone);
+		memberMapper.deleteMember(phone);
 	}
 
+	// 준회원 가입 처리
 	public int insertSemiMember(MemberDTO member) {
-	    // 1. DAO 또는 Mapper를 호출하여 실제 DB 저장을 수행합니다.
-	    // 2. 이전에 Mapper XML에서 등록한 id="insertSemiMember"와 연결됩니다.
-	    return memberMapper.insertSemiMember(member); 
+		return memberMapper.insertSemiMember(member);
+	}
+
+	// [수정] 전체 회원 수 조회
+	public int getTotalMemberCount() {
+		// Mapper를 호출하여 DB의 전체 회원 수를 반환합니다.
+		return memberMapper.getTotalMemberCount();
+	}
+
+	// [수정] 전체 회원 목록 조회
+	public List<MemberDTO> selectAllMembers() {
+		// Mapper를 호출하여 DB의 모든 회원 데이터를 리스트로 가져옵니다.
+		return memberMapper.selectAllMembers();
 	}
 	
 	// 비밀번호 재설정 (비밀번호만 업데이트)

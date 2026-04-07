@@ -83,8 +83,20 @@
             </tbody>
         </table>
     </div>
- 
-</div>
+ <%-- 테이블 섹션 하단에 버튼 영역 추가 --%>
+    <div class="detail-footer">
+        <div class="btn-group-left">
+            <%-- 메인 핫딜 목록으로 돌아가기 --%>
+            <a href="${path}/" class="btn-detail btn-list">목록으로</a>
+            
+            <%-- DB에 저장된 원문 URL(뽐뿌 등)로 이동 --%>
+            <c:if test="${not empty hotDeal.originUrl}">
+                <a href="${hotDeal.originUrl}" target="_blank" class="btn-detail btn-go">원문 바로가기</a>
+            </c:if>
+        </div>
+    </div>
+</div> <%-- .detail-container 닫는 태그 --%>
+
  
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>

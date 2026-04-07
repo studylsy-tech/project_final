@@ -4,82 +4,86 @@
 <mapper namespace="com.project.dao.SearchMapper">
 
     <sql id="search">
-	    <if test="searchType != null">
-	        <choose>
-	            <when test="searchType == 'drop'.toString()">
-	                AND BOARD_TYPE = 'DROP'
-	                <if test="keyword != null and keyword != ''">
-	                    AND PROD_NAME LIKE '%' || #{keyword} || '%'
-	                </if>
-	            </when>
-	            <when test="searchType == 'low'.toString()">
-	                AND BOARD_TYPE = 'HOT'
-	                <if test="keyword != null and keyword != ''">
-	                    AND PROD_NAME LIKE '%' || #{keyword} || '%'
-	                </if>
-	            </when>
-	            <otherwise>
-	                <if test="keyword != null and keyword != ''">
-	                    AND PROD_NAME LIKE '%' || #{keyword} || '%'
-	                </if>
-	            </otherwise>
-	        </choose>
-	    </if>
-	</sql>
+    <if test="searchType != null">
+        <choose>
+            <when test="searchType == 'title'.toString()">
+                AND PROD_NAME LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="searchType == 'url'.toString()">
+                AND ORIGIN_URL LIKE '%' || #{keyword} || '%'
+            </when>
+            <when test="searchType == 'content'.toString()">
+                AND PROD_NAME LIKE '%' || #{keyword} || '%'
+            </when>
+        </choose>
+    </if>
+</sql>
 
-    <select id="getSearchList" resultType="com.project.model.ProductDTO">
+<select id="getSearchList" resultType="com.project.model.ProductDTO">
         SELECT 
             PROD_ID as prodId,
             PROD_CODE as prodCode,
-            PROD_NAME as name,
-            PROD_PRICE as price,
+            PROD_NAME as name,       
+            PROD_PRICE as price,     
             BRAND as brand,
+            IMAGE_URL as imageUrl,   
+            SOURCE as source,        
+            BOARD_TYPE as boardType, 
             REG_DATE as regDate
         FROM Common_Product 
         WHERE 1=1
+        <choose>
+            <when test="boardType == 'DROP'"> AND BOARD_TYPE = 'DROP' </when>
+            <when test="boardType == 'LOW'"> AND BOARD_TYPE = 'HOT' </when>
+        </choose>
         <include refid="search"></include>
         ORDER BY PROD_ID DESC
         OFFSET #{pageStart} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
     </select>
 
-    <select id="getSearchCount" resultType="int">
+<select id="getHotDealSearchList" resultType="com.project.model.HotDealDTO">
+    SELECT 
+        DEAL_ID AS dealId, 
+        ORIGIN_URL AS originUrl, 
+        TITLE AS title, 
+        CURRENT_PRICE AS currentPrice, 
+        MALL_NAME AS mallName, 
+        LAST_UPDATE_DATE AS lastUpdateDate, 
+        IMAGE_URL AS imageUrl
+    FROM TB_HOTDEAL_TRACKER
+    WHERE 1=1
+    <if test="searchType == 'title'">
+        AND TITLE LIKE '%' || #{keyword} || '%'
+    </if>
+    <if test="searchType == 'url'">
+        AND ORIGIN_URL LIKE '%' || #{keyword} || '%'
+    </if>
+    ORDER BY LAST_UPDATE_DATE DESC
+    OFFSET #{pageStart} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
+</select>
+	
+	
+	
+	<select id="getHotDealSearchCount" resultType="int">
+    SELECT COUNT(*) 
+    FROM TB_HOTDEAL_TRACKER
+    WHERE 1=1
+    <if test="keyword != null and keyword != ''">
+        <choose>
+            <when test="searchType == 'title'"> AND TITLE LIKE '%' || #{keyword} || '%' </when>
+            <when test="searchType == 'url'"> AND ORIGIN_URL LIKE '%' || #{keyword} || '%' </when>
+            <otherwise> AND TITLE LIKE '%' || #{keyword} || '%' </otherwise>
+        </choose>
+    </if>
+</select>
+	<select id="getSearchCount" resultType="int">
         SELECT COUNT(*) 
         FROM Common_Product 
         WHERE 1=1
+        <choose>
+            <when test="boardType == 'DROP'"> AND BOARD_TYPE = 'DROP' </when>
+            <when test="boardType == 'LOW'"> AND BOARD_TYPE = 'HOT' </when>
+        </choose>
         <include refid="search"></include>
     </select>
-	
-	<!-- 핫딜 관련 쿼리문 -->
-	<select id="getHotDealSearchList" resultType="com.project.model.HotDealDTO">
-	    SELECT * FROM (
-	        SELECT 
-	            DEAL_ID AS dealId, 
-	            ORIGIN_URL AS originUrl, 
-	            TITLE AS title, 
-	            CURRENT_PRICE AS currentPrice, 
-	            START_PRICE AS startPrice, 
-	            MALL_NAME AS mallName, 
-	            COMMUNITY_NAME AS communityName, 
-	            LAST_UPDATE_DATE AS lastUpdateDate, 
-	            IMAGE_URL AS imageUrl,
-	            ROW_NUMBER() OVER(ORDER BY LAST_UPDATE_DATE DESC) AS rNum
-	        FROM TB_HOTDEAL_TRACKER
-	        WHERE 1=1
-	        <if test="keyword != null and keyword != ''">
-	            AND TITLE LIKE '%' || #{keyword} || '%'
-	        </if>
-	    ) 
-	    /* rowStart 대신 pageStart + 1을 사용하고, rowEnd 대신 pageStart + perPageNum을 사용합니다 */
-	    WHERE rNum BETWEEN (#{pageStart} + 1) AND (#{pageStart} + #{perPageNum})
-	</select>
-	
-	<select id="getHotDealSearchCount" resultType="int">
-	    SELECT COUNT(*) 
-	    FROM TB_HOTDEAL_TRACKER
-	    WHERE 1=1
-	    <if test="keyword != null and keyword != ''">
-	        AND TITLE LIKE '%' || #{keyword} || '%'
-	    </if>
-	</select>
-	
 </mapper>

@@ -35,4 +35,6 @@ public interface HotDealMapper {
     
     // 핫딜 가격 이력 조회
     List<Map<String, Object>> getHotDealPriceHistory(int dealId);
+
+	int deleteAllDeals();
 }

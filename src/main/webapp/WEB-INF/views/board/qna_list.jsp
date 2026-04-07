@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%-- JSTL 사용을 위한 선언문 추가 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<c:set var="path" value="${pageContext.request.contextPath}" />
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
 <link rel="stylesheet" href="${path}/resources/css/views/board/qna_list.css">
 
@@ -10,107 +11,63 @@
         <p>궁금하신 점을 남겨주시면 답변해 드립니다.</p>
     </div>
 
+    <%-- 검색 영역 --%>
+    <div class="search-area" style="margin-bottom: 20px; text-align: right;">
+        <select id="searchType" class="search-select">
+            <option value="t" ${pageMaker.cri.searchType eq 't' ? 'selected' : ''}>제목</option>
+            <option value="c" ${pageMaker.cri.searchType eq 'c' ? 'selected' : ''}>내용</option>
+            <option value="w" ${pageMaker.cri.searchType eq 'w' ? 'selected' : ''}>작성자</option>
+            <option value="tc" ${pageMaker.cri.searchType eq 'tc' ? 'selected' : ''}>제목+내용</option>
+        </select>
+        <input type="text" id="keywordInput" value="${pageMaker.cri.keyword}" 
+               class="search-input" placeholder="검색어를 입력하세요">
+        <button type="button" id="searchBtn" class="btn-search">검색</button>
+    </div>
+
+    <%-- 게시글 테이블 --%>
     <table class="board-table">
         <thead>
             <tr>
-                <th style="width: 8%;">번호</th>
-                <th style="width: 50%;">제목</th>
-                <th style="width: 15%;">작성자</th>
-                <th style="width: 12%;">상태</th>
-                <th style="width: 15%;">날짜</th>
+                <th class="col-no">번호</th>
+                <th class="col-title">제목</th>
+                <th class="col-writer">작성자</th>
+                <th class="col-status">상태</th>
+                <th class="col-date">날짜</th>
             </tr>
         </thead>
         <tbody>
-            <%-- Controller에서 보낸 'list'가 비어있지 않을 때 출력 --%>
-            <c:forEach items="${list}" var="board">
-                <tr>
-                    <%-- 소문자 필드 참조로 수정 --%>
-                    <td>${board.notice_no}</td>
-                    <td class="title-cell text-left">
-                        <a href="${path}/board/detail?notice_no=${board.notice_no}">${board.title}</a>
-                    </td>
-                    <td>${board.writer}</td>
-                    <td>
-                        <span class="badge ${board.board_type eq 'QNA' ? 'bg-blue' : 'bg-green'}">
-                            ${board.board_type eq 'QNA' ? '질문' : '공지'}
-                        </span>
-                    </td>
-                    <td>${board.indate}</td>
-                </tr>
-            </c:forEach>
-            
-            <%-- 데이터가 없을 경우 처리 --%>
-            <c:if test="${empty list}">
-                <tr>
-                    <td colspan="5" style="text-align:center;">등록된 문의사항이 없습니다.</td>
-                </tr>
-            </c:if>
-        </tbody>
-    </table>
-
-    <%-- 페이징 처리 영역 --%>
-    <div class="pagination-area" style="text-align: center; margin-top: 20px;">
-        <ul class="pagination" style="display: inline-flex; list-style: none; padding: 0;">
-            <%-- '이전' 버튼 --%>
-            <c:if test="${pageMaker.prev}">
-                <li style="margin: 0 5px;">
-                    <a href="${path}/board/qna${pageMaker.query(pageMaker.startPage - 1)}">이전</a>
-                </li>
-            </c:if>
-
-            <%-- 페이지 번호 목록 --%>
-            <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
-                <li style="margin: 0 5px;">
-                    <a href="${path}/board/qna${pageMaker.query(idx)}" 
-                       style="${pageMaker.criteria.page == idx ? 'font-weight: bold; color: #000; text-decoration: underline;' : 'color: #666;'}">
-                        ${idx}
-                    </a>
-                </li>
-            </c:forEach>
-
-            <%-- '다음' 버튼 --%>
-            <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-                <li style="margin: 0 5px;">
-                    <a href="${path}/board/qna${pageMaker.query(pageMaker.endPage + 1)}">다음</a>
-                </li>
-            </c:if>
-        </ul>
-    </div>
-	
-	<!-- 검색기능 -->
-	<div class="search-box">
-	    <select name="searchType" id="searchTypeSelect">
-	        <option value="t" ${pageMaker.criteria.searchType eq 't' ? 'selected' : ''}>제목</option>
-	        <option value="c" ${pageMaker.criteria.searchType eq 'c' ? 'selected' : ''}>내용</option>
-	        <option value="w" ${pageMaker.criteria.searchType eq 'w' ? 'selected' : ''}>작성자</option>
-	        <option value="tc" ${pageMaker.criteria.searchType eq 'tc' ? 'selected' : ''}>제목+내용</option>
-	    </select>
-	    
-	    <input type="text" name="keyword" id="keywordInput" value="${pageMaker.criteria.keyword}" placeholder="검색어 입력">
-	    <button id="searchBtn" class="btn-dark">검색</button>
-	</div>
-	
-    <div class="board-footer" style="width: 75%; margin-left: auto; margin-top: 20px; display: flex; justify-content: flex-end;">
-        <a href="${path}/board/qnaWrite" class="btn-dark">질문하기</a>
-    </div>
-</div>
-
-<script>
-    $(function(){
-        $('#searchBtn').on("click", function(event){
-            // 1. 단순하게 기본 경로 설정
-            var url = "qna?page=1"; 
-            
-            // 2. perPageNum 유지
-            url += "&perPageNum=${pageMaker.criteria.perPageNum}";
-            
-            // 3. 현재 입력창에 적힌 새로운 값을 직접 붙임
-            url += "&searchType=" + $("#searchTypeSelect").val();
-            url += "&keyword=" + encodeURIComponent($('#keywordInput').val());
-            
-            // 4. 이동
-            self.location = url;
-        });
-    });
-</script>
-<%@ include file="/WEB-INF/views/common/footer.jsp" %>
+            <c:choose>
+                <c:when test="${not empty list}">
+                    <c:forEach items="${list}" var="board">
+                        <tr>
+                            <td>${board.notice_no}</td>
+                            <td class="title-cell text-left">
+                                <%-- 답변 글인 경우 들여쓰기 표시 --%>
+                                <c:if test="${board.is_reply == 1}">
+                                    <span class="reply-indent" style="margin-left:20px;">└ [답변] </span>
+                                </c:if>
+                                <a href="${path}/board/detail?notice_no=${board.notice_no}">
+                                    <c:out value="${board.title}" />
+                                </a>
+                            </td>
+                            <td>${board.writer}</td>
+                            <td>
+                                <c:choose>
+                                    <%-- 답변글 자체일 때 --%>
+                                    <c:when test="${board.is_reply == 1}">
+                                        <span class="badge-status bg-gray">답변글</span>
+                                    </c:when>
+                                    <%-- 원본 질문글일 때 답변 여부 확인 --%>
+                                    <c:otherwise>
+                                        <c:choose>
+                                            <c:when test="${board.reply_count > 0}">
+                                                <span class="badge-status bg-success" style="color: blue;">답변완료</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="badge-status bg-danger" style="color: red;">미답변</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </c:otherwise>
+                                </c:choose>
+                            </td>
+                            <td><fmt:formatDate value="${board.indate}" pattern="yyyy-MM-dd
