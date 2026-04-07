@@ -16,6 +16,7 @@ public class MemberService {
 
 	@Autowired
 	private MemberMapper memberMapper;
+	
 
 	// 회원 가입
 	public void registerMember(MemberDTO member) {
@@ -72,5 +73,15 @@ public class MemberService {
 		// Mapper를 호출하여 DB의 모든 회원 데이터를 리스트로 가져옵니다.
 		return memberMapper.selectAllMembers();
 	}
+	
+	// 비밀번호 재설정 (비밀번호만 업데이트)
+	public int updatePassword(MemberDTO member) {
+	    return memberMapper.updatePassword(member);
+	}
 
+	// 비밀번호 찾기 시 회원 존재 여부 확인 (필요하다면 추가)
+	public int checkMemberForPw(MemberDTO member) {
+	    return memberMapper.checkUserForPw(member);
+	}
+	
 }

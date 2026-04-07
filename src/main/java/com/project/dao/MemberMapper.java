@@ -5,6 +5,7 @@ import com.project.model.MemberDTO;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Update;
 
 @Mapper
 public interface MemberMapper {
@@ -27,6 +28,14 @@ public interface MemberMapper {
 	void deleteMember(String phone);
 
 	int insertSemiMember(MemberDTO member);
+	
+	// 비밀번호 업데이트
+	@Update("UPDATE members SET pw = #{pw} WHERE phone = #{phone}")
+    int updatePassword(MemberDTO member);
+
+    // 비밀번호 찾기 시 회원 확인
+    int checkUserForPw(MemberDTO member);
+	
 
 	int getTotalMemberCount();
 
