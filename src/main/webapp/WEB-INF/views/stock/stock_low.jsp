@@ -28,40 +28,45 @@
     </div>
 
     <%-- 2. 상품 리스트 영역 --%>
-    <div class="stock-list-container">
-        <c:choose>
-            <c:when test="${empty stockList}">
-                <div style="text-align: center; padding: 50px; color: #999;">조회된 최저가 데이터가 없습니다.</div>
-            </c:when>
-            <c:otherwise>
-                <c:forEach var="s" items="${stockList}">
-                    <%-- 상세 페이지 경로 설정 --%>
-                    <c:set var="detailUrl" value="${path}/dashboard/detail?prodId=${s.prodId}" />
-				
-                    <div class="stock-card" onclick="location.href='${detailUrl}'">
+    <%-- 2. 상품 리스트 영역 --%>
+<div class="stock-list-container">
+    <c:choose>
+        <c:when test="${empty stockList}">
+            <div style="text-align: center; padding: 50px; color: #999;">조회된 최저가 데이터가 없습니다.</div>
+        </c:when>
+        <c:otherwise>
+            <c:forEach var="s" items="${stockList}">
+                <c:set var="detailUrl" value="${path}/dashboard/detail?prodId=${s.prodId}" />
+                
+                <div class="stock-card" onclick="location.href='${detailUrl}'">
+                    <%-- 이미지 영역 --%>
+                    <div class="prod-img-wrapper">
+                        <c:choose>
+                            <c:when test="${not empty s.imageUrl}">
+                                <img src="${s.imageUrl}" alt="${s.name}" class="prod-img"
+                                     onerror="this.src='${path}/resources/images/no-image.png'">
+                            </c:when>
+                            <c:otherwise>
+                                <img src="${path}/resources/images/no-image.png" alt="이미지없음" class="prod-img">
+                            </c:otherwise>
+                        </c:choose>
+                    </div>
 
-    <div class="prod-img-wrapper">
-        <c:choose>
-            <c:when test="${not empty s.imageUrl}">
-                <img src="${s.imageUrl}" alt="${s.name}"
-                     onerror="this.src='${path}/resources/images/no-image.png'">
-            </c:when>
-            <c:otherwise>
-                <img src="${path}/resources/images/no-image.png" alt="이미지없음">
-            </c:otherwise>
-        </c:choose>
-    </div>
-
-                        <div class="prod-info-wrapper">
-                            <%-- 최저가 뱃지 고정 --%>
-                            <div class="badge bg-blue" style="display:inline-block; padding: 3px 8px; background-color: #3498db; color: white; border-radius: 4px; font-size: 0.8em;">최저가</div>
-
+                    <%-- 정보 영역 --%>
+                    <div class="prod-info-wrapper">
+                        <div class="prod-title-row">
+                            <span class="badge bg-blue">최저가</span>
+                            <span class="prod-main-text">${s.name}</span>
+                        </div>
+                        <div class="prod-sub-text">
+                            현재가: <span class="price-highlight"><fmt:formatNumber value="${s.price}" pattern="#,###"/>원</span>
+                        </div>
+                    </div>
+                </div> <%-- .stock-card END --%>
+            </c:forEach>
+        </c:otherwise>
+    </c:choose>
 </div>
-                    
-                </c:forEach>
-            </c:otherwise>
-        </c:choose>
-    </div>
 
     <%-- 3. 페이징 처리 영역 --%>
     <div style="text-align: center; margin: 30px 0; font-size: 16px;">
