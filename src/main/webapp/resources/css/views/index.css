@@ -200,3 +200,31 @@
     background: #ddd;
     margin: 0 10px;
 }
+
+/* 티커 박스: 한 줄만 보이도록 높이 제한 및 숨김 처리 */
+.ticker-box {
+    height: 30px; /* 한 줄 높이 */
+    overflow: hidden;
+    position: relative;
+}
+
+#mainTicker {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    animation: ticker-slide 10s infinite; /* 10초 동안 무한 반복 */
+}
+
+#mainTicker li {
+    height: 30px;
+    line-height: 30px;
+}
+
+/* 아래에서 위로 올라가는 애니메이션 */
+@keyframes ticker-slide {
+    0% { transform: translateY(0); }
+    25% { transform: translateY(-30px); } /* 1번째 아이템 이동 */
+    50% { transform: translateY(-60px); } /* 2번째 아이템 이동 */
+    75% { transform: translateY(-90px); } /* 3번째 아이템 이동 (필요시) */
+    100% { transform: translateY(0); }    /* 다시 처음으로 */
+}

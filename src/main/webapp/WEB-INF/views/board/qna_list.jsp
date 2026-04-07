@@ -11,12 +11,12 @@
         <p>궁금하신 점을 남겨주시면 답변해 드립니다.</p>
     </div>
 
-    <%-- 검색 영역 (상단 고정) --%>
+    <%-- 검색 영역 --%>
     <div class="search-area">
         <select id="searchType" class="search-select">
             <option value="title" ${pageMaker.cri.searchType eq 'title' ? 'selected' : ''}>제목</option>
-            <option value="writer" ${pageMaker.cri.searchType eq 'writer' ? 'selected' : ''}>작성자</option>
             <option value="content" ${pageMaker.cri.searchType eq 'content' ? 'selected' : ''}>내용</option>
+            <option value="writer" ${pageMaker.cri.searchType eq 'writer' ? 'selected' : ''}>작성자</option>
         </select>
         <input type="text" id="keywordInput" value="${pageMaker.cri.keyword}" 
                class="search-input" placeholder="검색어를 입력하세요">
@@ -40,8 +40,9 @@
                         <tr>
                             <td>${board.notice_no}</td>
                             <td class="title-cell text-left">
+                                <%-- 답변글일 경우 들여쓰기 표시 --%>
                                 <c:if test="${board.is_reply == 1}">
-                                    <span class="reply-indent">└ [답변] </span>
+                                    <span class="reply-indent" style="margin-left: 15px;">└ [답변] </span>
                                 </c:if>
                                 <a href="${path}/board/detail?notice_no=${board.notice_no}">
                                     <c:out value="${board.title}" />
@@ -56,10 +57,10 @@
                                     <c:otherwise>
                                         <c:choose>
                                             <c:when test="${board.reply_count > 0}">
-                                                <span class="badge-status bg-success">답변완료</span>
+                                                <span class="badge-status bg-success" style="color: green;">답변완료</span>
                                             </c:when>
                                             <c:otherwise>
-                                                <span class="badge-status bg-danger">미답변</span>
+                                                <span class="badge-status bg-danger" style="color: red;">미답변</span>
                                             </c:otherwise>
                                         </c:choose>
                                     </c:otherwise>
@@ -71,33 +72,34 @@
                 </c:when>
                 <c:otherwise>
                     <tr>
-                        <td colspan="5" class="empty-row">등록된 문의사항이 없습니다.</td>
+                        <td colspan="5" class="empty-row" style="text-align:center; padding: 20px;">등록된 문의사항이 없습니다.</td>
                     </tr>
                 </c:otherwise>
             </c:choose>
         </tbody>
     </table>
 
-    <%-- 페이징 처리 영역 (다른 작업자의 query/makeSearch 로직 통합) --%>
-    <div class="pagination-container">
-        <ul class="pagination">
+    <%-- 페이징 처리 영역 --%>
+    <div class="pagination-container" style="text-align: center; margin-top: 30px;">
+        <ul class="pagination" style="display: inline-flex; list-style: none; padding: 0;">
             <c:if test="${pageMaker.prev}">
-                <li>
+                <li style="margin: 0 5px;">
                     <a href="${path}/search/list${pageMaker.makeSearch(pageMaker.startPage - 1)}&boardType=QNA">이전</a>
                 </li>
             </c:if>
 
             <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
-                <li>
+                <li style="margin: 0 5px;">
                     <a href="${path}/search/list${pageMaker.makeSearch(idx)}&boardType=QNA" 
-                       class="${pageMaker.cri.page == idx ? 'active' : ''}">
+                       class="${pageMaker.cri.page == idx ? 'active' : ''}"
+                       style="${pageMaker.cri.page == idx ? 'font-weight: bold; color: blue;' : ''}">
                         ${idx}
                     </a>
                 </li>
             </c:forEach>
 
             <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-                <li>
+                <li style="margin: 0 5px;">
                     <a href="${path}/search/list${pageMaker.makeSearch(pageMaker.endPage + 1)}&boardType=QNA">다음</a>
                 </li>
             </c:if>
@@ -105,7 +107,7 @@
     </div>
 
     <%-- 버튼 영역 --%>
-    <div class="board-footer">
+    <div class="board-footer" style="text-align: right; margin-top: 20px;">
         <a href="${path}/board/qnaWrite" class="btn-dark">질문하기</a>
     </div>
 </div>
@@ -113,7 +115,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-    // 검색 버튼 클릭 시 URL 이동 로직
+    // 검색 버튼 클릭 이벤트
     $(document).on("click", "#searchBtn", function(e) {
         e.preventDefault();
         
@@ -122,6 +124,7 @@ $(document).ready(function() {
         const perPageNum = "${pageMaker.cri.perPageNum}";
         const contextPath = "${path}";
 
+        // 검색 시 1페이지로 리셋 및 QNA 타입 유지
         let url = contextPath + "/search/list"
                 + "?page=1"
                 + "&perPageNum=" + (perPageNum || 10)
@@ -132,7 +135,7 @@ $(document).ready(function() {
         location.href = url;
     });
 
-    // 엔터키 입력 시 검색 실행
+    // 엔터키 지원
     $(document).on("keydown", "#keywordInput", function(e) {
         if (e.keyCode === 13) {
             $("#searchBtn").click();

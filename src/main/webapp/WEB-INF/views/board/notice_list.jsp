@@ -11,18 +11,19 @@
         <p>플랫폼의 새로운 소식을 전해드립니다.</p>
     </div>
 
-    <%-- 검색 영역 (상단) --%>
+    <%-- 검색 영역 --%>
     <div class="search-area">
         <select id="searchType" class="search-select">
             <option value="title" ${pageMaker.cri.searchType eq 'title' ? 'selected' : ''}>제목</option>
-            <option value="writer" ${pageMaker.cri.searchType eq 'writer' ? 'selected' : ''}>작성자</option>
             <option value="content" ${pageMaker.cri.searchType eq 'content' ? 'selected' : ''}>내용</option>
+            <option value="writer" ${pageMaker.cri.searchType eq 'writer' ? 'selected' : ''}>작성자</option>
         </select>
         <input type="text" id="keywordInput" value="${pageMaker.cri.keyword}" 
                class="search-input" placeholder="검색어를 입력하세요">
         <button type="button" id="searchBtn" class="btn-search">검색</button>
     </div>
 
+    <%-- 게시판 목록 --%>
     <table class="board-table">
         <thead>
             <tr>
@@ -62,18 +63,18 @@
         </tbody>
     </table>
 
-    <%-- 페이징 영역 (다른 작업자의 query/makeSearch 통합) --%>
+    <%-- 페이징 영역 --%>
     <div class="pagination-container">
         <ul class="pagination">
             <c:if test="${pageMaker.prev}">
                 <li>
-                    <a href="${path}/search/list${pageMaker.makeSearch(pageMaker.startPage - 1)}&boardType=NOTICE">이전</a>
+                    <a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.startPage - 1)}">이전</a>
                 </li>
             </c:if>
 
             <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
                 <li>
-                    <a href="${path}/search/list${pageMaker.makeSearch(idx)}&boardType=NOTICE" 
+                    <a href="${path}/board/notice${pageMaker.makeSearch(idx)}" 
                        class="${pageMaker.cri.page == idx ? 'active' : ''}">
                         ${idx}
                     </a>
@@ -82,15 +83,15 @@
 
             <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
                 <li>
-                    <a href="${path}/search/list${pageMaker.makeSearch(pageMaker.endPage + 1)}&boardType=NOTICE">다음</a>
+                    <a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.endPage + 1)}">다음</a>
                 </li>
             </c:if>
         </ul>
     </div>
 
     <%-- 관리자 권한 확인 및 등록 버튼 --%>
-    <c:if test="${loginUser.memberType == 0}">
-        <div class="board-footer">
+    <c:if test="${loginUser.memberType == 'ADMIN' || loginUser.memberType == 0}">
+        <div class="board-footer" style="text-align: right; margin-top: 20px;">
             <a href="${path}/board/write?type=NOTICE" class="btn-dark">공지등록</a>
         </div>
     </c:if>
@@ -99,7 +100,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-    // 1. 검색 버튼 클릭 이벤트
+    // 검색 버튼 클릭 이벤트
     $(document).on("click", "#searchBtn", function(e) {
         e.preventDefault();
         
@@ -108,18 +109,16 @@ $(document).ready(function() {
         const perPageNum = "${pageMaker.cri.perPageNum}";
         const contextPath = "${path}";
 
-        // URL 생성 (기존 search/list 경로 유지)
-        let url = contextPath + "/search/list"
+        let url = contextPath + "/board/notice"
                 + "?page=1"
                 + "&perPageNum=" + (perPageNum || 10)
-                + "&boardType=NOTICE"
                 + "&searchType=" + searchType
                 + "&keyword=" + encodeURIComponent(keyword);
 
         location.href = url;
     });
 
-    // 2. 엔터키 지원
+    // 엔터키 지원
     $(document).on("keydown", "#keywordInput", function(e) {
         if (e.keyCode === 13) {
             $("#searchBtn").click();
