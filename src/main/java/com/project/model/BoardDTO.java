@@ -16,4 +16,5 @@ public class BoardDTO {
     private int is_reply;
     
     private int reply_count; 
+    private String status;
 }

@@ -8,11 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import com.project.model.BoardDTO;
 import com.project.model.MemberDTO;
 import com.project.service.AdminService;
 import com.project.service.HotDealService;
 import com.project.service.BoardService;
 import com.project.service.MemberService; // 추가
+import com.project.util.Criteria;
+import com.project.util.PageMaker;
+import com.project.util.SearchCriteria;
+import com.project.util.SearchPageMaker;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -77,21 +84,40 @@ public class AdminController {
         return "admin/crawling_status";
     }
 
-    // 공지사항 관리 페이지 이동
+ // 공지사항 관리 페이지 이동 (수정본)
     @GetMapping("/notice_manage")
-    public String noticeManage(HttpSession session) {
+    public String noticeManage(SearchCriteria scri, HttpSession session, Model model) {
         if (!isAdmin(session)) return "redirect:/";
+
+        // 10개씩 보여주기 설정
+        scri.setPerPageNum(10);
+        scri.setBoardType("NOTICE");
+
+        // 페이징된 목록과 전체 개수 조회
+        List<BoardDTO> noticeList = boardService.getNoticeListPaging(scri);
+        int totalCount = boardService.getNoticeCount();
+
+        // SearchPageMaker 활용
+        SearchPageMaker pageMaker = new SearchPageMaker();
+        pageMaker.setCri(scri);
+        pageMaker.setTotalCount(totalCount);
+        pageMaker.setDisplayPageNum(5); 
+
+        model.addAttribute("noticeList", noticeList);
+        model.addAttribute("pm", pageMaker);
+        
         return "admin/notice_manage";
     }
 
-    // AJAX: 통계 새로고침
-    @GetMapping("/refreshStats.do")
-    @ResponseBody
-    public Map<String, Object> refreshStats() {
-        Map<String, Object> stats = adminService.getDashboardStats();
-        stats.put("unansweredCount", boardService.getUnansweredCount());
-        stats.put("totalMemberCount", memberService.getTotalMemberCount()); // 회원 수 추가
-        return stats; 
+    // 상태 변경을 처리할 매핑 추가
+    @GetMapping("/updateNoticeStatus")
+    public String updateNoticeStatus(@RequestParam("notice_no") int no, 
+                                     @RequestParam("status") String status, 
+                                     HttpSession session) {
+        if (!isAdmin(session)) return "redirect:/";
+        
+        boardService.updateBoardStatus(no, status);
+        return "redirect:/admin/notice_manage";
     }
 
     @PostMapping("/startPriceUpdate.do")
@@ -160,4 +186,6 @@ public class AdminController {
         // 3. 핫딜 전용 엔진 설정 JSP 반환
         return "admin/hotdeal_engine"; 
     }
+    
+    
 }

@@ -1,5 +1,5 @@
 package com.project.dao;
-
+import org.apache.ibatis.annotations.Param;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.project.model.BoardDTO;
@@ -25,4 +25,9 @@ public interface BoardMapper {
     int deleteBoard(int notice_no);
 
 	int getUnansweredCount();
-}
+
+	List<BoardDTO> getNoticeList();
+
+	void updateBoardStatus(@Param("notice_no") int no, @Param("status") String status);
+
+	List<BoardDTO> getNoticeListPaging(SearchCriteria scri);}

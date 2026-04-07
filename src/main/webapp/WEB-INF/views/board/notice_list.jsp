@@ -6,39 +6,24 @@
 <link rel="stylesheet" href="${path}/resources/css/views/board/notice_list.css">
 
 <div class="board-wrapper">
-    <%-- 상단 타이틀 --%>
     <div class="board-title-area">
         <h2>공지사항</h2>
         <p>플랫폼의 새로운 소식을 전해드립니다.</p>
     </div>
 
     <%-- 검색 영역 --%>
-<<<<<<< HEAD
     <div class="search-area">
-=======
-    <div class="search-area" style="margin-bottom: 20px; text-align: right;">
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
         <select id="searchType" class="search-select">
-<<<<<<< HEAD
             <option value="title" ${pageMaker.cri.searchType eq 'title' ? 'selected' : ''}>제목</option>
             <option value="content" ${pageMaker.cri.searchType eq 'content' ? 'selected' : ''}>내용</option>
             <option value="writer" ${pageMaker.cri.searchType eq 'writer' ? 'selected' : ''}>작성자</option>
-=======
-            <option value="t" ${pageMaker.cri.searchType eq 't' ? 'selected' : ''}>제목</option>
-            <option value="c" ${pageMaker.cri.searchType eq 'c' ? 'selected' : ''}>내용</option>
-            <option value="tc" ${pageMaker.cri.searchType eq 'tc' ? 'selected' : ''}>제목+내용</option>
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
         </select>
         <input type="text" id="keywordInput" value="${pageMaker.cri.keyword}" 
                class="search-input" placeholder="검색어를 입력하세요">
         <button type="button" id="searchBtn" class="btn-search">검색</button>
     </div>
 
-<<<<<<< HEAD
     <%-- 게시판 목록 --%>
-=======
-    <%-- 게시글 테이블 --%>
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
     <table class="board-table">
         <thead>
             <tr>
@@ -64,7 +49,7 @@
                                 </a>
                             </td>
                             <td>${board.writer}</td>
-                            <td><fmt:formatDate value="${board.indate}" pattern="yyyy-MM-dd"/></td>
+                            <td>${board.indate}</td>
                             <td>${board.count}</td>
                         </tr>
                     </c:forEach>
@@ -79,58 +64,33 @@
     </table>
 
     <%-- 페이징 영역 --%>
-<<<<<<< HEAD
     <div class="pagination-container">
         <ul class="pagination">
-=======
-    <div class="pagination-container" style="text-align: center; margin-top: 30px;">
-        <ul class="pagination" style="display: inline-flex; list-style: none; padding: 0;">
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
             <c:if test="${pageMaker.prev}">
-<<<<<<< HEAD
                 <li>
-=======
-                <li style="margin: 0 5px;">
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
                     <a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.startPage - 1)}">이전</a>
                 </li>
             </c:if>
 
             <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
-<<<<<<< HEAD
                 <li>
                     <a href="${path}/board/notice${pageMaker.makeSearch(idx)}" 
                        class="${pageMaker.cri.page == idx ? 'active' : ''}">
-=======
-                <li style="margin: 0 5px;">
-                    <a href="${path}/board/notice${pageMaker.makeSearch(idx)}" 
-                       style="${pageMaker.cri.page == idx ? 'font-weight: bold; color: #ff0000;' : ''}">
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
                         ${idx}
                     </a>
                 </li>
             </c:forEach>
 
             <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
-<<<<<<< HEAD
                 <li>
-=======
-                <li style="margin: 0 5px;">
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
                     <a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.endPage + 1)}">다음</a>
                 </li>
             </c:if>
         </ul>
     </div>
 
-<<<<<<< HEAD
     <%-- 관리자 권한 확인 및 등록 버튼 --%>
-    <c:if test="${loginUser.memberType == 'ADMIN' || loginUser.memberType == 0}">
-=======
-    <%-- 관리자 버튼 영역 (memberType 0 = ADMIN) --%>
-    <c:if test="${loginUser.memberType == 0}">
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
-        <div class="board-footer" style="text-align: right; margin-top: 20px;">
+<c:if test="${loginUser.memberType == 0}">        <div class="board-footer" style="text-align: right; margin-top: 20px;">
             <a href="${path}/board/write?type=NOTICE" class="btn-dark">공지등록</a>
         </div>
     </c:if>
@@ -139,49 +99,28 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-<<<<<<< HEAD
     // 검색 버튼 클릭 이벤트
     $(document).on("click", "#searchBtn", function(e) {
         e.preventDefault();
         
-=======
-    // 검색 로직 통합
-    const searchHandler = function() {
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
         const keyword = $('#keywordInput').val();
         const searchType = $("#searchType").val();
         const perPageNum = "${pageMaker.cri.perPageNum}";
-<<<<<<< HEAD
         const contextPath = "${path}";
 
         let url = contextPath + "/board/notice"
-=======
-        
-        let url = "${path}/board/notice"
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
                 + "?page=1"
                 + "&perPageNum=" + (perPageNum || 10)
                 + "&searchType=" + searchType
                 + "&keyword=" + encodeURIComponent(keyword);
 
         location.href = url;
-    };
-
-    // 버튼 클릭 시 검색
-    $("#searchBtn").on("click", function(e) {
-        e.preventDefault();
-        searchHandler();
     });
 
-<<<<<<< HEAD
     // 엔터키 지원
     $(document).on("keydown", "#keywordInput", function(e) {
-=======
-    // 엔터키 입력 시 검색
-    $("#keywordInput").on("keydown", function(e) {
->>>>>>> branch 'develop' of https://github.com/studylsy-tech/project_final.git
         if (e.keyCode === 13) {
-            searchHandler();
+            $("#searchBtn").click();
         }
     });
 });
