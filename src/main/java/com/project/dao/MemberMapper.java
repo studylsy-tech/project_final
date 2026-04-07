@@ -1,6 +1,9 @@
 package com.project.dao;
 
 import com.project.model.MemberDTO;
+
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -24,4 +27,8 @@ public interface MemberMapper {
 	void deleteMember(String phone);
 
 	int insertSemiMember(MemberDTO member);
+
+	int getTotalMemberCount();
+
+	List<MemberDTO> selectAllMembers();
 }

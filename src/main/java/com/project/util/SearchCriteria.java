@@ -35,4 +35,14 @@ public class SearchCriteria extends Criteria {
         return super.toString() + " Range: " + pageStart + "~" + pageEnd + 
                " [searchType=" + searchType + ", keyword=" + keyword + "]";
     }
+    
+    public int getPageStart() {
+        // MyBatis가 #{pageStart}를 호출할 때 실시간으로 계산해서 반환
+        return (super.getPage() - 1) * super.getPerPageNum() + 1;
+    }
+
+    public int getPageEnd() {
+        // MyBatis가 #{pageEnd}를 호출할 때 실시간으로 계산해서 반환
+        return super.getPage() * super.getPerPageNum();
+    }
 }

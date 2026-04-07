@@ -13,4 +13,6 @@ public interface BoardService {
     void insertBoard(BoardDTO board);
     void updateCount(int notice_no);
     List<BoardDTO> selectBoardList(SearchCriteria scri);
+	int deleteBoard(int notice_no);
+	int getUnansweredCount();
 }

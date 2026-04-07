@@ -26,11 +26,19 @@
     </div>
 
     <div class="detail-footer">
+        <%-- 게시판 타입에 따른 목록 이동 --%>
         <a href="${path}/board/${board.board_type == 'NOTICE' ? 'notice' : 'qna'}" class="btn-detail btn-list">목록으로</a>
         
         <div class="btn-group">
-            <%-- 본인 글이거나 관리자일 때만 수정/삭제 노출 --%>
-            <c:if test="${loginUser.nickname == board.writer || loginUser.memberType == 'ADMIN'}">
+            <%-- 1. [관리자 전용] 답변하기 버튼: 관리자(0)이고 QNA 글일 때만 노출 --%>
+            <c:if test="${loginUser.memberType == 0 && board.board_type == 'QNA'}">
+                <a href="${path}/board/qnaReply?notice_no=${board.notice_no}" 
+                   class="btn-detail btn-reply" 
+                   style="background-color: #444; color: #fff; margin-right: 5px;">답변하기</a>
+            </c:if>
+
+            <%-- 2. 수정/삭제 버튼: 본인 글이거나 관리자(0)일 때 노출 --%>
+            <c:if test="${loginUser.nickname == board.writer || loginUser.memberType == 0}">
                 <a href="${path}/board/modify?notice_no=${board.notice_no}" class="btn-detail btn-edit">수정</a>
                 <button type="button" class="btn-detail btn-delete" onclick="deleteBoard();">삭제</button>
             </c:if>

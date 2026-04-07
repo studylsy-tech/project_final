@@ -45,7 +45,7 @@
 				<%-- 메인 페이지이므로 상위 10개만 깔끔하게 노출 --%>
 				<c:if test="${status.index < 10}">
 					<div class="hotdeal-item"
-						onclick="location.href='${deal.originUrl}'"
+						onclick="location.href='${path}/hotdeal/detail?dealId=${deal.dealId}'"
 						style="cursor: pointer;">
 						<div class="img-wrapper">
 							<c:choose>
@@ -83,7 +83,7 @@
 	<%-- 우측: 급락 순위 --%>
 	<div class="drop-rank-container">
       <h3 style="
-                width: 100%; 
+                width: 1ss00%; 
                 margin-top: -15px; 
                 margin-bottom: 15px; 
                 border-bottom: 2px solid #2196f3; 
@@ -100,7 +100,7 @@
 	<ul style="list-style: none; padding: 0; margin: 0;">
 			<c:forEach var="i" begin="1" end="10">
 				<li class="rank-list-item"><span class="rank-num">${i}</span> <span
-					style="flex: 1; margin: 0 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">테스트
+					style="flex: 2.5; margin: 0 10px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">테스트
 						상품명 ${i}</span> <span style="color: #ff4d4d; font-weight: bold;">-15%</span>
 				</li>
 			</c:forEach>
