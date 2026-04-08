@@ -3,10 +3,10 @@
 <c:set var="path" value="${pageContext.request.contextPath}" />
 
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-<link rel="stylesheet" href="${path}/resources/css/views/member/find_pw.css?v=2">
+<link rel="stylesheet" href="${path}/resources/css/views/member/find_pw.css?v=999">
 
 <main>
-    <div class="form-card">
+    <div class="form-card"> 
         <h1>비밀번호 찾기</h1>
 
         <div class="field">
@@ -16,20 +16,22 @@
 
         <div class="field">
             <label for="email">이메일 주소</label>
-            <input type="email" id="email" placeholder="example@email.com">
-            <button type="button" id="send_code_btn" class="btn-verify">인증번호 받기</button>
+            <div class="input-group"> 
+                <input type="email" id="email" placeholder="example@email.com">
+                <button type="button" id="send_code_btn" class="btn-verify">인증번호 받기</button>
+            </div>
         </div>
-
+        
         <div id="auth_area" style="display:none;">
             <div class="field">
                 <label for="auth_code">인증번호</label>
-                <input type="text" id="auth_code" placeholder="6자리 입력">
-                <button type="button" id="verify_btn" class="btn-verify">인증 확인</button>
+                <div class="input-group">
+                    <input type="text" id="auth_code" placeholder="6자리 입력">
+                    <button type="button" id="verify_btn" class="btn-verify">인증 확인</button>
+                </div>
             </div>
         </div>
-    </div>
-</main>
-
+    </div> </main>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     var serverCode = ""; 
