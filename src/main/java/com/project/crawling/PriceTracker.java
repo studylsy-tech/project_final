@@ -31,10 +31,10 @@ public class PriceTracker {
     }
 
     /**
-     * [1] 일반 상품 가격 추적
+     * [1] 일반 상품 가격 추적 (핫딜 스타일로 보완)
      */
     public int updateRegisteredProductPrices() {
-        this.stopRequested = false; // 시작 시 플래그 초기화
+        this.stopRequested = false;
         int count = 0;
         List<ProductDTO> targetList = adminMapper.getNormalProductList();
         if (targetList.isEmpty()) return 0;
@@ -43,32 +43,41 @@ public class PriceTracker {
         
         try {
             for (ProductDTO product : targetList) {
-                // 정지 체크
                 if (stopRequested) break;
 
+                // ID가 정상인지 체크 (어제 배운 방어 로직)
+                if (product.getProdId() <= 0) continue;
+
                 try {
-                    driver.get("https://search.danawa.com/dsearch.php?query=" + java.net.URLEncoder.encode(product.getProdName(), "UTF-8"));
-                    Thread.sleep(2000); 
+                    // 검색어 정제 (30자 제한)
+                    String searchKeyword = product.getProdName().replaceAll("\\[.*?\\]", "").trim();
+                    if (searchKeyword.length() > 30) searchKeyword = searchKeyword.substring(0, 30).trim();
+
+                    driver.get("https://search.danawa.com/dsearch.php?query=" + java.net.URLEncoder.encode(searchKeyword, "UTF-8"));
+                    Thread.sleep(2500); // 다나와 차단 방지 대기시간
 
                     WebElement priceElem = driver.findElement(By.cssSelector(".product_list .prod_item:first-child .price_sect strong"));
                     int currentPrice = Integer.parseInt(priceElem.getText().replaceAll("[^0-9]", ""));
 
-                    adminMapper.insertCommonPriceHistory(product.getProdId(), currentPrice);
+                    // [핵심] 1. 메인 테이블 가격 갱신
                     adminMapper.updateCurrentPrice(product.getProdId(), currentPrice);
                     
+                    // [핵심] 2. 이력 테이블(그래프용)에 점 찍기
+                    adminMapper.insertCommonPriceHistory(product.getProdId(), currentPrice);
+                    
                     count++;
-                    log.info("[일반] 상품명: {} | 갱신가: {}원", product.getProdName(), currentPrice);
+                    log.info("[일반 성공] {} : {}원", product.getProdName(), currentPrice);
                     
                 } catch (Exception e) {
-                    log.error("[일반 갱신 실패] 상품명: {} | 원인: {}", product.getProdName(), e.getMessage());
+                    log.error("[일반 실패] {} : {}", product.getProdName(), e.getMessage());
                 }
             }
         } finally {
+            // 모든 수집이 끝난 뒤에만 드라이버 종료
             seleniumDriver.closeDriver();
         }
         return count;
     }
-
     /**
      * [2] 핫딜 상품 가격 추적
      */
@@ -139,4 +148,6 @@ public class PriceTracker {
         
         return count;
     }
+    
+    
 }

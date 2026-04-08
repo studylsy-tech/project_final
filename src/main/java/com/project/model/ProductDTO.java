@@ -29,11 +29,10 @@ public class ProductDTO {
     private String category;       
     
     private long targetPrice;
-
-	public String getProdName() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    private int checkInterval;   // [추가] 확인 주기 (MyBatis 에러 해결용)
+    public String getProdName() {
+        return this.name;
+    }
 
 
 }
