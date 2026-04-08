@@ -13,4 +13,6 @@ public class HotDealDTO {
     private String lastUpdateDate;
     private String imageUrl;
     // 기존 수동 setStartPrice() 메서드 삭제
+    
+    private int historyId; 
 }

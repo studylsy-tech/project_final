@@ -39,7 +39,7 @@ public class HotDealServiceImpl implements HotDealService {
     
     @Override
     public int fetchAndStoreDeals(int ignoredLimit) {
-        isCrawling = true; // 수집 시작 상태로 설정
+        isCrawling = true; 
         int newlyAddedCount = 0;
         int page = 1;
         ObjectMapper mapper = new ObjectMapper();
@@ -47,8 +47,6 @@ public class HotDealServiceImpl implements HotDealService {
         log.info("핫딜 수집 엔진 시작...");
 
         try {
-            // 사용자가 stop을 호출하여 isCrawling이 false가 될 때까지 무한 반복
-            // 단, 사이트의 물리적 페이지 한계(예: 500페이지)는 안전장치로 두는 것이 좋습니다.
             while (isCrawling && page <= 500) {
                 String apiUrl = "https://hotdeal.zip/api/deals.php?page=" + page + "&category=all";
                 URL url = new URL(apiUrl);
@@ -64,15 +62,17 @@ public class HotDealServiceImpl implements HotDealService {
                     JsonNode root = mapper.readTree(sb.toString());
                     JsonNode deals = root.path("data");
 
-                    // 더 이상 가져올 데이터가 없으면 종료
                     if (deals.isMissingNode() || deals.size() == 0) {
                         log.info("더 이상 수집할 데이터가 없습니다. 종료합니다.");
                         break;
                     }
 
                     for (JsonNode deal : deals) {
-                        // 루프 내부에서도 정지 신호를 즉각 반영
                         if (!isCrawling) break;
+
+                        // 1. 변수 선언 (price)
+                        String priceStr = deal.path("price").asText("0");
+                        long price = Long.parseLong(priceStr.replaceAll("[^0-9]", ""));
 
                         HotDealDTO dto = new HotDealDTO();
                         dto.setOriginUrl(deal.path("post_url").asText());
@@ -81,28 +81,41 @@ public class HotDealServiceImpl implements HotDealService {
                         dto.setCommunityName(deal.path("community_name").asText("기타"));
                         dto.setImageUrl(deal.path("thumbnail_url").asText(""));
                         
-                        String priceStr = deal.path("price").asText("0");
-                        long price = Long.parseLong(priceStr.replaceAll("[^0-9]", ""));
-                        dto.setCurrentPrice(price);
+                        dto.setCurrentPrice(price); 
                         dto.setStartPrice(price);
 
-                        int before = hotDealMapper.getTotalCount();
-                        hotDealMapper.upsertHotDeal(dto); 
-                        int after = hotDealMapper.getTotalCount();
+                        // 2. 변수 선언 (before)
+                        int before = hotDealMapper.getTotalCount(); 
 
-                        if (after > before) newlyAddedCount++;
-                    }
+                        // 3. 메인 테이블 저장
+                        hotDealMapper.upsertHotDeal(dto); 
+
+                        // 4. 가격 이력 저장
+                        int finalId = dto.getDealId();
+                        if (finalId == 0) {
+                            finalId = hotDealMapper.getDealIdByUrl(dto.getOriginUrl());
+                        }
+
+                        if (finalId > 0) {
+                            hotDealMapper.insertPriceHistory(finalId, price);
+                        }
+
+                        // 5. 개수 비교 및 카운트
+                        int after = hotDealMapper.getTotalCount();
+                        if (after > before) {
+                            newlyAddedCount++;
+                        }
+                    } // <-- for 루프 끝 (여기가 빠져있었습니다)
                 }
+                
                 log.info("현재 {} 페이지 수집 중... (누적 신규: {})", page, newlyAddedCount);
                 page++;
-                
-                // 대상 서버 차단 방지를 위한 최소한의 지연 (0.5초)
                 Thread.sleep(500); 
             }
         } catch (Exception e) {
             log.error("수집 중 치명적 오류 발생: {}", e.getMessage());
         } finally {
-            isCrawling = false; // 루프 탈출 시 상태 초기화
+            isCrawling = false; 
             log.info("핫딜 수집 엔진 정지 완료. 총 {}건 수집", newlyAddedCount);
         }
         return newlyAddedCount;

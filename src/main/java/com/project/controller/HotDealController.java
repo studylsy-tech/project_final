@@ -1,6 +1,7 @@
 package com.project.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,21 +21,21 @@ public class HotDealController {
     private HotDealService hotDealService;
 
     // 1. 핫딜 상세 페이지 처리 (404 해결 핵심)
-    // 클래스 레벨의 /admin을 제거했으므로 이제 /hotdeal/detail로 직접 접근이 가능합니다.
     @GetMapping("/hotdeal/detail")
     public String getHotDealDetail(@RequestParam("dealId") int dealId, Model model) {
-        // 데이터 조회
+        // 1. 상단 정보 (제목, 현재가 등)
         HotDealDTO deal = hotDealService.getHotDealSummary(dealId);
         
+        // 2. 하단 이력 (차트, 테이블) - 서비스 메서드 호출
+        List<Map<String, Object>> history = hotDealService.getPriceHistory(dealId);
+        
         if (deal == null) {
-            // 데이터가 없을 경우 리스트로 리다이렉트 처리 등 예외처리 가능
-            return "redirect:/"; 
+            return "redirect:/stock/analysis"; 
         }
 
         model.addAttribute("deal", deal);
+        model.addAttribute("history", history); // JSP의 ${history}와 연결
         
-        // dashboard/history_detail.jsp의 디자인을 그대로 쓰고 싶다면 해당 경로를 리턴
-        // 단, JSP 내부에서 사용하는 변수명(${product} 등)이 deal과 다를 수 있으니 주의
         return "dashboard/history_detail"; 
     }
 

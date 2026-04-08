@@ -75,8 +75,9 @@ public class SeleniumDriver {
         } catch (Exception e) {
             System.out.println("크롤링 중 오류 발생: " + e.getMessage());
         } finally {
-            closeDriver(); // 공통 종료 메서드 호출
         }
+        closeDriver(); // 공통 종료 메서드 호출
+
         return productList;
     }
 }

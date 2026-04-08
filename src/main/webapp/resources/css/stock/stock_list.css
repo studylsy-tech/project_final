@@ -1,204 +1,113 @@
-@charset "UTF-8";
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<c:set var="path" value="${pageContext.request.contextPath}" />
 
-/* [1] 기본 레이아웃 - 너비 800px 강제 적용 */
-.board-wrapper {
-    /* 다른 스타일보다 우선순위를 높이기 위해 !important를 추가했습니다. */
-    max-width: 900px !important; 
-    margin: 60px auto;
-    padding: 0 20px;
-    font-family: 'Pretendard', sans-serif;
-}
+<%@ include file="/WEB-INF/views/common/header.jsp"%>
 
-.board-wrapper h2 {
-    text-align: left;
-    color: #1a2a44;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #1a2a44;
-    padding-bottom: 15px;
-}
+<link rel="stylesheet" href="${path}/resources/css/stock/stock_list.css">
 
-/* [2] 카드 컨테이너 스타일 */
-.stock-list-container {
-    display: flex;
-    flex-direction: column;
-    gap: 0;          /* 간격 제거 */
-    border: 1px solid #e1e4e8;  /* 외곽선 한 번만 */
-    border-radius: 8px;
-    overflow: hidden; /* 모서리 둥글게 유지 */
-}
+<%-- 현재 접속 경로 저장 --%>
+<c:set var="currentUri" value="${requestScope['javax.servlet.forward.request_uri']}" />
 
-/* [3] 개별 카드 - .stock-card 구조 유지 */
-.stock-card {
-    display: flex;
-    align-items: center;
-    padding: 20px 25px;
-    background-color: #fff;
-    border: none;
-    border-bottom: 1px solid #e1e4e8;
-    border-radius: 0;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
+<div class="board-wrapper">
+    <h2>${boardTitle}</h2>
 
-.stock-card:hover {
-    background-color: #fcfdfe;
-    border-color: #1a2a44;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
+    <%-- 1. 통합 검색 영역 --%>
+    <div style="margin-bottom: 20px; text-align: right;">
+        <form action="${currentUri}" method="get" id="searchForm">
+            <select name="searchType" style="padding: 5px;">
+                <option value="name" ${pageMaker.criteria.searchType eq 'name' ? 'selected' : ''}>상품명</option>
+                <option value="drop" ${pageMaker.criteria.searchType eq 'drop' ? 'selected' : ''}>급락상품</option>
+                <option value="low" ${pageMaker.criteria.searchType eq 'low' ? 'selected' : ''}>최저가</option>
+            </select>
+            <input type="text" name="keyword" id="keywordInput" value="${pageMaker.criteria.keyword}" style="padding: 5px; width: 200px;">
+            <button type="submit" id="searchBtn" style="padding: 5px 15px;">검색</button>
+        </form>
+    </div>
 
-/* [4] 배지 색상 연동 */
-.badge {
-    width: 65px;
-    padding: 8px 0;
-    text-align: center;
-    border-radius: 5px;
-    font-size: 13px;
-    font-weight: bold;
-    color: #fff !important;
-    margin-right: 25px;
-}
+    <%-- 2. 상품 리스트 영역 --%>
+    <div class="stock-list-container">
+        <c:choose>
+            <c:when test="${empty stockList}">
+                <div style="text-align: center; padding: 50px; color: #999;">조회된 데이터가 없습니다.</div>
+            </c:when>
+            <c:otherwise>
+                <c:forEach var="s" items="${stockList}">
+                    <%-- 상세 페이지 URL 분기 처리 --%>
+                    <c:url var="detailUrl" value="${s.boardType eq 'HOT' ? '/hotdeal/detail' : '/dashboard/detail'}">
+                        <c:param name="${s.boardType eq 'HOT' ? 'dealId' : 'prodId'}" value="${s.prodId}" />
+                    </c:url>
 
-/* 급락: 빨간색 */
-.bg-red { background-color: #e74c3c !important; }
+                    <div class="stock-card" onclick="location.href='${detailUrl}'" 
+                         style="display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #eee; cursor: pointer;">
+                        
+                        <%-- 이미지 영역 --%>
+                        <div class="prod-img-wrapper" style="margin-right: 20px; flex-shrink: 0;">
+                            <img src="${not empty s.imageUrl ? s.imageUrl : path.concat('/resources/images/no-image.png')}" 
+                                 alt="${s.name}" class="prod-img"
+                                 style="width:100px; height:100px; object-fit:cover; border-radius: 8px;"
+                                 onerror="this.src='${path}/resources/images/no-image.png';">
+                        </div>
 
-/* 갱신: 초록색 */
-.bg-blue, .bg-green { background-color: #27ae60 !important; }
+                        <%-- 정보 영역 --%>
+                        <div class="prod-info-wrapper">
+                            <c:set var="badgeClass" value="${s.boardType eq 'DROP' ? 'bg-red' : (s.boardType eq 'HOT' ? 'bg-orange' : 'bg-blue')}" />
+                            <c:set var="badgeText" value="${s.boardType eq 'DROP' ? '급락' : (s.boardType eq 'HOT' ? '핫딜' : '최저가')}" />
+                            <div class="badge ${badgeClass}">${badgeText}</div>
 
-/* [5] 상품 정보 영역 */
-.prod-info {
-    flex: 1;
-}
+                            <div class="prod-info" style="margin-top: 8px;">
+                                <div class="prod-main-text" style="font-weight: bold; font-size: 1.1em;">
+                                    ${s.name} — <span class="price-highlight" style="color: #e74c3c;">₩<fmt:formatNumber value="${s.price}" pattern="#,###" /></span>
+                                </div>
+                                <div class="prod-sub-text" style="color: #888; font-size: 0.9em; margin-top: 4px;">
+                                    <fmt:formatDate value="${s.regDate}" pattern="yyyy.MM.dd HH:mm" /> | ${s.source}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
+    </div>
 
-.prod-main-text {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    color: #2c3e50;
-}
+    <%-- 3. 페이징 처리 영역 --%>
+    <div style="text-align: center; margin: 30px 0; font-size: 16px;">
+        <c:if test="${pageMaker.prev}">
+            <a href="${currentUri}${pageMaker.makeSearch(pageMaker.startPage - 1)}" style="text-decoration:none; color:#333;">[이전]</a>
+        </c:if>
 
-.prod-sub-text {
-    font-size: 14px;
-    color: #95a5a6;
-}
+        <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
+            <a href="${currentUri}${pageMaker.makeSearch(idx)}" style="text-decoration:none; margin: 0 5px;">
+                <c:choose>
+                    <c:when test="${pageMaker.criteria.page == idx}">
+                        <span style="color: red; font-weight: bold; border-bottom: 2px solid red; padding-bottom: 2px;">${idx}</span>
+                    </c:when>
+                    <c:otherwise>
+                        <span style="color: #666;">${idx}</span>
+                    </c:otherwise>
+                </c:choose>
+            </a>
+        </c:forEach>
 
-/* [6] 가격 강조 - 연한 파란색 글씨만 적용 */
-.price-highlight {
-    background-color: transparent !important; 
-    color: #3498db !important;
-    font-weight: 800;
-    margin-left: 5px;
-    display: inline-block;
-}
+        <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+            <a href="${currentUri}${pageMaker.makeSearch(pageMaker.endPage + 1)}" style="text-decoration:none; color:#333;">[다음]</a>
+        </c:if>
+    </div>
+</div>
 
-/* [7] 하단 질문하기 버튼 (75% 크기 및 오른쪽 정렬) */
-.board-footer {
-    margin-top: 30px;
-    display: flex;
-    justify-content: flex-end; 
-}
-
-.btn-dark {
-    background-color: #1a2a44;
-    color: #fff !important;
-    padding: 15px 0;
-    text-decoration: none;
-    border-radius: 4px;
-    font-weight: 700;
-    
-    width: 75%;            
-    display: block;        
-    text-align: center;    
-    box-sizing: border-box; 
-    
-    transition: background-color 0.3s;
-}
-
-.btn-dark:hover {
-    background-color: #34495e;
-} 
-    
- /* [8] 테이블 스타일 - hotdeal 페이지용 */
-.analysis-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.card {
-    background-color: #fff;
-    border: 1px solid #e1e4e8;
-    border-radius: 8px;
-    padding: 20px 25px;
-}
-
-.card h3 {
-    color: #2c3e50;
-    margin-bottom: 16px;
-    font-size: 16px;
-}
-
-.card table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-}
-
-.card table th {
-    background-color: #f4f6f8;
-    color: #1a2a44;
-    padding: 10px 12px;
-    border: 1px solid #e1e4e8;
-    text-align: center;
-    font-weight: 600;
-}
-
-.card table td {
-    text-align: center;
-    vertical-align: middle;
-}
-
-.card table td {
-    padding: 10px 12px;
-    border: 1px solid #e1e4e8;
-    color: #2c3e50;
-}
-
-.card table tr:hover td {
-    background-color: #fcfdfe;
-}
-
-.start-btn {
-    background-color: #1a2a44;
-    color: #fff !important;
-    border-radius: 4px;
-    display: inline-block;
-    transition: background-color 0.3s;
-}
-
-.start-btn:hover {
-    background-color: #34495e;
-}   
-.bg-red { background-color: #ff4d4d; color: white; }    /* 급락 */
-.bg-orange { background-color: #ff9800; color: white; } /* 핫딜 */
-.bg-blue { background-color: #2196f3; color: white; }   /* 최저가/갱신 */
-
-
-.prod-img-wrapper { margin-right: 20px; }
-
-
-/* 모든 상품 이미지에 공통 적용 */
-.prod-img {
-    width: 80px !important;  /* 가로 크기 고정 */
-    height: 80px !important; /* 세로 크기 고정 */
-    object-fit: cover;        /* 비율 유지하며 꽉 채우기 */
-    border-radius: 8px;       /* 모서리 둥글게 */
-    display: block;           /* 레이아웃 정렬 최적화 */
-}
-
-/* 이미지를 감싸는 영역 (간격 조절) */
-.prod-img-wrapper {
-    width: 80px;
-    height: 80px;
-    margin-right: 20px;
-    flex-shrink: 0;           /* 부모 박스가 좁아져도 이미지는 유지 */
-}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(function() {
+        $('#searchBtn').on("click", function(event) {
+            event.preventDefault();
+            const uri = "${currentUri}";
+            const keyword = $('#keywordInput').val();
+            const searchType = $("select[name='searchType']").val();
+            
+            // 검색 시 1페이지로 리셋하여 이동
+            location.href = uri + "?page=1" 
+                          + "&perPageNum=${pageMaker.criteria.perPageNum}"
+                          + "&searchType=" + searchType
+                          + "&keyword=" + encodeURIComponent(keyword);
+        });

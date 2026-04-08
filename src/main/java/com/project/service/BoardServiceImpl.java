@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.project.dao.BoardMapper;
 import com.project.model.BoardDTO;
+import com.project.util.Criteria;
 import com.project.util.SearchCriteria;
 
 @Service
@@ -54,5 +55,35 @@ public class BoardServiceImpl implements BoardService {
     @Override
     public int getUnansweredCount() {
         return boardMapper.getUnansweredCount();
+    }
+
+    @Override
+    public List<BoardDTO> getNoticeList() {
+        return boardMapper.getNoticeList(); // Mapper에도 해당 쿼리가 정의되어 있어야 합니다
+    }
+
+    @Override
+    public void updateBoardStatus(int no, String status) {
+        boardMapper.updateBoardStatus(no, status);
+    }
+
+    @Override
+    public int getNoticeCount() {
+        // 공지사항 전용 카운트 조회를 위해 기본 SearchCriteria를 생성하여 전달합니다.
+        SearchCriteria scri = new SearchCriteria();
+        scri.setBoardType("NOTICE");
+        return boardMapper.getBoardCount(scri);
+    }
+
+    @Override
+    public List<BoardDTO> getNoticeListPaging(Criteria cri) {
+        SearchCriteria scri = new SearchCriteria();
+        scri.setPage(cri.getPage());
+        scri.setPerPageNum(cri.getPerPageNum());
+        scri.setBoardType("NOTICE");
+        
+        // 수정 전: return boardMapper.selectBoardListPaging(scri);
+        // 수정 후: 상태(STATUS) 조건이 없는 관리자용 쿼리 호출
+        return boardMapper.getNoticeListPaging(scri); 
     }
 }

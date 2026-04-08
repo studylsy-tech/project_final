@@ -5,7 +5,8 @@
 
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 
-<link rel="stylesheet" href="${path}/resources/css/stock/stock_drop.css">
+<%-- 통합된 공통 스톡 CSS 적용 --%>
+<link rel="stylesheet" href="${path}/resources/css/stock/stock_common.css">
 
 <%-- 현재 요청 경로를 동적으로 가져와서 타겟 URI로 설정 --%>
 <c:set var="targetUri" value="${pageContext.request.contextPath}/stock/drop" />
@@ -16,10 +17,10 @@
         <img class="title-icon"
              src="${path}/resources/images/icon_drop.png"
              onerror="this.style.display='none'" alt="">
-        ${boardTitle}
+        오늘의 급락
     </h2>
 
-    <%-- 1. 검색 영역 (제목, URL, 내용 기준으로 수정) --%>
+    <%-- 1. 검색 영역 --%>
     <div class="search-area">
         <form action="${targetUri}" method="get" id="searchForm">
             <select name="searchType" id="searchType">
@@ -87,7 +88,7 @@
             <a href="${targetUri}${pageMaker.makeSearch(idx)}">
                 <c:choose>
                     <c:when test="${pageMaker.criteria.page == idx}">
-                        <span class="current-page" style="color: red; font-weight: bold;">${idx}</span>
+                        <span class="current-page">${idx}</span>
                     </c:when>
                     <c:otherwise>
                         <span>${idx}</span>
@@ -106,19 +107,24 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     $(function() {
-        $('#searchBtn').on("click", function(event) {
-            event.preventDefault();
-            // 검색 시 무조건 1페이지로 이동하도록 설정
+        // 검색 실행 공통 함수
+        function doSearch() {
             var url = "${targetUri}" + "?page=1&perPageNum=${pageMaker.criteria.perPageNum}"
                     + "&searchType=" + $("#searchType").val()
                     + "&keyword=" + encodeURIComponent($('#keywordInput').val());
             location.href = url;
+        }
+
+        $('#searchBtn').on("click", function(event) {
+            event.preventDefault();
+            doSearch();
         });
 
         // 엔터키 검색 지원
         $('#keywordInput').on("keydown", function(e) {
             if(e.keyCode == 13) {
-                $('#searchBtn').click();
+                e.preventDefault();
+                doSearch();
             }
         });
     });

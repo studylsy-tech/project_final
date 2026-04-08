@@ -2,6 +2,7 @@ package com.project.service;
 
 import java.util.List;
 import com.project.model.BoardDTO;
+import com.project.util.Criteria;
 import com.project.util.SearchCriteria;
 
 public interface BoardService {
@@ -15,4 +16,8 @@ public interface BoardService {
     List<BoardDTO> selectBoardList(SearchCriteria scri);
 	int deleteBoard(int notice_no);
 	int getUnansweredCount();
+	List<BoardDTO> getNoticeList();
+	void updateBoardStatus(int no, String status);
+	int getNoticeCount();
+	List<BoardDTO> getNoticeListPaging(Criteria cri);
 }
