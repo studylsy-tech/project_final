@@ -4,35 +4,50 @@
 <mapper namespace="com.project.dao.BoardMapper">
 
     <select id="getNoticeListPaging" resultType="com.project.model.BoardDTO">
-    SELECT * FROM (
-        SELECT rownum rnum, a.* FROM (
-            SELECT 
-                NOTICE_NO as notice_no, 
-                TITLE as title, 
-                CONTENT as content,   WRITER as writer,
-                COUNT as count, 
-                STATUS as status,
-                TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
-            FROM BOARD
-            WHERE BOARD_TYPE = 'NOTICE'
-            ORDER BY NOTICE_NO DESC
-        ) a WHERE rownum &lt;= #{pageEnd}
-    ) WHERE rnum &gt;= #{pageStart}
-</select>
+	    SELECT * FROM (
+	        SELECT rownum rnum, a.* FROM (
+	            SELECT 
+	                NOTICE_NO as notice_no, 
+	                TITLE as title, 
+	                CONTENT as content, WRITER as writer,
+	                COUNT as count, 
+	                STATUS as status,
+	                TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
+	            FROM BOARD
+	            WHERE BOARD_TYPE = 'NOTICE'
+	            
+	            <choose>
+				    <when test='sortType != null and sortType == "count"'>
+				        ORDER BY COUNT DESC, NOTICE_NO DESC
+				    </when>
+				    <otherwise>
+				        ORDER BY NOTICE_NO DESC
+				    </otherwise>
+				</choose>
+	            
+	        ) a WHERE rownum &lt;= #{pageEnd}
+	    ) WHERE rnum &gt;= #{pageStart}
+	</select>
 
 <select id="selectBoardListPaging" resultType="com.project.model.BoardDTO">
     SELECT * FROM (
         SELECT rownum rnum, a.* FROM (
             SELECT 
-                NOTICE_NO as notice_no, 
-                TITLE as title, 
-                WRITER as writer,
-                COUNT as count, 
-                STATUS as status,
+                NOTICE_NO as notice_no, TITLE as title, WRITER as writer,
+                COUNT as count, STATUS as status,
                 TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
             FROM BOARD
-            WHERE BOARD_TYPE = 'NOTICE' AND STATUS = 'Y'
-            ORDER BY NOTICE_NO DESC
+            WHERE BOARD_TYPE = #{boardType} AND STATUS = 'Y'
+            
+            <choose>
+			    <when test='sortType != null and sortType == "count"'>
+			        ORDER BY COUNT DESC, NOTICE_NO DESC
+			    </when>
+			    <otherwise>
+			        ORDER BY NOTICE_NO DESC
+			    </otherwise>
+			</choose>
+            
         ) a WHERE rownum &lt;= #{pageEnd}
     ) WHERE rnum &gt;= #{pageStart}
 </select>
