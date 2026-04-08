@@ -86,4 +86,22 @@ public class BoardServiceImpl implements BoardService {
         // 수정 후: 상태(STATUS) 조건이 없는 관리자용 쿼리 호출
         return boardMapper.getNoticeListPaging(scri); 
     }
+
+    @Override
+    public List<BoardDTO> getQnaListPaging(Criteria cri) {
+        SearchCriteria scri = new SearchCriteria();
+        scri.setPage(cri.getPage());
+        scri.setPerPageNum(cri.getPerPageNum());
+        scri.setBoardType("QNA");
+        
+        return boardMapper.selectBoardListPaging(scri);
+    }
+
+    @Override
+    public List<BoardDTO> selectQnaListPaging(SearchCriteria scri) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+	
 }

@@ -187,5 +187,8 @@ public class AdminController {
         return "admin/hotdeal_engine"; 
     }
     
-    
+    @GetMapping("/error_logs")
+    public String errorLogs() {
+        return "admin/error_logs"; 
+    }
 }

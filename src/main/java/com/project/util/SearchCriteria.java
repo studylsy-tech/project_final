@@ -12,6 +12,7 @@ public class SearchCriteria extends Criteria {
     private String searchType;    // 검색 타입 (name, drop, low 등)
     private String keyword;       // 검색어
     private String boardType;     // 게시판 타입
+    private String status;        // (게시 상태: 'Y' 등)
     
     // MyBatis rownum 범위를 위한 필드 추가
     private int pageStart;        // 시작 행 번호
