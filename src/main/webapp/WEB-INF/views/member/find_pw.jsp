@@ -3,7 +3,7 @@
 <c:set var="path" value="${pageContext.request.contextPath}" />
 
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-<link rel="stylesheet" href="${path}/resources/css/views/member/find_pw.css?v=1">
+<link rel="stylesheet" href="${path}/resources/css/views/member/find_pw.css?v=2">
 
 <main>
     <div class="form-card">

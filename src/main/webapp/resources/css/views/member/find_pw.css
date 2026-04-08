@@ -23,13 +23,13 @@ main {
 
 /* ── 중앙 카드 박스 (login-box 스타일 적용) ── */
 .form-card {
-    width: 100%;
-    max-width: 440px;
+    width: 400px;
     padding: 40px;
     background: #ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    box-sizing : border-box;
 }
 
 h1 {
@@ -110,11 +110,30 @@ h1 {
     border-top: 1px solid #eee;
 }
 
-/* ── 푸터 ── */
+/* ── 푸터 ── 
 footer {
     background: #1e2d3d;
     color: #aab4be;
     text-align: center;
-    padding: 1.5rem;
+    padding: 3rem;
     font-size: 13px;
+}*/
+
+
+
+ ── 푸터 (로그인 페이지 스타일과 통일) ── 
+footer {
+    background: #1a2a44;       /* 로그인 버튼/제목과 동일한 다크 네이비 */
+    color: #ffffff;            /* 글자색을 흰색으로 변경하여 가독성 높임 */
+    text-align: center;
+    padding: 60px 60px;        /* 로그인 박스 패딩과 유사한 수치로 조정 */
+    font-size: 13px;
+    letter-spacing: 0.5px;     /* 글자 간격을 살짝 벌려 고급스럽게 */
+    border-top: 1px solid rgba(255, 255, 255, 0.1); /* 미세한 경계선 */
+    margin-top: auto;          /* 페이지 하단에 고정되도록 유도 */
+}
+
+footer p {
+    margin: 5px 0;
+    opacity: 0.7;              /* 저작권 정보 등은 살짝 투명하게 */
 }
