@@ -3,44 +3,39 @@
 <mapper namespace="com.project.dao.HotDealMapper">
 
     <insert id="upsertHotDeal" parameterType="com.project.model.HotDealDTO">
+        <selectKey keyProperty="dealId" resultType="int" order="BEFORE">
+            SELECT NVL((SELECT DEAL_ID FROM TB_HOTDEAL_TRACKER WHERE ORIGIN_URL = #{originUrl}), 0) FROM DUAL
+        </selectKey>
+
         MERGE INTO TB_HOTDEAL_TRACKER t
-        USING DUAL
-        ON (t.ORIGIN_URL = #{originUrl})
+        USING DUAL ON (t.ORIGIN_URL = #{originUrl})
         WHEN MATCHED THEN
             UPDATE SET 
                 t.TITLE = #{title},
                 t.CURRENT_PRICE = #{currentPrice},
-                t.IMAGE_URL = #{imageUrl}, t.LAST_UPDATE_DATE = SYSDATE
+                t.IMAGE_URL = #{imageUrl}, 
+                t.LAST_UPDATE_DATE = SYSDATE
         WHEN NOT MATCHED THEN
             INSERT (ORIGIN_URL, TITLE, IMAGE_URL, CURRENT_PRICE, START_PRICE, MALL_NAME, COMMUNITY_NAME, LAST_UPDATE_DATE)
             VALUES (#{originUrl}, #{title}, #{imageUrl}, #{currentPrice}, #{currentPrice}, #{mallName}, #{communityName}, SYSDATE)
     </insert>
 
-    <select id="getRecentDeals" resultType="com.project.model.HotDealDTO">
-    SELECT * FROM (
-        SELECT 
-            DEAL_ID as dealId,
-            ORIGIN_URL as originUrl,
-            TITLE as title,
-            IMAGE_URL as imageUrl,  
-            CURRENT_PRICE as currentPrice,
-            START_PRICE as startPrice,
-            MALL_NAME as mallName,
-            COMMUNITY_NAME as communityName,
-            LAST_UPDATE_DATE as lastUpdateDate
-        FROM TB_HOTDEAL_TRACKER  
-        ORDER BY LAST_UPDATE_DATE DESC    
-    ) WHERE rownum &lt;= 10
+<insert id="insertPriceHistory">
+    INSERT INTO TB_PRICE_HISTORY (DEAL_ID, PRICE, RECORD_DATE)
+    VALUES (#{dealId}, #{price}, SYSDATE)
+</insert>
+
+    <select id="getDealIdByUrl" resultType="int">
+        SELECT DEAL_ID FROM TB_HOTDEAL_TRACKER WHERE ORIGIN_URL = #{originUrl}
     </select>
 
-    <select id="getRecentDealsPaging" resultType="com.project.model.HotDealDTO">
-    SELECT * FROM (
-        SELECT rownum rnum, a.* FROM (
+    <select id="getRecentDeals" resultType="com.project.model.HotDealDTO">
+        SELECT * FROM (
             SELECT 
                 DEAL_ID as dealId,
                 ORIGIN_URL as originUrl,
                 TITLE as title,
-                IMAGE_URL as imageUrl, 
+                IMAGE_URL as imageUrl,  
                 CURRENT_PRICE as currentPrice,
                 START_PRICE as startPrice,
                 MALL_NAME as mallName,
@@ -48,35 +43,62 @@
                 LAST_UPDATE_DATE as lastUpdateDate
             FROM TB_HOTDEAL_TRACKER  
             ORDER BY LAST_UPDATE_DATE DESC    
-        ) a WHERE rownum &lt;= #{pageEnd}
-    ) WHERE rnum &gt;= #{pageStart}
+        ) WHERE rownum &lt;= 10
+    </select>
+
+    <select id="getRecentDealsPaging" resultType="com.project.model.HotDealDTO">
+        SELECT * FROM (
+            SELECT rownum rnum, a.* FROM (
+                SELECT 
+                    DEAL_ID as dealId,
+                    ORIGIN_URL as originUrl,
+                    TITLE as title,
+                    IMAGE_URL as imageUrl, 
+                    CURRENT_PRICE as currentPrice,
+                    START_PRICE as startPrice,
+                    MALL_NAME as mallName,
+                    COMMUNITY_NAME as communityName,
+                    LAST_UPDATE_DATE as lastUpdateDate
+                FROM TB_HOTDEAL_TRACKER  
+                ORDER BY LAST_UPDATE_DATE DESC    
+            ) a WHERE rownum &lt;= #{pageEnd}
+        ) WHERE rnum &gt;= #{pageStart}
     </select>
 
     <select id="getTotalCount" resultType="int">
         SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
     </select>
 
+    <delete id="deleteAllDeals">
+        DELETE FROM TB_HOTDEAL_TRACKER
+    </delete>
+
     <select id="getLastCollectTime" resultType="string">
         SELECT NVL(TO_CHAR(MAX(LAST_UPDATE_DATE), 'YYYY-MM-DD HH24:MI:SS'), '-') 
         FROM TB_HOTDEAL_TRACKER
     </select>
-<select id="getHotDealDetail" parameterType="int" resultType="com.project.model.HotDealDTO">
-    SELECT 
-        DEAL_ID          as dealId,
-        TITLE            as title,        CURRENT_PRICE    as currentPrice, IMAGE_URL        as imageUrl,
-        ORIGIN_URL       as originUrl,
-        MALL_NAME        as mallName,
-        START_PRICE      as startPrice,   LAST_UPDATE_DATE as lastUpdateDate FROM TB_HOTDEAL_TRACKER
-    WHERE DEAL_ID = #{dealId}
-</select>
 
-    <select id="getHotDealPriceHistory" parameterType="int" resultType="map">
+    <select id="getHotDealDetail" parameterType="int" resultType="com.project.model.HotDealDTO">
         SELECT 
-            TO_CHAR(REG_DATE, 'YYYY-MM-DD') as REG_DATE,
-            PRICE as PRICE
-        FROM PRICE_HISTORY 
-        WHERE PROD_ID = #{dealId} 
-        /* 핫딜 상품과 일반 상품의 이력이 같은 테이블을 쓴다면 구분자가 필요할 수 있습니다 */
-        ORDER BY REG_DATE ASC
+            DEAL_ID          as dealId,
+            TITLE            as title,        
+            CURRENT_PRICE    as currentPrice, 
+            IMAGE_URL        as imageUrl,
+            ORIGIN_URL       as originUrl,
+            MALL_NAME        as mallName,
+            START_PRICE      as startPrice,   
+            LAST_UPDATE_DATE as lastUpdateDate 
+        FROM TB_HOTDEAL_TRACKER
+        WHERE DEAL_ID = #{dealId}
     </select>
+
+    <select id="getHotDealPriceHistory" resultType="map">
+        SELECT 
+            TO_CHAR(RECORD_DATE, 'YYYY-MM-DD HH24:MI') AS REG_DATE,
+            PRICE
+        FROM TB_PRICE_HISTORY
+        WHERE DEAL_ID = #{dealId}
+        ORDER BY RECORD_DATE ASC
+    </select>
+
 </mapper>

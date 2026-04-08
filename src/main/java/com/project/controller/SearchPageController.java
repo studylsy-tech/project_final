@@ -28,20 +28,27 @@ public class SearchPageController {
 
     @GetMapping("/list")
     public String searchList(@ModelAttribute("scri") SearchCriteria scri, Model model) throws Exception {
+        scri.calcPageRange();
         
-        // 1. "boardType"이 있는지 확인 (게시판인지 상품인지 구분)
         String boardType = scri.getBoardType(); 
         
         if (boardType != null && (boardType.equals("NOTICE") || boardType.equals("QNA"))) {
-            // [게시판 모드]
-            int totalCount = boardMapper.getBoardCount(scri); // 게시판 개수를 가져옴!
+            int totalCount = boardMapper.getBoardCount(scri); 
             SearchPageMaker pageMaker = new SearchPageMaker(scri, totalCount, 5);
             
-            model.addAttribute("list", boardMapper.selectBoardListPaging(scri)); // 게시판 리스트
+            model.addAttribute("list", boardMapper.selectBoardListPaging(scri)); 
             model.addAttribute("pageMaker", pageMaker);
-            
-            return "board/notice_list"; // 게시판 JSP로 보냄
-            
+            // 1. "boardType"이 있는지 확인 (게시판인지 상품인지 구분)
+
+            // [수정 포인트] boardType에 따라 반환하는 JSP 경로를 분기합니다.
+            if ("QNA".equals(boardType)) {
+                return "board/qna_list";    // Q&A 검색 시 qna_list.jsp로 이동
+            } else {
+                return "board/notice_list"; // NOTICE 검색 시 notice_list.jsp로 이동
+            }
+
+        
+        
         }else if (boardType != null && boardType.equals("HOTDEAL")) {
             // [핫딜 분석 모드] 추가된 부분!
             int totalCount = searchMapper.getHotDealSearchCount(scri); // 핫딜용 카운트 매퍼 필요

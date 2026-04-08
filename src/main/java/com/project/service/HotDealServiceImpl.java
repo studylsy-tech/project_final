@@ -34,15 +34,20 @@ public class HotDealServiceImpl implements HotDealService {
     private final HotDealMapper hotDealMapper;
     private final AdminMapper adminMapper;
     
+ // 여러 스레드에서 상태를 공유하기 위해 volatile 사용
+    private volatile boolean isCrawling = false;
+    
     @Override
-    @Transactional
-    public int fetchAndStoreDeals(int limit) {
+    public int fetchAndStoreDeals(int ignoredLimit) {
+        isCrawling = true; 
         int newlyAddedCount = 0;
         int page = 1;
         ObjectMapper mapper = new ObjectMapper();
 
+        log.info("핫딜 수집 엔진 시작...");
+
         try {
-            while (newlyAddedCount < limit && page <= 5) {
+            while (isCrawling && page <= 500) {
                 String apiUrl = "https://hotdeal.zip/api/deals.php?page=" + page + "&category=all";
                 URL url = new URL(apiUrl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -57,8 +62,17 @@ public class HotDealServiceImpl implements HotDealService {
                     JsonNode root = mapper.readTree(sb.toString());
                     JsonNode deals = root.path("data");
 
+                    if (deals.isMissingNode() || deals.size() == 0) {
+                        log.info("더 이상 수집할 데이터가 없습니다. 종료합니다.");
+                        break;
+                    }
+
                     for (JsonNode deal : deals) {
-                        if (newlyAddedCount >= limit) break;
+                        if (!isCrawling) break;
+
+                        // 1. 변수 선언 (price)
+                        String priceStr = deal.path("price").asText("0");
+                        long price = Long.parseLong(priceStr.replaceAll("[^0-9]", ""));
 
                         HotDealDTO dto = new HotDealDTO();
                         dto.setOriginUrl(deal.path("post_url").asText());
@@ -67,27 +81,52 @@ public class HotDealServiceImpl implements HotDealService {
                         dto.setCommunityName(deal.path("community_name").asText("기타"));
                         dto.setImageUrl(deal.path("thumbnail_url").asText(""));
                         
-                        String priceStr = deal.path("price").asText("0");
-                        long price = Long.parseLong(priceStr.replaceAll("[^0-9]", ""));
-                        dto.setCurrentPrice(price);
+                        dto.setCurrentPrice(price); 
                         dto.setStartPrice(price);
 
-                        int before = hotDealMapper.getTotalCount();
-                        hotDealMapper.upsertHotDeal(dto); 
-                        int after = hotDealMapper.getTotalCount();
+                        // 2. 변수 선언 (before)
+                        int before = hotDealMapper.getTotalCount(); 
 
+                        // 3. 메인 테이블 저장
+                        hotDealMapper.upsertHotDeal(dto); 
+
+                        // 4. 가격 이력 저장
+                        int finalId = dto.getDealId();
+                        if (finalId == 0) {
+                            finalId = hotDealMapper.getDealIdByUrl(dto.getOriginUrl());
+                        }
+
+                        if (finalId > 0) {
+                            hotDealMapper.insertPriceHistory(finalId, price);
+                        }
+
+                        // 5. 개수 비교 및 카운트
+                        int after = hotDealMapper.getTotalCount();
                         if (after > before) {
                             newlyAddedCount++;
                         }
-                    }
+                    } // <-- for 루프 끝 (여기가 빠져있었습니다)
                 }
+                
+                log.info("현재 {} 페이지 수집 중... (누적 신규: {})", page, newlyAddedCount);
                 page++;
+                Thread.sleep(500); 
             }
         } catch (Exception e) {
-            log.error("핫딜 수집 중 오류 발생: {}", e.getMessage());
+            log.error("수집 중 치명적 오류 발생: {}", e.getMessage());
+        } finally {
+            isCrawling = false; 
+            log.info("핫딜 수집 엔진 정지 완료. 총 {}건 수집", newlyAddedCount);
         }
         return newlyAddedCount;
     }
+
+    @Override
+    public void stopCrawling() {
+        // 정지 버튼 클릭 시 이 메서드가 호출되어 while 문을 빠져나가게 함
+        this.isCrawling = false;
+    }
+
 
     @Override
     public boolean checkConnection() {
@@ -118,6 +157,13 @@ public class HotDealServiceImpl implements HotDealService {
             log.error("총 개수 조회 실패: {}", e.getMessage());
             return 0;
         }
+    }
+    
+    @Override
+    @Transactional
+    public void deleteAllDeals() {
+        // AdminMapper 또는 HotDealMapper에 정의된 삭제 쿼리 호출
+    	hotDealMapper.deleteAllDeals();
     }
 
     @Override
@@ -182,4 +228,6 @@ public class HotDealServiceImpl implements HotDealService {
 	    // 핫딜 전용 가격 추적 및 이력 기록 로직 호출
 	    return priceTracker.updateRegisteredHotDealPrices();
 	}
+
+	
 }

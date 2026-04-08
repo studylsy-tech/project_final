@@ -37,7 +37,9 @@
 </update>
 
 <select id="getHotDealList" resultType="com.project.model.HotDealDTO">
-    SELECT DEAL_ID, TITLE FROM TB_HOTDEAL_TRACKER
+    SELECT 
+        DEAL_ID as dealId,  TITLE   as title
+    FROM TB_HOTDEAL_TRACKER
 </select>
 
 <update id="upsertHotDealAndGetId" parameterType="com.project.model.HotDealDTO">
@@ -54,9 +56,7 @@
 
 <insert id="insertHotDealPriceHistory">
     INSERT INTO TB_PRICE_HISTORY (DEAL_ID, PRICE, RECORD_DATE)
-    SELECT DEAL_ID, #{price}, SYSDATE 
-    FROM TB_HOTDEAL_TRACKER 
-    WHERE DEAL_ID = #{dealId}
+    VALUES (#{dealId}, #{price}, SYSDATE)
 </insert>
 
 <update id="updateHotDealPrice">

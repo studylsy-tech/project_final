@@ -68,4 +68,6 @@ public class DashboardController {
 
 	    return "dashboard/history_detail";
 	}
+	
+	
 }

@@ -16,23 +16,19 @@
                 <h3>📊 실시간 수집 현황</h3>
                 <div class="status-panel">
                     <span>연결 상태: <strong id="db-status">연결 확인 중...</strong></span>
-                    
-                     <span style="margin-left: 20px;">누적 핫딜 수: <strong id="count-hotdeal">0</strong>개</span> 
-                    <button class="btn-refresh" onclick="updateHotDealStatus()"><strong>현황 갱신</strong></button>
+                    <span style="margin-left: 20px;">누적 핫딜 수: <strong id="count-hotdeal">0</strong>개</span>
+                    <button class="btn-refresh" onclick="updateHotDealStatus()">현황 갱신</button>
                 </div>
             </div>
 <%-- 수집 카드 섹션 수정 --%>
 <div class="engine-card">
     <div class="card-info">
-       <h4><span class="site-name">핫딜 트래커</span></h4>
-       <h4><span class="site-name">HotDeal Tracker</span></h4>
-        <p><strong>TB_HOTDEAL_TRACKER 테이블로</strong></p>
-        <p><strong> 데이터를 10개씩 </strong></p>
-        <p><strong> 크롤링하여 동기화합니다.</strong></p>
+        <span class="site-name">핫딜 트래커 (HotDeal Tracker)</span>
+        <p>TB_HOTDEAL_TRACKER 테이블로 데이터를 10개씩 크롤링하여 동기화합니다.</p>
     </div>
     <div class="card-actions">
-        <button id="engine-btn" class="btn-engine start" onclick="toggleHotDealEngine()"><h3>수집 실행</h3></button>
-        <button class="btn-engine delete" onclick="deleteAllDeals()"><h3>데이터 초기화</h3></button>
+        <button id="engine-btn" class="btn-engine start" onclick="toggleHotDealEngine()">수집 실행</button>
+        <button class="btn-engine delete" onclick="deleteAllDeals()">데이터 초기화</button>
     </div>
 </div>
 

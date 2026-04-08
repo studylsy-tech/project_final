@@ -11,40 +11,50 @@ import com.project.model.HotDealDTO;
 @Component
 public class PriceParser {
 
-public List<HotDealDTO> parseHotdealZip(WebDriver driver) {
-    List<HotDealDTO> list = new ArrayList<>();
-    try {
-        driver.get("[https://hotdeal.zip/](https://hotdeal.zip/)");
-        // 동적 콘텐츠 로딩을 위해 잠시 대기
-        Thread.sleep(3000); 
+	public List<HotDealDTO> parseHotdealZip(WebDriver driver) {
+	    List<HotDealDTO> list = new ArrayList<>();
+	    try {
+	        driver.get("https://hotdeal.zip/");
+	        Thread.sleep(3000); 
 
-        // 핫딜 아이템 리스트 추출 (사이트의 실제 CSS 선택자에 맞춰 수정 필요)
-        List<WebElement> items = driver.findElements(By.cssSelector("a.group")); 
+	        // 1. 메인 페이지에서 상품 상세 페이지 링크들 수집
+	        List<WebElement> items = driver.findElements(By.cssSelector("a.group")); 
+	        List<String> detailUrls = new ArrayList<>();
+	        for (WebElement item : items) {
+	            detailUrls.add(item.getAttribute("href"));
+	        }
 
-        for (WebElement item : items) {
-            try {
-                HotDealDTO dto = new HotDealDTO();
-                
-                // URL 및 제목 추출
-                dto.setOriginUrl(item.getAttribute("href"));
-                String title = item.findElement(By.cssSelector("h3")).getText();
-                dto.setTitle(title);
-                
-                // 가격 추출 (숫자만 남김)
-                String priceText = item.findElement(By.cssSelector(".text-red-500")).getText();
-                dto.setCurrentPrice(Integer.parseInt(priceText.replaceAll("[^0-9]", "")));
-                
-                dto.setCommunityName("HotdealZip");
-                dto.setMallName("기타");
+	        // 2. 각 상세 페이지로 이동하여 진짜 구매 링크(원문 주소) 추출
+	        for (String detailUrl : detailUrls) {
+	            try {
+	                driver.get(detailUrl);
+	                Thread.sleep(1500); // 상세 페이지 로딩 대기
 
-                list.add(dto);
-            } catch (Exception e) {
-                continue; // 개별 항목 파싱 실패 시 다음으로 진행
-            }
-        }
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-    return list;
-}
+	                HotDealDTO dto = new HotDealDTO();
+	                
+	                // [핵심 수정] 상세 페이지 내의 진짜 구매 버튼 링크 추출
+	                // HTML 분석 결과: body > div.hotdeal-container > div.deal-action-box > a.buy-button
+	                WebElement buyBtn = driver.findElement(By.cssSelector(".buy-button"));
+	                String realOriginUrl = buyBtn.getAttribute("href");
+	                dto.setOriginUrl(realOriginUrl); 
+
+	                // 제목 및 가격 추출 (상세 페이지의 클래스명에 맞게 수정)
+	                dto.setTitle(driver.findElement(By.cssSelector(".deal-title")).getText()); 
+	                String priceText = driver.findElement(By.cssSelector(".price-value")).getText(); 
+	                dto.setCurrentPrice(Integer.parseInt(priceText.replaceAll("[^0-9]", "")));
+	                
+	                // 쇼핑몰 이름 추출 (예: 네이버)
+	                dto.setMallName(driver.findElement(By.cssSelector(".shop-name")).getText().trim());
+	                dto.setCommunityName("핫딜모음");
+
+	                list.add(dto);
+	            } catch (Exception e) {
+	                continue; 
+	            }
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return list;
+	}
 }

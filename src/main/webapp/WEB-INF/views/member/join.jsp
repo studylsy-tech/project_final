@@ -14,6 +14,68 @@
     </script>
 </c:if>
 
+<script>
+    // 서버에서 받은 인증번호를 저장할 변수 (준회원, 정회원 구분)
+    var authCodes = {
+        semi: "",
+        full: ""
+    };
+
+    $(function() {
+        // 인증번호 발송 기능
+        $(".mail-btn").on("click", function() {
+            var type = $(this).data("type"); // 'semi' 또는 'full'
+            // 정회원 이메일 입력창 ID는 'email'이고 준회원은 'semi_email'인 점 체크!!!
+            var emailSelector = (type === 'semi') ? "#semi_email" : "#email";
+            var email = $(emailSelector).val();
+
+            if(!email || !email.includes('@')) {
+                alert("이메일 주소를 정확히 입력해주세요.");
+                return;
+            }
+
+            $.ajax({
+                url: "${path}/member/mailCheck",
+                type: "GET",
+                data: { email: email },
+                success: function(data) {
+                    if(data !== "error") {
+                        alert("인증번호가 발송되었습니다.");
+                        authCodes[type] = data; // 서버가 보낸 번호 저장
+                        $("#" + type + "_auth_area").show(); // 숨겨진 입력창 노출
+                    } else {
+                        alert("메일 발송에 실패했습니다.");
+                    }
+                }
+            });
+        });
+
+        // [2] 인증번호 확인 및 가입 버튼 활성화 기능
+        $(".verify-btn").on("click", function() {
+            var type = $(this).data("type");
+            var inputCode = $("#" + type + "_code").val(); // 사용자가 입력한 번호
+            var serverCode = authCodes[type]; // 서버에서 보냈던 번호
+
+            if(inputCode === serverCode && serverCode !== "") {
+                alert("인증 성공!");
+                
+                // 인증 완료 후 수정 방지
+                var emailSelector = (type === 'semi') ? "#semi_email" : "#email";
+                $(emailSelector).attr("readonly", true);
+                $("#" + type + "_code").attr("readonly", true);
+                
+                // 가입 버튼 활성화 (disabled 해제)
+                $("#" + type + "_submit").prop("disabled", false);
+                // 시각적으로 클릭 가능하게 변경
+                $("#" + type + "_submit").css("cursor", "pointer").css("opacity", "1");
+            } else {
+                alert("인증번호가 일치하지 않습니다.");
+                $("#" + type + "_submit").prop("disabled", true);
+            }
+        });
+    });
+</script>
+
 <div class="join-container">
     <h2>회원가입</h2>
      
@@ -38,9 +100,13 @@
         <div class="form-group">
             <label for="semi_email">이메일</label>
             <input type="email" name="email" id="semi_email" placeholder="알림을 받을 이메일을 입력하세요" required>
+            <button type="button" class="mail-btn" data-type="semi">인증번호 받기</button>
         </div>
-        
-        <button type="submit" class="login-btn">알림 신청하기</button>
+        <div id="semi_auth_area" style="display:none;">
+		    <input type="text" id="semi_code" placeholder="인증번호 6자리">
+		    <button type="button" class="verify-btn" data-type="semi">인증확인</button>
+		</div>
+        <button type="submit" id="semi_submit" class="login-btn" disabled>알림 신청하기</button>
     </form>
 </div>
 
@@ -62,7 +128,12 @@
             <div class="form-group">
                 <label for="email">이메일</label>
                 <input type="email" name="email" id="email" placeholder="example@email.com" required>
+                <button type="button" class="mail-btn" data-type="full">인증번호 받기</button>
             </div>
+            <div id="full_auth_area" style="display:none;">
+			    <input type="text" id="full_code" placeholder="인증번호 6자리">
+			    <button type="button" class="verify-btn" data-type="full">인증확인</button>
+			</div>
             <div class="form-group">
                 <label for="nickname">별명</label>
                 <input type="text" name="nickname" id="nickname" placeholder="미입력 시 실명이 노출됩니다.">
@@ -72,7 +143,7 @@
                 <input type="text" name="address" id="address" placeholder="상세 주소를 입력하세요">
             </div>
             
-            <button type="submit" class="login-btn">정회원 가입하기</button>
+            <button type="submit" id="full_submit" class="login-btn" disabled>정회원 가입하기</button>
         </form>
     </div>
 </div>

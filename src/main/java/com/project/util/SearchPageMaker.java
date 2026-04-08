@@ -15,19 +15,27 @@ public class SearchPageMaker extends PageMaker{
 
 	@Override
 	public String query(int page) {
-		SearchCriteria sCri = (SearchCriteria)criteria;
-		UriComponents uriComponentsents = 
-				UriComponentsBuilder.newInstance()
-				.query(super.query(page))   // 부모가 만든 기존 쿼리 추가 이후 검색 쿼리 추가
-//				.queryParam("page", page)
-//				.queryParam("perPageNum", criteria.getPerPageNum())
-				.queryParam("searchType", sCri.getSearchType())
-				.queryParam("keyword",sCri.getKeyword())
-				.build();
-		String query = uriComponentsents.toUriString();
-		return query;
+	    SearchCriteria sCri = (SearchCriteria)criteria;
+	    UriComponents uriComponentsents = 
+	            UriComponentsBuilder.newInstance()
+	            .query(super.query(page))   // page, perPageNum 포함
+	            .queryParam("boardType", sCri.getBoardType()) // ★ 추가: 게시판 타입 유지
+	            .queryParam("searchType", sCri.getSearchType())
+	            .queryParam("keyword", sCri.getKeyword())
+	            .build();
+	    return uriComponentsents.toUriString();
 	}
-	
+	// 만약 JSP에서 makeSearch()를 사용 중이라면 이 메서드도 확인/추가 필요
+	public String makeSearch(int page) {
+	    SearchCriteria sCri = (SearchCriteria)criteria;
+	    return UriComponentsBuilder.newInstance()
+	            .queryParam("page", page)
+	            .queryParam("perPageNum", sCri.getPerPageNum())
+	            .queryParam("boardType", sCri.getBoardType()) // ★ 추가
+	            .queryParam("searchType", sCri.getSearchType())
+	            .queryParam("keyword", sCri.getKeyword())
+	            .build().toUriString();
+	}
 	public String makeQueryBno(int bno) {
 		SearchCriteria sCri = (SearchCriteria)criteria;
 		UriComponents uriComponentsents = 

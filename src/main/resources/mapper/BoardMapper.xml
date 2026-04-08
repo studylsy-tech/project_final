@@ -3,59 +3,81 @@
 
 <mapper namespace="com.project.dao.BoardMapper">
 
-    <sql id="boardSearch">
-        <if test="searchType != null">
-            <if test="searchType == 't'.toString()">AND TITLE LIKE '%' || #{keyword} || '%'</if>
-            <if test="searchType == 'c'.toString()">AND CONTENT LIKE '%' || #{keyword} || '%'</if>
-            <if test="searchType == 'w'.toString()">AND WRITER LIKE '%' || #{keyword} || '%'</if>
-        </if>
-    </sql>
-
-    <select id="selectBoardListPaging" resultType="com.project.model.BoardDTO">
+    <select id="getNoticeListPaging" resultType="com.project.model.BoardDTO">
     SELECT * FROM (
         SELECT rownum rnum, a.* FROM (
             SELECT 
-                NOTICE_NO as notice_no,
-                TITLE as title,
-                CONTENT as content,
-                WRITER as writer,
-                BOARD_TYPE as board_type,
-                COUNT as count,
+                NOTICE_NO as notice_no, 
+                TITLE as title, 
+                CONTENT as content,   WRITER as writer,
+                COUNT as count, 
+                STATUS as status,
                 TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
-            FROM BOARD 
-            WHERE BOARD_TYPE = #{boardType}
-            <include refid="boardSearch" />
+            FROM BOARD
+            WHERE BOARD_TYPE = 'NOTICE'
             ORDER BY NOTICE_NO DESC
         ) a WHERE rownum &lt;= #{pageEnd}
     ) WHERE rnum &gt;= #{pageStart}
 </select>
 
+<select id="selectBoardListPaging" resultType="com.project.model.BoardDTO">
+    SELECT * FROM (
+        SELECT rownum rnum, a.* FROM (
+            SELECT 
+                NOTICE_NO as notice_no, 
+                TITLE as title, 
+                WRITER as writer,
+                COUNT as count, 
+                STATUS as status,
+                TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
+            FROM BOARD
+            WHERE BOARD_TYPE = 'NOTICE' AND STATUS = 'Y'
+            ORDER BY NOTICE_NO DESC
+        ) a WHERE rownum &lt;= #{pageEnd}
+    ) WHERE rnum &gt;= #{pageStart}
+</select>
+
+    <select id="getBoardCount" resultType="int">
+        SELECT COUNT(*) FROM BOARD 
+        WHERE BOARD_TYPE = 'NOTICE'
+    </select>
+
+    <select id="getNoticeCount" resultType="int">
+        SELECT COUNT(*) FROM BOARD 
+        WHERE BOARD_TYPE = 'NOTICE'
+    </select>
+
+    <update id="updateBoardStatus">
+        UPDATE BOARD 
+        SET STATUS = #{status} 
+        WHERE NOTICE_NO = #{notice_no}
+    </update>
+
+    <select id="getUnansweredCount" resultType="int">
+        SELECT COUNT(*) FROM BOARD 
+        WHERE BOARD_TYPE = 'QNA' AND IS_REPLY = 0 AND STATUS = 'Y'
+    </select>
+
     <select id="selectBoardDetail" parameterType="int" resultType="com.project.model.BoardDTO">
         SELECT 
-            NOTICE_NO as notice_no, 
-            TITLE as title, 
-            CONTENT as content, 
-            WRITER as writer, 
-            BOARD_TYPE as board_type, 
-            COUNT as count, 
-            TO_CHAR(INDATE, 'YYYY-MM-DD') as indate 
-        FROM BOARD 
-        WHERE NOTICE_NO = #{notice_no}
+            NOTICE_NO as notice_no, TITLE as title, CONTENT as content, 
+            WRITER as writer, BOARD_TYPE as board_type, COUNT as count, 
+            IS_REPLY as is_reply, PARENT_NO as parent_no, STATUS as status,
+            TO_CHAR(INDATE, 'YYYY-MM-DD HH24:MI:SS') as indate 
+        FROM BOARD WHERE NOTICE_NO = #{notice_no}
     </select>
 
     <insert id="insertBoard" parameterType="com.project.model.BoardDTO">
-        INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE)
-        VALUES (#{title}, #{content}, #{writer}, #{board_type})
+        INSERT INTO BOARD (TITLE, CONTENT, WRITER, BOARD_TYPE, PARENT_NO, IS_REPLY, STATUS)
+        VALUES (#{title}, #{content}, #{writer}, #{board_type}, #{parent_no}, #{is_reply}, 'Y')
     </insert>
 
     <update id="updateCount" parameterType="int">
         UPDATE BOARD SET COUNT = COUNT + 1 WHERE NOTICE_NO = #{notice_no}
     </update>
 
-    <select id="getBoardCount" resultType="int"> 
-        SELECT COUNT(*) FROM BOARD 
-        WHERE BOARD_TYPE = #{boardType}
-        <include refid="boardSearch" />
-    </select>
+    <delete id="deleteBoard" parameterType="int">
+        DELETE FROM BOARD WHERE NOTICE_NO = #{notice_no}
+    </delete>
 
 </mapper>
