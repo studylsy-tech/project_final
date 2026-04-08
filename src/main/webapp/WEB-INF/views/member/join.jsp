@@ -97,15 +97,25 @@
         </div>
         
         <%-- 추가된 이메일 입력란 --%>
-        <div class="form-group">
-            <label for="semi_email">이메일</label>
-            <input type="email" name="email" id="semi_email" placeholder="알림을 받을 이메일을 입력하세요" required>
-            <button type="button" class="mail-btn" data-type="semi">인증번호 받기</button>
-        </div>
-        <div id="semi_auth_area" style="display:none;">
-		    <input type="text" id="semi_code" placeholder="인증번호 6자리">
-		    <button type="button" class="verify-btn" data-type="semi">인증확인</button>
-		</div>
+      <div class="form-group">
+    <label for="semi_email">이메일</label>
+    <!-- flex 컨테이너로 input과 button을 한 줄에 배치 -->
+    <div style="display: flex; gap: 8px;">
+        <input type="email" name="email" id="semi_email" 
+               placeholder="알림을 받을 이메일을 입력하세요" required
+               style="flex: 1;"> <!-- flex:1 로 남은 공간을 input이 채움 -->
+        <button type="button" class="mail-btn" data-type="semi">인증번호 받기</button>
+    </div>
+	</div>
+        <div id="semi_auth_area" style="display: none;">
+    <!-- flex 컨테이너로 input과 button을 한 줄에 배치 + height 일치 -->
+    <div style="display: flex; gap: 8px; height: 48px;">
+        <input type="text" id="semi_code" 
+               placeholder="인증번호 6자리"
+               style="flex: 1; height: 100%;">
+        <button type="button" class="verify-btn" data-type="semi">인증확인</button>
+    </div>
+</div>
         <button type="submit" id="semi_submit" class="login-btn" disabled>알림 신청하기</button>
     </form>
 </div>
@@ -127,12 +137,19 @@
             </div>
             <div class="form-group">
                 <label for="email">이메일</label>
-                <input type="email" name="email" id="email" placeholder="example@email.com" required>
+                <!-- flex 컨테이너로 input과 button을 한 줄에 배치 -->
+   				 <div style="display: flex; gap: 8px;">                
+                <input type="email" name="email" id="email" placeholder="example@email.com" required style="flex: 1;">
+                <!-- flex:1 로 남은 공간을 input이 채움 -->                
                 <button type="button" class="mail-btn" data-type="full">인증번호 받기</button>
             </div>
-            <div id="full_auth_area" style="display:none;">
-			    <input type="text" id="full_code" placeholder="인증번호 6자리">
+            </div>
+            <div id="full_auth_area" style="display:none; ">
+             <!-- flex 컨테이너로 input과 button을 한 줄에 배치 + height 일치 -->
+                <div style="display: flex; gap: 8px; height: 48px;">                         
+			    <input type="text" id="full_code" placeholder="인증번호 6자리" style="flex: 1; height :100%;">
 			    <button type="button" class="verify-btn" data-type="full">인증확인</button>
+			</div>
 			</div>
             <div class="form-group">
                 <label for="nickname">별명</label>
