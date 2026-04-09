@@ -38,10 +38,20 @@
                 TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
             FROM BOARD
             WHERE BOARD_TYPE = #{boardType} AND STATUS = 'Y'
-            ORDER BY NOTICE_NO DESC
+            
+            <choose>
+			    <when test='sortType != null and sortType == "count"'>
+			        ORDER BY COUNT DESC, NOTICE_NO DESC
+			    </when>
+			    <otherwise>
+			        ORDER BY NOTICE_NO DESC
+			    </otherwise>
+			</choose>
+            
         ) a WHERE rownum &lt;= #{pageEnd}
     ) WHERE rnum &gt;= #{pageStart}
 </select>
+
 
     <select id="getBoardCount" resultType="int">
     SELECT COUNT(*) FROM BOARD 

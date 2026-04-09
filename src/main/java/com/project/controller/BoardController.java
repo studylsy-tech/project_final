@@ -24,7 +24,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.project.model.BoardDTO;
 import com.project.model.MemberDTO;
 import com.project.service.BoardService;
-import com.project.util.Criteria;
 import com.project.util.PageMaker;
 import com.project.util.SearchCriteria;
 @Controller
