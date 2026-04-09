@@ -51,15 +51,27 @@
                         <%-- 정보 영역: 계층 구조 정렬 --%>
                         <div class="prod-info-wrapper">
                             <div class="prod-title-row">
-                                <c:set var="badgeClass" value="${s.boardType eq 'DROP' ? 'bg-red' : (s.boardType eq 'HOT' ? 'bg-orange' : 'bg-green')}" />
-                                <c:set var="badgeText" value="${s.boardType eq 'DROP' ? '급락' : (s.boardType eq 'HOT' ? '핫딜' : '최저가')}" />
-                                <span class="badge ${badgeClass}">${badgeText}</span>
-                                
-                                <span class="prod-main-text">
-                                    ${s.name} &mdash; 
-                                    <span class="price-highlight">&#8361;<fmt:formatNumber value="${s.price}" pattern="#,###" /></span>
-                                </span>
-                            </div>
+    <%-- 배지 색상 및 텍스트 설정 --%>
+    <c:choose>
+        <c:when test="${s.boardType eq 'DROP'}">
+            <span class="badge bg-red">급락</span>
+        </c:when>
+        <c:when test="${s.boardType eq 'HOT'}">
+            <span class="badge bg-orange">핫딜</span>
+        </c:when>
+        <c:when test="${s.boardType eq 'CRAWL'}">
+            <span class="badge bg-blue">추적중</span>
+        </c:when>
+        <c:otherwise>
+            <span class="badge bg-green">최저가</span>
+        </c:otherwise>
+    </c:choose>
+    
+    <span class="prod-main-text">
+        ${s.name} &mdash; 
+        <span class="price-highlight">&#8361;<fmt:formatNumber value="${s.price}" pattern="#,###" /></span>
+    </span>
+</div>
                             <div class="prod-sub-text">
                                 <fmt:formatDate value="${s.regDate}" pattern="yyyy.MM.dd HH:mm" /> | ${s.source}
                             </div>

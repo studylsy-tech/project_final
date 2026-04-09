@@ -35,12 +35,21 @@ public interface AdminMapper {
     void insertHotDealPriceHistory(@Param("dealId") int dealId, @Param("price") long price);
 	Map<String, Object> getDashboardStats();
 
-	void updateCurrentPrice(int prodId, int currentPrice);
-
-	void insertCommonPriceHistory(int prodId, int currentPrice);
-
+	
+	void deleteHotDeals();
+	
+	// 1. 일반 상품 리스트 가져오기
 	List<ProductDTO> getNormalProductList();
 
-	void deleteHotDeals();
-    
+	// 2. 메인 테이블 현재가 갱신
+	void updateCurrentPrice(@Param("prodId") int prodId, @Param("currentPrice") int currentPrice);
+
+	// 3. 이력 테이블(그래프용) 데이터 추가
+	void insertCommonPriceHistory(@Param("prodId") int prodId, @Param("currentPrice") int currentPrice);
+
+	// 핫딜 전용 이력 조회
+	List<Map<String, Object>> getHotDealPriceHistory(@Param("dealId") int dealId);
+
+	// 일반 제품 전용 이력 조회 (이름을 일반 제품용으로 변경)
+	List<Map<String, Object>> getNormalPriceHistory(@Param("prodId") int prodId);
 }

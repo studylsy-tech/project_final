@@ -7,6 +7,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.project.dao.ProductMapper;
 import com.project.dao.SearchMapper;
 import com.project.model.HotDealDTO;
 import com.project.model.ProductDTO;
@@ -20,16 +22,18 @@ public class StockController {
     @Autowired
     private SearchMapper searchMapper;
 
+    @Autowired
+    private ProductMapper productMapper;
     // 1. 전체 상품 검색 (Common_Product 전체)
     @GetMapping("/all")
     public String searchAll(@ModelAttribute("scri") SearchCriteria scri, Model model) throws Exception {
-        scri.setBoardType("ALL"); // Mapper에서 전체 조회를 위해 구분자 설정
-        List<ProductDTO> list = searchMapper.getSearchList(scri);
-        int totalCount = searchMapper.getSearchCount(scri);
+        // SearchMapper 대신 수정된 ProductMapper의 메서드를 호출해야 합니다.
+        List<ProductDTO> list = productMapper.listSearch(scri); 
+        int totalCount = productMapper.listSearchCount(scri);
         
         model.addAttribute("stockList", list);
         model.addAttribute("pageMaker", new SearchPageMaker(scri, totalCount, 5));
-        return "stock/stock_all"; // stock_all.jsp
+        return "stock/stock_all";
     }
 
     // 2. 급락 상품 검색 (BOARD_TYPE = 'DROP')

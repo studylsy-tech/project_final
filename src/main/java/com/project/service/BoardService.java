@@ -9,7 +9,8 @@ public interface BoardService {
     // SearchCriteria 하나로 통합
     List<BoardDTO> selectBoardListPaging(SearchCriteria scri);
     int getBoardCount(SearchCriteria scri);
-    
+    List<BoardDTO> selectQnaListPaging(SearchCriteria scri);
+
     BoardDTO selectBoardDetail(int notice_no);
     void insertBoard(BoardDTO board);
     void updateCount(int notice_no);
@@ -20,4 +21,5 @@ public interface BoardService {
 	void updateBoardStatus(int no, String status);
 	int getNoticeCount();
 	List<BoardDTO> getNoticeListPaging(Criteria cri);
+	List<BoardDTO> getQnaListPaging(Criteria cri);
 }
