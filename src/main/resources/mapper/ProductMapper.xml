@@ -50,41 +50,29 @@
                 PROD_PRICE as price,
                 IMAGE_URL as imageUrl,
                 ORIGIN_URL as originUrl,
-                SOURCE as communityName,
-                BOARD_TYPE as boardType,
+                SOURCE as source,        BOARD_TYPE as boardType,
                 REG_DATE as regDate
             FROM Common_Product
             WHERE 1=1
-            <choose>
-                <when test="searchType == 'name'.toString()">
-                    AND PROD_NAME LIKE '%'||#{keyword}||'%'
-                </when>
-                <when test="searchType == 'drop'.toString()">
-                    AND BOARD_TYPE = 'DROP'
-                </when>
-                <when test="searchType == 'low'.toString()">
-                    AND BOARD_TYPE = 'NORMAL' 
-                </when>
-            </choose>
+            <if test="searchType == 'name'.toString()">
+                AND PROD_NAME LIKE '%'||#{keyword}||'%'
+            </if>
 
-            <if test="searchType == null or searchType == 'name'.toString() or searchType == 'hot'.toString()">
             UNION ALL
+
             SELECT
                 DEAL_ID as prodId,
                 TITLE as name,
                 CURRENT_PRICE as price,
                 IMAGE_URL as imageUrl,
                 ORIGIN_URL as originUrl,
-                COMMUNITY_NAME as communityName,
+                COMMUNITY_NAME as source,
                 'HOT' as boardType,
                 LAST_UPDATE_DATE as regDate
             FROM TB_HOTDEAL_TRACKER
             WHERE 1=1
             <if test="searchType == 'name'.toString()">
                 AND TITLE LIKE '%'||#{keyword}||'%'
-            </if>
-            <if test="searchType == 'hot'.toString()">
-                </if>
             </if>
 
             ORDER BY regDate DESC
@@ -96,30 +84,15 @@
     SELECT (
         SELECT COUNT(*) FROM Common_Product
         WHERE 1=1
-        <choose>
-            <when test="searchType == 'name'.toString()">
-                AND PROD_NAME LIKE '%'||#{keyword}||'%'
-            </when>
-            <when test="searchType == 'drop'.toString()">
-                AND BOARD_TYPE = 'DROP'
-            </when>
-            <when test="searchType == 'low'.toString()">
-                AND BOARD_TYPE = 'NORMAL'
-            </when>
-        </choose>
+        <if test="searchType == 'name'.toString()">
+            AND PROD_NAME LIKE '%'||#{keyword}||'%'
+        </if>
     ) + (
-        <choose>
-            <when test="searchType == null or searchType == 'name'.toString() or searchType == 'hot'.toString()">
-                SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
-                WHERE 1=1
-                <if test="searchType == 'name'.toString()">
-                    AND TITLE LIKE '%'||#{keyword}||'%'
-                </if>
-            </when>
-            <otherwise>
-                0
-            </otherwise>
-        </choose>
+        SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
+        WHERE 1=1
+        <if test="searchType == 'name'.toString()">
+            AND TITLE LIKE '%'||#{keyword}||'%'
+        </if>
     ) FROM DUAL
 </select>
 
@@ -164,6 +137,8 @@
 <update id="updateProductPrice" parameterType="com.project.model.ProductDTO">
     UPDATE Common_Product 
     SET PROD_PRICE = #{price}, 
+        TARGET_PRICE = #{targetPrice},
+        CHECK_INTERVAL = #{checkInterval},
         REG_DATE = SYSDATE 
     WHERE PROD_ID = #{prodId}
 </update>
@@ -172,5 +147,25 @@
     INSERT INTO PRICE_HISTORY (PROD_ID, PRICE, REG_DATE)
     VALUES (#{prodId}, #{price}, SYSDATE)
 </insert>
+<insert id="insertProduct" parameterType="com.project.model.ProductDTO" useGeneratedKeys="true" keyProperty="prodId" keyColumn="PROD_ID">
+    INSERT INTO Common_Product (
+        PROD_CODE, SOURCE, PROD_NAME, PROD_PRICE, 
+        TARGET_PRICE, CHECK_INTERVAL, IMAGE_URL, BOARD_TYPE, REG_DATE
+    ) VALUES (
+        #{prodCode}, 'DANAWA', #{name}, #{price}, 
+        #{targetPrice}, #{checkInterval}, #{imageUrl}, 'CRAWL', SYSDATE
+    )
+</insert>
 
+<update id="upsertProduct" parameterType="com.project.model.ProductDTO">
+    MERGE INTO Common_Product p
+    USING DUAL ON (p.PROD_CODE = #{prodCode})
+    WHEN MATCHED THEN
+        UPDATE SET 
+            p.PROD_PRICE = #{price},
+            p.REG_DATE = SYSDATE
+    WHEN NOT MATCHED THEN
+        INSERT (PROD_CODE, SOURCE, PROD_NAME, PROD_PRICE, IMAGE_URL, BOARD_TYPE, REG_DATE)
+        VALUES (#{prodCode}, 'DANAWA', #{name}, #{price}, #{imageUrl}, 'CRAWL', SYSDATE)
+</update>
 </mapper>

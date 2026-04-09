@@ -22,7 +22,16 @@
                class="search-input" placeholder="검색어를 입력하세요">
         <button type="button" id="searchBtn" class="btn-search">검색</button>
     </div>
-
+	
+	<!-- 시간순/조회순 영역 -->
+	<div class="sort-area">
+	    <a href="javascript:void(0);" class="sort-link" data-sort="latest" 
+	       style="${pageMaker.cri.sortType == 'latest' || empty pageMaker.cri.sortType ? 'font-weight:bold; color:#000;' : 'color:#999;'}">최신순</a>
+	    <span style="margin: 0 5px; color: #ddd;">|</span>
+	    <a href="javascript:void(0);" class="sort-link" data-sort="count" 
+	       style="${pageMaker.cri.sortType == 'count' ? 'font-weight:bold; color:#000;' : 'color:#999;'}">조회순</a>
+	</div>
+	
     <table class="board-table">
         <thead>
             <tr>
@@ -84,23 +93,23 @@
         <ul class="pagination" style="display: inline-flex; list-style: none; padding: 0;">
             <c:if test="${pageMaker.prev}">
                 <li style="margin: 0 5px;">
-                    <a href="${path}/search/list${pageMaker.makeSearch(pageMaker.startPage - 1)}&boardType=QNA">이전</a>
+                    <a href="${path}/board/qna${pageMaker.makeSearch(pageMaker.startPage - 1)}&sortType=${pageMaker.cri.sortType}">이전</a>
                 </li>
             </c:if>
 
             <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
-                <li style="margin: 0 5px;">
-                    <a href="${path}/search/list${pageMaker.makeSearch(idx)}&boardType=QNA" 
-                       class="${pageMaker.cri.page == idx ? 'active' : ''}"
-                       style="${pageMaker.cri.page == idx ? 'font-weight: bold; color: blue;' : ''}">
-                        ${idx}
-                    </a>
-                </li>
-            </c:forEach>
+			    <li style="margin: 0 5px;">
+			        <a href="${path}/board/qna${pageMaker.makeSearch(idx)}&sortType=${pageMaker.cri.sortType}" 
+			           class="${pageMaker.cri.page == idx ? 'active' : ''}"
+			           style="${pageMaker.cri.page == idx ? 'font-weight: bold; color: blue;' : ''}">
+			             ${idx}
+			        </a>
+			    </li>
+			</c:forEach>
 
             <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
                 <li style="margin: 0 5px;">
-                    <a href="${path}/search/list${pageMaker.makeSearch(pageMaker.endPage + 1)}&boardType=QNA">다음</a>
+                    <a href="${path}/board/qna${pageMaker.makeSearch(pageMaker.endPage + 1)}&sortType=${pageMaker.cri.sortType}">다음</a>
                 </li>
             </c:if>
         </ul>
@@ -115,22 +124,42 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-    // 검색 버튼 클릭 이벤트
-    $(document).on("click", "#searchBtn", function(e) {
+	// [추가] 정렬 링크 클릭 이벤트
+    $(document).on("click", ".sort-link", function(e) {
         e.preventDefault();
         
-        const keyword = $('#keywordInput').val();
+        const sortType = $(this).data("sort");
         const searchType = $("#searchType").val();
+        const keyword = $('#keywordInput').val();
         const perPageNum = "${pageMaker.cri.perPageNum}";
         const contextPath = "${path}";
 
-        // 검색 시 1페이지로 리셋 및 QNA 타입 유지
-        let url = contextPath + "/search/list"
+        // 현재 Q&A 페이지 주소로 정렬 값(sortType)을 들고 이동
+        let url = contextPath + "/board/qna"
                 + "?page=1"
                 + "&perPageNum=" + (perPageNum || 10)
-                + "&boardType=QNA"
                 + "&searchType=" + searchType
-                + "&keyword=" + encodeURIComponent(keyword);
+                + "&keyword=" + encodeURIComponent(keyword)
+                + "&sortType=" + sortType;
+
+        location.href = url;
+    });
+
+    // 검색 버튼 클릭 시에도 현재 정렬(sortType)을 유지하도록 수정
+    $(document).on("click", "#searchBtn", function(e) {
+        e.preventDefault();
+        
+        const sortType = "${pageMaker.cri.sortType}"; // 현재 정렬 기준 가져오기
+        const keyword = $('#keywordInput').val();
+        const searchType = $("#searchType").val();
+        const contextPath = "${path}";
+
+        let url = contextPath + "/board/qna" // /search/list 대신 /board/qna로 통일 권장
+                + "?page=1"
+                + "&perPageNum=${pageMaker.cri.perPageNum}"
+                + "&searchType=" + searchType
+                + "&keyword=" + encodeURIComponent(keyword)
+                + "&sortType=" + (sortType || 'latest');
 
         location.href = url;
     });

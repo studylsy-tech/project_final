@@ -8,8 +8,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.crawling.SeleniumDriver;
 import com.project.model.ProductDTO;
@@ -46,15 +48,7 @@ public class DashboardController {
 		return "dashboard/main"; // WEB-INF/views/dashboard/main.jsp를 호출합니다.
 	}
 
-	@PostMapping("/register")
-	public String register(ProductDTO product) {
-		// 1. 서비스 호출 (DB 저장 완료 후 product 객체에 prodId가 채워짐)
-		productService.registerNewProduct(product);
-
-		// 2. 홈 대신 상세 페이지로 리다이렉트
-		// 저장된 직후의 상품 번호(prodId)를 파라미터로 넘깁니다.
-		return "redirect:/dashboard/detail?prodId=" + product.getProdId();
-	}
+	
 
 	@GetMapping("/detail")
 	public String productDetail(@RequestParam("prodId") int prodId, Model model) {
@@ -68,6 +62,16 @@ public class DashboardController {
 
 	    return "dashboard/history_detail";
 	}
-	
+	@PostMapping("/register")
+	public String registerProduct(ProductDTO productDTO) {
+	    try {
+	        productService.registerNewProduct(productDTO);
+	        // /fin_project/stock/all 페이지가 실제로 존재하는지 확인!
+	        return "redirect:/stock/all"; 
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        return "common/error";
+	    }
+	}
 	
 }

@@ -56,20 +56,41 @@ public class SeleniumDriver {
             for (WebElement item : items) {
                 if (count >= 10) break;
                 try {
+                    // 스크롤 이동 (Lazy Load 트리거)
+                    ((org.openqa.selenium.JavascriptExecutor) localDriver).executeScript("arguments[0].scrollIntoView(true);", item);
+                    Thread.sleep(100); 
+
                     String title = item.findElement(By.cssSelector(".prod_name a")).getText();
                     String priceStr = item.findElement(By.cssSelector(".rank_one .price_sect strong")).getText();
-                    int price = Integer.parseInt(priceStr.replaceAll("[^0-9]", ""));
+                    long price = Long.parseLong(priceStr.replaceAll("[^0-9]", ""));
                     String prodCode = item.getAttribute("id");
+
+                    WebElement imgElement = item.findElement(By.cssSelector(".thumb_link img"));
+                    
+                    // 우선순위: data-src > data-original > src
+                    String imageUrl = imgElement.getAttribute("data-src");
+                    if (imageUrl == null || imageUrl.isEmpty()) {
+                        imageUrl = imgElement.getAttribute("data-original");
+                    }
+                    if (imageUrl == null || imageUrl.isEmpty() || imageUrl.contains("blank") || imageUrl.contains("noImg")) {
+                        imageUrl = imgElement.getAttribute("src");
+                    }
+
+                    if (imageUrl != null && imageUrl.startsWith("//")) {
+                        imageUrl = "https:" + imageUrl;
+                    }
 
                     ProductDTO dto = new ProductDTO();
                     dto.setProdCode(prodCode);
                     dto.setName(title);
                     dto.setPrice(price);
+                    dto.setImageUrl(imageUrl);
+                    dto.setSource("DANAWA");
 
                     productList.add(dto);
                     count++;
                 } catch (Exception e) {
-                    continue;
+                    continue; 
                 }
             }
         } catch (Exception e) {

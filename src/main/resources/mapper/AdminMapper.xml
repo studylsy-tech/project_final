@@ -65,4 +65,40 @@
         LAST_UPDATE_DATE = SYSDATE 
     WHERE DEAL_ID = #{dealId}
 </update>
+
+
+
+<select id="getNormalProductList" resultType="com.project.model.ProductDTO">
+        SELECT 
+            PROD_ID   as prodId, 
+            PROD_NAME as name 
+        FROM Common_Product
+    </select>
+<update id="updateCurrentPrice">
+        UPDATE Common_Product 
+        SET PROD_PRICE = #{currentPrice}, 
+            REG_DATE = SYSDATE 
+        WHERE PROD_ID = #{prodId}
+    </update>
+
+<insert id="insertCommonPriceHistory">
+        INSERT INTO PRICE_HISTORY (PROD_ID, PRICE, REG_DATE)
+        VALUES (#{prodId}, #{currentPrice}, SYSDATE)
+    </insert>
+    
+    <select id="getHotDealPriceHistory" resultType="map">
+    SELECT 
+        TO_CHAR(REG_DATE, 'YYYY-MM-DD HH24:MI') as REG_DATE,  PRICE as PRICE
+    FROM TB_PRICE_HISTORY
+    WHERE DEAL_ID = #{dealId}
+    ORDER BY REG_DATE DESC
+</select>
+
+<select id="getNormalPriceHistory" resultType="com.project.model.ProductDTO">
+    SELECT 
+        REG_DATE as regDate, PRICE as price
+    FROM PRICE_HISTORY
+    WHERE PROD_ID = #{prodId}
+    ORDER BY REG_DATE DESC
+</select>
 </mapper>

@@ -12,10 +12,13 @@ public class SearchCriteria extends Criteria {
     private String searchType;    // 검색 타입 (name, drop, low 등)
     private String keyword;       // 검색어
     private String boardType;     // 게시판 타입
+    private String status;        // (게시 상태: 'Y' 등)
     
     // MyBatis rownum 범위를 위한 필드 추가
     private int pageStart;        // 시작 행 번호
     private int pageEnd;          // 끝 행 번호
+    
+    private String sortType = "latest"; 		  // 정렬 타입을 위한 필드
     
     public SearchCriteria(int page, int perPageNum, String searchType, String keyword) {
         super(page, perPageNum);
@@ -32,8 +35,8 @@ public class SearchCriteria extends Criteria {
 
     @Override
     public String toString() {
-        return super.toString() + " Range: " + pageStart + "~" + pageEnd + 
-               " [searchType=" + searchType + ", keyword=" + keyword + "]";
+    	return super.toString() + " Range: " + pageStart + "~" + pageEnd + 
+                " [searchType=" + searchType + ", keyword=" + keyword + ", sortType=" + sortType + "]";
     }
     
     public int getPageStart() {

@@ -30,4 +30,6 @@ public interface BoardMapper {
 
 	void updateBoardStatus(@Param("notice_no") int no, @Param("status") String status);
 
-	List<BoardDTO> getNoticeListPaging(SearchCriteria scri);}
+	List<BoardDTO> getNoticeListPaging(SearchCriteria scri);
+
+	List<BoardDTO> selectQnaListPaging(SearchCriteria scri);}

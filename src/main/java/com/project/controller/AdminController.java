@@ -187,5 +187,24 @@ public class AdminController {
         return "admin/hotdeal_engine"; 
     }
     
+    @GetMapping("/error_logs")
+    public String errorLogs() {
+        return "admin/error_logs"; 
+    }
     
+ // [추가] 시세 관리 페이지 수치 새로고침 (Ajax 응답용)
+    @GetMapping("/refreshStats.do")
+    @ResponseBody
+    public Map<String, Object> refreshStats(HttpSession session) {
+        // 관리자 권한 체크 (안전을 위해)
+        if (!isAdmin(session)) {
+            Map<String, Object> error = new HashMap<>();
+            error.put("status", "error");
+            error.put("message", "권한이 없습니다.");
+            return error;
+        }
+
+        // adminService를 통해 대시보드 통계 수치(TOTALCOUNT, HOTDEALLASTSYNC 등)를 가져옵니다.
+        return adminService.getDashboardStats();
+    }
 }

@@ -15,10 +15,10 @@
     </div>
 
     <form action="${path}/dashboard/register" method="post">
-        <input type="hidden" name="prodCode" value="${selectedProduct.prodCode}">
-        <input type="hidden" name="name" value="${selectedProduct.name}">
-        <input type="hidden" name="price" value="${selectedProduct.price}">
-        
+    <input type="hidden" name="prodCode" value="${selectedProduct.prodCode}">
+    <input type="hidden" name="name" value="${selectedProduct.name}">
+    <input type="hidden" name="price" value="${selectedProduct.price}">
+    <input type="hidden" name="imageUrl" value="${selectedProduct.imageUrl}">     
         <div class="form-group">
             <label>③ 목표 가격 설정</label>
             <input type="number" name="targetPrice" placeholder="원하는 가격을 입력하세요" required>
