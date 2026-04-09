@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.project.crawling.SeleniumDriver;
+import com.project.model.HotDealDTO;
 import com.project.model.ProductDTO;
+import com.project.service.HotDealService;
 import com.project.service.ProductService;
 
 @Controller
@@ -27,7 +29,9 @@ public class DashboardController {
 	// 2. 이 부분이 누락되어 에러가 발생한 것입니다. 아래 코드를 추가하세요.
 	@Autowired
 	private ProductService productService;
-
+	
+    @Autowired
+    private HotDealService hotDealService;
 	@GetMapping("/search")
 	public String searchList(@RequestParam("query") String query, Model model) {
 		List<ProductDTO> searchResults = seleniumDriver.crawlingList(query);
@@ -51,17 +55,50 @@ public class DashboardController {
 	
 
 	@GetMapping("/detail")
-	public String productDetail(@RequestParam("prodId") int prodId, Model model) {
-	    // 1. 서비스에서 데이터를 가져옴
-	    ProductDTO product = productService.getProductById(prodId);
-	    List<Map<String, Object>> history = productService.getPriceHistory(prodId);
+	public String productDetail(
+	    @RequestParam(value = "prodId", required = false) Integer prodId, 
+	    @RequestParam(value = "dealId", required = false) Integer dealId, 
+	    Model model) {
 
-	    // 2. JSP에서 사용할 변수명을 "product", "history"로 정확히 지정
-	    model.addAttribute("product", product);
-	    model.addAttribute("history", history);
+	    System.out.println("\n========== [데이터 전송 직전 최종 진단] ==========");
+	    
+	    if (prodId != null) {
+	        System.out.println("[타입] 일반 상품 요청");
+	        model.addAttribute("product", productService.getProductById(prodId));
+	        List<Map<String, Object>> history = productService.getPriceHistory(prodId);
+	        
+	        if (history != null && !history.isEmpty()) {
+	            System.out.println("일반상품 첫 이력 데이터: " + history.get(0));
+	        }
+	        model.addAttribute("history", history);
+	        model.addAttribute("isProduct", true);
+	    } 
+	    else if (dealId != null) {
+	        System.out.println("[타입] 핫딜 상품 요청");
+	        
+	        // 핫딜 상세 정보
+	        HotDealDTO deal = hotDealService.getHotDealSummary(dealId);
+	        System.out.println("핫딜 상세 정보(DTO): " + deal);
+	        model.addAttribute("deal", deal);
+	        
+	        // 핫딜 가격 이력
+	        List<Map<String, Object>> history = hotDealService.getPriceHistory(dealId);
+	        if (history != null && !history.isEmpty()) {
+	            System.out.println("핫딜 이력 첫 행 데이터: " + history.get(0));
+	            System.out.println("사용 중인 날짜 키값: " + history.get(0).keySet());
+	        } else {
+	            System.out.println("!!! 경고: 핫딜 이력 데이터(history)가 비어있습니다 !!!");
+	        }
+	        
+	        model.addAttribute("history", history);
+	        model.addAttribute("isProduct", false);
+	    }
+	    
+	    System.out.println("========== [진단 종료] ==========\n");
 
 	    return "dashboard/history_detail";
 	}
+	
 	@PostMapping("/register")
 	public String registerProduct(ProductDTO productDTO) {
 	    try {

@@ -41,4 +41,11 @@ public interface HotDealMapper {
 
 	void insertPriceHistory(@Param("dealId") int dealId, @Param("price") long price);
 	int getDealIdByUrl(@Param("originUrl") String originUrl);
+	
+HotDealDTO getHotDealSummary(Integer dealId);
+    
+    List<Map<String, Object>> getPriceHistory(Integer dealId);
+    
+    List<Map<String, Object>> getTopDroppingDeals();
+    List<Map<String, Object>> getLowestPriceDeals();
 }

@@ -34,6 +34,9 @@ BoardDTO selectBoardDetail(int noticeNo);
 	int fetchAndRecordNormalProducts();
 	void deleteAllDeals();
 	void stopCrawling();
-    
+	HotDealDTO getDealDetail(Integer dealId); // Object -> HotDealDTO
+	List<Map<String, Object>> getDealHistory(Integer dealId); // Object -> List<Map<String, Object>>
+	List<Map<String, Object>> getTopDroppingDeals();
+	List<Map<String, Object>> getLowestPriceDeals();
     
 }

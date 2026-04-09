@@ -1,6 +1,7 @@
 package com.project.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -33,14 +34,19 @@ public class MainController {
 	@GetMapping("/")
 	public String mainHome(Model model, SearchCriteria cri) throws Exception {
 
-		// 1. 실시간 인기 핫딜 (TB_HOTDEAL_TRACKER 데이터)
-		// [수정] 주입받은 변수 hotDealService를 사용 (static 호출 방지)
-		List<HotDealDTO> hotDealList = hotDealService.getRecentDeals();
+	    // 1. 실시간 인기 핫딜
+	    List<HotDealDTO> hotDealList = hotDealService.getRecentDeals();
+	    model.addAttribute("hotDealList", hotDealList);
 
-		// 2. JSP의 items="${hotDealList}"에 전달
-		model.addAttribute("hotDealList", hotDealList);
+	    // 2. 급락 순위 데이터 가져오기 [추가]
+	    List<Map<String, Object>> dropList = hotDealService.getTopDroppingDeals();
+	    model.addAttribute("dropList", dropList);
 
-		return "index";
+	    // 3. 최저가 틱커 데이터 가져오기 [추가]
+	    List<Map<String, Object>> lowestList = hotDealService.getLowestPriceDeals();
+	    model.addAttribute("lowestList", lowestList);
+
+	    return "index";
 	}
 
 	// --- 하단 푸터 관련 메서드들 ---

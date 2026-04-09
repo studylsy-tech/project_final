@@ -24,12 +24,15 @@
 		<div class="v-line"></div>
 
 		<div class="ticker-box">
-			<ul id="mainTicker">
-				<li><span class="live-tag">[LIVE]</span> 소니 WH-1000XM5 최저가 ₩325,000</li>
-				<li><span class="live-tag">[LIVE]</span> 갤럭시 S24 울트라 가격 하락!</li>
-				<li><span class="live-tag">[LIVE]</span> LG 그램 Pro 16 역대 최저가 경신</li>
-			</ul>
-		</div>
+    <ul id="mainTicker">
+        <c:forEach var="low" items="${lowestList}">
+            <li>
+                <span class="live-tag">[최저가경신]</span> 
+                ${low.title} - 역대 최저가 ₩<fmt:formatNumber value="${low.price}" pattern="#,###" />
+            </li>
+        </c:forEach>
+    </ul>
+</div>
 	</div>
 </div>
 
@@ -55,7 +58,7 @@
 				<c:forEach var="deal" items="${hotDealList}" varStatus="status">
 					<c:if test="${status.index < 10}">
 						<div class="hotdeal-item"
-							onclick="location.href='${path}/hotdeal/detail?dealId=${deal.dealId}'"
+							onclick="location.href='${path}/dashboard/detail?dealId=${deal.dealId}'"
 							style="cursor: pointer;">
 							<div class="img-wrapper">
 								<c:choose>
@@ -85,14 +88,15 @@
 
 		<%-- 우측: 급락순위 10×1 리스트 --%>
 		<div class="drop-rank-list">
-			<c:forEach var="i" begin="1" end="10">
-				<div class="rank-list-item">
-					<span class="rank-num">${i}</span>
-					<span class="rank-name" style="font-size:20px;">테스트 상품명 ${i}</span>
-					<span class="rank-drop" style="font-size:20px;">-15%</span>
-				</div>
-			</c:forEach>
-		</div>
+    <c:forEach var="drop" items="${dropList}" varStatus="status">
+        <div class="rank-list-item" onclick="location.href='${path}/dashboard/detail?dealId=${drop.dealId}'">
+            <span class="rank-num">${status.count}</span>
+            <%-- 인라인 style을 제거하고 CSS 클래스에 맡깁니다 --%>
+            <span class="rank-name">${drop.title}</span>
+            <span class="rank-drop">${drop.dropRate}% ↓</span>
+        </div>
+    </c:forEach>
+</div>
 
 	</div>
 </section>

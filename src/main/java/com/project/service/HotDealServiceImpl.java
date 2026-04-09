@@ -229,5 +229,25 @@ public class HotDealServiceImpl implements HotDealService {
 	    return priceTracker.updateRegisteredHotDealPrices();
 	}
 
-	
+	@Override
+	public HotDealDTO getDealDetail(Integer dealId) {
+	    // 기존에 구현된 getHotDealSummary 메서드를 활용하여 DB에서 데이터를 가져옵니다.
+	    return hotDealMapper.getHotDealSummary(dealId); 
+	}
+
+	@Override
+	public List<Map<String, Object>> getDealHistory(Integer dealId) {
+	    // 기존에 구현된 getPriceHistory 메서드를 활용하여 가격 이력을 가져옵니다.
+	    return hotDealMapper.getPriceHistory(dealId);
+	}
+
+	@Override
+	public List<Map<String, Object>> getTopDroppingDeals() {
+	    return hotDealMapper.getTopDroppingDeals();
+	}
+
+	@Override
+	public List<Map<String, Object>> getLowestPriceDeals() {
+	    return hotDealMapper.getLowestPriceDeals();
+	}
 }

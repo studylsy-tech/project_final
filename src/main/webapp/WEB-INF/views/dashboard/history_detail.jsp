@@ -15,16 +15,20 @@
         <c:set var="mall" value="${product.communityName}" />
         <c:set var="uDate" value="${product.regDate}" />
         <c:set var="link" value="${product.originUrl}" />
-        
+        <c:set var="isProduct" value="true" /> <%-- [추가] 일반 상품 구분자 --%>
     </c:when>
     <c:otherwise>
         <%-- 핫딜(HotDeal) 케이스 --%>
         <c:set var="title" value="${deal.title}" />
         <c:set var="currP" value="${deal.currentPrice}" />
-        <c:set var="targP" value="${deal.startPrice}" />
+        
+        <%-- [수정] 핫딜은 목표가(빨간선)를 안 보이게 하려고 0으로 설정합니다 --%>
+        <c:set var="targP" value="0" /> 
+        
         <c:set var="mall" value="${deal.mallName}" />
         <c:set var="uDate" value="${deal.lastUpdateDate}" />
         <c:set var="link" value="${deal.originUrl}" />
+        <c:set var="isProduct" value="false" /> <%-- [추가] 핫딜 구분자 --%>
     </c:otherwise>
 </c:choose>
 
@@ -95,26 +99,25 @@
         </thead>
         <tbody>
     <c:forEach var="h" items="${history}">
-        <tr>
-            <td>
-                <%-- 1. 문자열을 날짜 객체로 변환 --%>
-                <fmt:parseDate value="${h.REGDATE}" var="pDate" pattern="yyyy-MM-dd HH:mm:ss" />
-                <%-- 2. 변환된 객체를 화면에 출력 --%>
-                <fmt:formatDate value="${pDate}" pattern="yyyy-MM-dd HH:mm" />
-            </td>
-            <td>
-                <strong>₩<fmt:formatNumber value="${h.PRICE}" pattern="#,###" /></strong>
-            </td>
-            <td class="change-cell">-</td>
-        </tr>
-    </c:forEach>
-    <c:if test="${empty history}">
-        <tr>
-            <td colspan="3" style="text-align:center; padding:40px; color:#999;">
-                수집된 가격 데이터가 없습니다.
-            </td>
-        </tr>
-    </c:if>
+    <tr>
+        <td>
+            <c:choose>
+                <c:when test="${isProduct == true}">
+                    <%-- 일반 상품: DTO 필드명 혹은 Map의 키값에 맞춰 포맷팅 --%>
+                    <fmt:formatDate value="${h.REGDATE}" pattern="yyyy-MM-dd HH:mm" />
+                </c:when>
+                <c:otherwise>
+                    <%-- 핫딜 상품: 콘솔 확인 결과 키값이 [REG_DATE] 임 --%>
+                    ${h.REG_DATE}
+                </c:otherwise>
+            </c:choose>
+        </td>
+        <td>
+            <strong>₩<fmt:formatNumber value="${h.PRICE}" pattern="#,###" /></strong>
+        </td>
+        <td class="change-cell">-</td>
+    </tr>
+</c:forEach>
 </tbody>
     </table>
 </div>
