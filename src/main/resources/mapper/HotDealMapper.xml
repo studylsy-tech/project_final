@@ -93,13 +93,12 @@
     </select>
 
     <select id="getHotDealPriceHistory" resultType="map">
-        SELECT 
-            TO_CHAR(RECORD_DATE, 'YYYY-MM-DD HH24:MI') AS REG_DATE,
-            PRICE
-        FROM TB_PRICE_HISTORY
-        WHERE DEAL_ID = #{dealId}
-        ORDER BY RECORD_DATE ASC
-    </select>
+    SELECT 
+        TO_CHAR(RECORD_DATE, 'YYYY-MM-DD HH24:MI') AS REG_DATE,
+        PRICE
+    FROM TB_PRICE_HISTORY
+    WHERE DEAL_ID = #{dealId}
+    ORDER BY RECORD_DATE ASC </select>
 <select id="getHotDealSummary" parameterType="int" resultType="com.project.model.HotDealDTO">
         SELECT 
             DEAL_ID as dealId,
@@ -116,30 +115,49 @@
     <select id="getPriceHistory" parameterType="int" resultType="map">
     SELECT 
         PRICE, 
-        RECORD_DATE AS REGDATE  FROM TB_PRICE_HISTORY 
+        RECORD_DATE AS REGDATE  
+    FROM TB_PRICE_HISTORY 
     WHERE DEAL_ID = #{dealId}
-    ORDER BY RECORD_DATE DESC
-</select>
+    ORDER BY RECORD_DATE ASC  </select>
 
 <select id="getTopDroppingDeals" resultType="map">
     SELECT * FROM (
+        /* 1. 핫딜: TB_HOTDEAL_TRACKER + TB_PRICE_HISTORY 조인 */
         SELECT 
-            t.DEAL_ID as "dealId",
+            t.DEAL_ID as "id",
             t.TITLE as "title", 
             t.CURRENT_PRICE as "currentPrice", 
             h.PRICE as "prevPrice",
-            ROUND(((t.CURRENT_PRICE - h.PRICE) / h.PRICE) * 100, 1) as "dropRate"
+            ROUND(((h.PRICE - t.CURRENT_PRICE) / h.PRICE) * 100, 1) as "dropRate",
+            'HOT' as "type"
         FROM TB_HOTDEAL_TRACKER t
         JOIN (
-            -- 가장 최근 이력 하나 전의 가격을 가져오기 위한 조인
             SELECT DEAL_ID, PRICE, 
                    ROW_NUMBER() OVER(PARTITION BY DEAL_ID ORDER BY RECORD_DATE DESC) as rn
             FROM TB_PRICE_HISTORY
         ) h ON t.DEAL_ID = h.DEAL_ID
-        WHERE h.rn = 2 -- 1은 현재가와 같으므로, 2번째(이전 수집가)와 비교
-          AND t.CURRENT_PRICE &lt; h.PRICE -- 가격이 떨어진 것만
-        ORDER BY "dropRate" ASC -- 하락폭이 큰 순서 (-20%가 -10%보다 작으므로 ASC)
-    ) WHERE ROWNUM &lt;= 10
+        WHERE h.rn = 2 AND t.CURRENT_PRICE &lt; h.PRICE
+
+        UNION ALL
+
+        /* 2. 일반 상품: Common_Product + PRICE_HISTORY 조인 */
+        SELECT 
+            p.PROD_ID as "id",
+            p.PROD_NAME as "title", 
+            p.PROD_PRICE as "currentPrice", 
+            ph.PRICE as "prevPrice",
+            ROUND(((ph.PRICE - p.PROD_PRICE) / ph.PRICE) * 100, 1) as "dropRate",
+            'NORMAL' as "type"
+        FROM Common_Product p
+        JOIN (
+            SELECT PROD_ID, PRICE, 
+                   ROW_NUMBER() OVER(PARTITION BY PROD_ID ORDER BY REG_DATE DESC) as rn
+            FROM PRICE_HISTORY
+        ) ph ON p.PROD_ID = ph.PROD_ID
+        WHERE ph.rn = 2 AND p.PROD_PRICE &lt; ph.PRICE
+    ) 
+    ORDER BY "dropRate" DESC
+    OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY
 </select>
 
 <select id="getLowestPriceDeals" resultType="map">
@@ -151,5 +169,45 @@
         WHERE h.DEAL_ID = t.DEAL_ID
     )
     AND ROWNUM &lt;= 5
+</select>
+<select id="getCombinedDropRank" resultType="map">
+    SELECT * FROM (
+        /* 1. 핫딜 테이블에서 하락 상품 추출 */
+        SELECT 
+            t.DEAL_ID as "id",
+            t.TITLE as "title", 
+            t.CURRENT_PRICE as "currentPrice", 
+            h.PRICE as "prevPrice",
+            ROUND(((h.PRICE - t.CURRENT_PRICE) / h.PRICE) * 100, 1) as "dropRate",
+            'HOT' as "type" -- 구분을 위한 타입
+        FROM TB_HOTDEAL_TRACKER t
+        JOIN (
+            SELECT DEAL_ID, PRICE, 
+                   ROW_NUMBER() OVER(PARTITION BY DEAL_ID ORDER BY RECORD_DATE DESC) as rn
+            FROM TB_PRICE_HISTORY
+        ) h ON t.DEAL_ID = h.DEAL_ID
+        WHERE h.rn = 2 AND t.CURRENT_PRICE &lt; h.PRICE
+
+        UNION ALL
+
+        /* 2. 일반 상품 테이블에서 하락 상품 추출 */
+        SELECT 
+            p.PROD_ID as "id",
+            p.PROD_NAME as "title", 
+            p.PROD_PRICE as "currentPrice", 
+            ph.PRICE as "prevPrice",
+            ROUND(((ph.PRICE - p.PROD_PRICE) / ph.PRICE) * 100, 1) as "dropRate",
+            'NORMAL' as "type"
+        FROM Common_Product p
+        JOIN (
+            SELECT PROD_ID, PRICE, 
+                   ROW_NUMBER() OVER(PARTITION BY PROD_ID ORDER BY REG_DATE DESC) as rn
+            FROM PRICE_HISTORY
+        ) ph ON p.PROD_ID = ph.PROD_ID
+        WHERE ph.rn = 2 AND p.PROD_PRICE &lt; ph.PRICE
+
+    ) 
+    ORDER BY "dropRate" DESC -- 전체 결과 중 하락율이 높은 순으로 정렬
+    OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY -- 상위 10개만
 </select>
 </mapper>

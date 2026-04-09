@@ -112,13 +112,12 @@
 </select>
 
 <select id="getPriceHistory" resultType="map">
-    SELECT 
+    SELECT  
         PRICE as price,
         REG_DATE as regDate
     FROM PRICE_HISTORY
     WHERE PROD_ID = #{prodId}
-    ORDER BY REG_DATE DESC
-</select>
+    ORDER BY REG_DATE ASC  </select>
 
 <select id="getProductSummary" resultType="com.project.model.ProductDTO">
     SELECT

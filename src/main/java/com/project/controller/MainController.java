@@ -40,7 +40,19 @@ public class MainController {
 
 	    // 2. 급락 순위 데이터 가져오기 [추가]
 	    List<Map<String, Object>> dropList = hotDealService.getTopDroppingDeals();
-	    model.addAttribute("dropList", dropList);
+
+	 // 콘솔 출력 (데이터가 어떻게 들어있는지 확인)
+	 System.out.println("========= 급락순위 데이터 디버깅 =========");
+	 if(dropList != null && !dropList.isEmpty()) {
+	     for(Map<String, Object> map : dropList) {
+	         System.out.println(map.toString());
+	     }
+	 } else {
+	     System.out.println("데이터가 비어있습니다. (SQL 결과 0건)");
+	 }
+	 System.out.println("=======================================");
+
+	 model.addAttribute("dropList", dropList);
 
 	    // 3. 최저가 틱커 데이터 가져오기 [추가]
 	    List<Map<String, Object>> lowestList = hotDealService.getLowestPriceDeals();

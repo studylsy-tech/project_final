@@ -86,16 +86,25 @@
 			</div>
 		</div>
 
-		<%-- 우측: 급락순위 10×1 리스트 --%>
-		<div class="drop-rank-list">
+		<%-- 우측: 급락순위 리스트 (index.jsp 소스 중간쯤) --%>
+<div class="drop-rank-list">
     <c:forEach var="drop" items="${dropList}" varStatus="status">
-        <div class="rank-list-item" onclick="location.href='${path}/dashboard/detail?dealId=${drop.dealId}'">
-            <span class="rank-num">${status.count}</span>
-            <%-- 인라인 style을 제거하고 CSS 클래스에 맡깁니다 --%>
-            <span class="rank-name">${drop.title}</span>
-            <span class="rank-drop">${drop.dropRate}% ↓</span>
-        </div>
+        <%-- 기존 내용을 지우고 아래 코드로 교체 --%>
+        <div class="rank-list-item" 
+     <%-- type이 'HOT'이면 dealId 파라미터를, 아니면 prodId 파라미터를 사용 --%>
+     onclick="location.href='${path}/dashboard/detail?${drop.type == 'HOT' ? 'dealId' : 'prodId'}=${drop.id}'"
+     style="cursor:pointer;">
+    
+    <span class="rank-num">${status.count}</span>
+    <span class="rank-name">${drop.title}</span>
+    <span class="rank-drop">${drop.dropRate}% ↓</span>
+</div>
     </c:forEach>
+    
+    <%-- 혹시 리스트가 비었을 때 --%>
+    <c:if test="${empty dropList}">
+        <div style="padding: 20px; text-align: center; color: #999;">급락 상품이 없습니다.</div>
+    </c:if>
 </div>
 
 	</div>

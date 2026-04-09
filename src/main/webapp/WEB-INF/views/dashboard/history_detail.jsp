@@ -151,8 +151,8 @@
         }
 
         // 날짜와 가격 배열 생성 (최신순에서 과거순으로 오므로 reverse로 그래프 방향 정렬)
-        const labels = historyData.map(item => item.date).reverse();
-        const prices = historyData.map(item => item.price).reverse();
+        const labels = historyData.map(item => item.date);
+        const prices = historyData.map(item => item.price);
         
         // 목표가 변수 (상단 c:set에서 정의한 targP 사용)
         const targetPriceValue = ${not empty targP ? targP : 0};

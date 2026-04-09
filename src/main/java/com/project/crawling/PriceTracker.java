@@ -1,9 +1,12 @@
 package com.project.crawling;
 
+import java.time.Duration;
 import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.stereotype.Component;
 import com.project.dao.AdminMapper;
 import com.project.model.HotDealDTO;
@@ -40,40 +43,41 @@ public class PriceTracker {
         if (targetList.isEmpty()) return 0;
 
         WebDriver driver = seleniumDriver.getDriver();
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10)); // [추가] 핫딜처럼 대기 객체 생성
         
         try {
             for (ProductDTO product : targetList) {
                 if (stopRequested) break;
-
-                // ID가 정상인지 체크 (어제 배운 방어 로직)
                 if (product.getProdId() <= 0) continue;
 
                 try {
-                    // 검색어 정제 (30자 제한)
+                    // [핫딜 방식 적용] 검색어 정제 (특수문자 제거 및 길이 제한)
                     String searchKeyword = product.getProdName().replaceAll("\\[.*?\\]", "").trim();
-                    if (searchKeyword.length() > 30) searchKeyword = searchKeyword.substring(0, 30).trim();
+                    if (searchKeyword.length() > 20) searchKeyword = searchKeyword.substring(0, 20).trim();
 
                     driver.get("https://search.danawa.com/dsearch.php?query=" + java.net.URLEncoder.encode(searchKeyword, "UTF-8"));
-                    Thread.sleep(2500); // 다나와 차단 방지 대기시간
+                    
+                    // [핫딜 방식 적용] 암묵적 대기 대신 명시적 대기 사용
+                    // 가격 태그가 나타날 때까지 최대 10초 대기
+                    WebElement priceElem = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                        By.cssSelector(".product_list .prod_item:first-child .price_sect strong")
+                    ));
 
-                    WebElement priceElem = driver.findElement(By.cssSelector(".product_list .prod_item:first-child .price_sect strong"));
                     int currentPrice = Integer.parseInt(priceElem.getText().replaceAll("[^0-9]", ""));
 
-                    // [핵심] 1. 메인 테이블 가격 갱신
                     adminMapper.updateCurrentPrice(product.getProdId(), currentPrice);
-                    
-                    // [핵심] 2. 이력 테이블(그래프용)에 점 찍기
                     adminMapper.insertCommonPriceHistory(product.getProdId(), currentPrice);
                     
                     count++;
                     log.info("[일반 성공] {} : {}원", product.getProdName(), currentPrice);
                     
                 } catch (Exception e) {
-                    log.error("[일반 실패] {} : {}", product.getProdName(), e.getMessage());
+                    // [핫딜 방식 적용] 에러 발생 시 로그만 찍고 다음 상품으로 넘어가기
+                    log.error("[일반 실패] 상품명: {} | 원인: {}", product.getProdName(), e.getMessage());
+                    continue; 
                 }
             }
         } finally {
-            // 모든 수집이 끝난 뒤에만 드라이버 종료
             seleniumDriver.closeDriver();
         }
         return count;
