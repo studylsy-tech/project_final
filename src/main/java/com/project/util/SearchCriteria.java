@@ -18,6 +18,8 @@ public class SearchCriteria extends Criteria {
     private int pageStart;        // 시작 행 번호
     private int pageEnd;          // 끝 행 번호
     
+    private String sortType = "latest"; 		  // 정렬 타입을 위한 필드
+    
     public SearchCriteria(int page, int perPageNum, String searchType, String keyword) {
         super(page, perPageNum);
         this.searchType = searchType;
@@ -33,8 +35,8 @@ public class SearchCriteria extends Criteria {
 
     @Override
     public String toString() {
-        return super.toString() + " Range: " + pageStart + "~" + pageEnd + 
-               " [searchType=" + searchType + ", keyword=" + keyword + "]";
+    	return super.toString() + " Range: " + pageStart + "~" + pageEnd + 
+                " [searchType=" + searchType + ", keyword=" + keyword + ", sortType=" + sortType + "]";
     }
     
     public int getPageStart() {

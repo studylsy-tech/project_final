@@ -37,6 +37,9 @@ public class BoardController {
     // 1. 공지사항 목록 조회
     @GetMapping("/notice") 
     public String noticeList(SearchCriteria scri, Model model) {
+    	// 로그를 찍어서 sortType이 제대로 들어오는지 확인 용도
+        // System.out.println("현재 정렬 기준: " + scri.getSortType());
+    	
         scri.setBoardType("NOTICE");
         scri.calcPageRange();
         int totalCount = boardService.getBoardCount(scri);

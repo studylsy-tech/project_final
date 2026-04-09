@@ -22,6 +22,15 @@
                class="search-input" placeholder="검색어를 입력하세요">
         <button type="button" id="searchBtn" class="btn-search">검색</button>
     </div>
+    
+    <!-- 시간순/조회순 영역 -->
+    <div class="sort-area">
+	    <a href="javascript:void(0);" class="sort-link" data-sort="latest" 
+	       style="${pageMaker.cri.sortType == 'latest' || empty pageMaker.cri.sortType ? 'font-weight:bold; color:#000;' : 'color:#999;'}">최신순</a>
+	    <span style="margin: 0 5px; color: #ddd;">|</span>
+	    <a href="javascript:void(0);" class="sort-link" data-sort="count" 
+	       style="${pageMaker.cri.sortType == 'count' ? 'font-weight:bold; color:#000;' : 'color:#999;'}">조회순</a>
+	</div>
 
     <%-- 게시판 목록 --%>
     <table class="board-table">
@@ -68,22 +77,22 @@
         <ul class="pagination">
             <c:if test="${pageMaker.prev}">
                 <li>
-                    <a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.startPage - 1)}">이전</a>
+                    <a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.startPage - 1)}&sortType=${pageMaker.cri.sortType}">이전</a>
                 </li>
             </c:if>
 
             <c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="idx">
-                <li>
-                    <a href="${path}/board/notice${pageMaker.makeSearch(idx)}" 
-                       class="${pageMaker.cri.page == idx ? 'active' : ''}">
-                        ${idx}
-                    </a>
-                </li>
-            </c:forEach>
+			    <li>
+			        <a href="${path}/board/notice${pageMaker.makeSearch(idx)}&sortType=${pageMaker.cri.sortType}" 
+			           class="${pageMaker.cri.page == idx ? 'active' : ''}">
+			            ${idx}
+			        </a>
+			    </li>
+			</c:forEach>
 
             <c:if test="${pageMaker.next && pageMaker.endPage > 0}">
                 <li>
-                    <a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.endPage + 1)}">다음</a>
+                    <a href="${path}/board/notice${pageMaker.makeSearch(pageMaker.endPage + 1)}&sortType=${pageMaker.cri.sortType}">다음</a>
                 </li>
             </c:if>
         </ul>
@@ -122,6 +131,42 @@ $(document).ready(function() {
         if (e.keyCode === 13) {
             $("#searchBtn").click();
         }
+    });
+    
+ // 정렬 링크 클릭 이벤트 추가
+    $(document).on("click", ".sort-link", function(e) {
+        e.preventDefault();
+        
+        const sortType = $(this).data("sort"); // 'latest' 또는 'count'
+        const searchType = "${pageMaker.cri.searchType}";
+        const keyword = "${pageMaker.cri.keyword}";
+        const perPageNum = "${pageMaker.cri.perPageNum}";
+        const contextPath = "${path}";
+
+        // URL 조립 (정렬 타입 추가)
+        let url = contextPath + "/board/notice"
+                + "?page=1" // 정렬 변경 시 1페이지로 이동
+                + "&perPageNum=" + (perPageNum || 10)
+                + "&searchType=" + searchType
+                + "&keyword=" + encodeURIComponent(keyword)
+                + "&sortType=" + sortType; // 추가된 부분
+
+        location.href = url;
+    });
+
+    // 검색 버튼 클릭 시에도 현재 정렬 유지하도록 수정 (선택사항)
+    $(document).on("click", "#searchBtn", function(e) {
+        e.preventDefault();
+        const keyword = $('#keywordInput').val();
+        const searchType = $("#searchType").val();
+        const sortType = "${pageMaker.cri.sortType}"; // 현재 정렬 기준 가져오기
+
+        location.href = "${path}/board/notice"
+                + "?page=1"
+                + "&perPageNum=${pageMaker.cri.perPageNum}"
+                + "&searchType=" + searchType
+                + "&keyword=" + encodeURIComponent(keyword)
+                + "&sortType=" + sortType;
     });
 });
 </script>
