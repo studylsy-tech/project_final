@@ -36,109 +36,83 @@ CREATE TABLE PRICE_HISTORY (
 );
 
 -- 4. 초기 테스트 데이터 삽입
--- [RTX 3090]
-INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, BRAND, PROD_PRICE, BOARD_TYPE, ORIGIN_URL) 
-VALUES ('NV-3090', 'NAVER', 'PC부품', 'NVIDIA GeForce RTX 3090 Ti', 'NVIDIA', 1850000, 'DROP', 'https://naver.com/item1');
+-- 기존 데이터 삭제 (중복 방지)
+DELETE FROM PRICE_HISTORY;
+DELETE FROM Common_Product;
 
--- [맥북]
-INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, BRAND, PROD_PRICE, BOARD_TYPE, ORIGIN_URL) 
-VALUES ('AP-MBP16', 'COUPANG', '노트북', 'Apple 맥북 프로 16 M3 Max', 'Apple', 4850000, 'NORMAL', 'https://coupang.com/item2');
-
--- [소니 헤드셋]
-INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, BRAND, PROD_PRICE, BOARD_TYPE, ORIGIN_URL) 
-VALUES ('SN-XM5', 'SSG', '음향기기', '소니 WH-1000XM5 헤드셋', 'SONY', 360000, 'NORMAL', 'https://ssg.com/item3');
-
--- 5. 가격 이력 등록 (PROD_ID 기반)
--- RTX 3090
-INSERT INTO PRICE_HISTORY (PROD_ID, PRICE, REG_DATE) VALUES (1, 2200000, SYSDATE - 1);
-INSERT INTO PRICE_HISTORY (PROD_ID, PRICE, REG_DATE) VALUES (1, 1850000, SYSDATE);
-
--- 맥북
-INSERT INTO PRICE_HISTORY (PROD_ID, PRICE, REG_DATE) VALUES (2, 4800000, SYSDATE - 1);
-INSERT INTO PRICE_HISTORY (PROD_ID, PRICE, REG_DATE) VALUES (2, 4850000, SYSDATE);
-
--- 소니 헤드셋
-INSERT INTO PRICE_HISTORY (PROD_ID, PRICE, REG_DATE) VALUES (3, 450000, SYSDATE - 5);
-INSERT INTO PRICE_HISTORY (PROD_ID, PRICE, REG_DATE) VALUES (3, 400000, SYSDATE - 2);
-INSERT INTO PRICE_HISTORY (PROD_ID, PRICE, REG_DATE) VALUES (3, 360000, SYSDATE);
-
--- 6. 페이징 테스트용 대량 데이터 (12개 추가)
 BEGIN
-    FOR i IN 1..12 LOOP
-        INSERT INTO Common_Product (PROD_CODE, PROD_NAME, PROD_PRICE, BOARD_TYPE, REG_DATE)
-        VALUES ('PCODE_' || i, '실시간 요청 크롤링 상품 ' || i, 10000 * i, 'CRAWL', SYSDATE - (i/24));
-    END LOOP;
+    -- [1] IT/가전/PC (하락폭이 커서 연출하기 좋음)
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_PC_01', '네이버', 'PC', '마이크로소프트 서피스 프로 12 Plus', 2300000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_PC_02', '쿠팡', 'PC', 'LG전자 울트라기어 27GS60QC', 490000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_PC_03', 'futureteri', 'PC', '앤커 랩탑 파워뱅크 25000mAh', 180000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_APP_01', '컴퓨존', '가전', '갤럭시탭 S11 WIFI 128GB', 2100000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_APP_02', '11번가', '가전', '삼성 25년형 무풍클래식 에어컨', 3800000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_APP_03', '오늘의집', '가전', '필립스 전자동 커피머신 EP1220/19', 580000, 'HOT');
+
+    -- [2] 식품류 (리스트에 많았던 품목)
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_FOOD_01', '롯데온', '식품', '암꽃게 1kg 4-6미', 50000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_FOOD_02', '옥션', '식품', '프로즌 곱도리탕 1+1 (590g 2팩)', 32000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_FOOD_03', '네이버', '식품', '한우등심1등급 500g', 75000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_FOOD_04', '지마켓', '식품', '청정원 순창 초고추장 1kg 3통', 22000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_FOOD_05', '11번가', '식품', '토레타 340ml 24개', 24000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_FOOD_06', '롯데온', '식품', '코카콜라 제로 350ml 24캔', 32000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_FOOD_07', '지마켓', '식품', '배홍동 8개 + 안성탕면 5개 + 짜파게티 5개', 28000, 'HOT');
+
+    -- [3] 생활/의류/기타
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_LIFE_01', '롯데온', '생활용품', '도루코 페이스6 면도날 12입', 45000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_LIFE_02', '지마켓', '생활용품', '지오다노 장우산', 30000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_LIFE_03', '지마켓', '생활용품', '렛츠클린 다용도 건티슈 대형 200매', 14000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_CLOTH_01', '지마켓', '의류', '푸마 단목양말 10켤레', 28000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_CLOTH_02', 'SSG', '의류', '레노마 봄 여름 프리미엄 정장', 180000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_CLOTH_03', '롯데온', '의류', '폴햄 기본 캐쥬얼 니트', 25000, 'HOT');
+    
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
+    VALUES ('HOT_ETC_01', 'SSG', 'PC', '로지텍 G304 무선 게이밍 마우스', 75000, 'HOT');
+
     COMMIT;
 END;
 /
 
-BEGIN
-    -- 1. 전자기기/노트북 카테고리 (15개)
-    FOR i IN 1..15 LOOP
-        INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, BRAND, PROD_PRICE, BOARD_TYPE, ORIGIN_URL, REG_DATE)
-        VALUES (
-            'LAPTOP_' || i, 
-            CASE MOD(i, 3) WHEN 0 THEN 'NAVER' WHEN 1 THEN 'COUPANG' ELSE 'DANWA' END,
-            '노트북',
-            CASE MOD(i, 3) WHEN 0 THEN '삼성 갤럭시북 4 Pro ' || i WHEN 1 THEN 'LG 그램 16 ' || i ELSE 'ASUS 제피러스 ' || i END,
-            CASE MOD(i, 3) WHEN 0 THEN 'Samsung' WHEN 1 THEN 'LG' ELSE 'ASUS' END,
-            1200000 + (i * 50000),
-            CASE WHEN i <= 5 THEN 'DROP' WHEN i <= 10 THEN 'HOT' ELSE 'NORMAL' END,
-            'https://search.shopping.naver.com/search/all?query=laptop' || i,
-            SYSDATE - (i/24)
-        );
-    END LOOP;
+-- 4. 위 상품들의 '비싼 가격'을 과거 이력으로 1회 강제 저장
+INSERT INTO PRICE_HISTORY (PROD_ID, PRICE, REG_DATE)
+SELECT PROD_ID, PROD_PRICE, SYSDATE - 1 FROM Common_Product;
 
-    -- 2. 스마트폰/태블릿 카테고리 (15개)
-    FOR i IN 16..30 LOOP
-        INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, BRAND, PROD_PRICE, BOARD_TYPE, ORIGIN_URL, REG_DATE)
-        VALUES (
-            'PHONE_' || i,
-            CASE MOD(i, 2) WHEN 0 THEN 'SKT' ELSE 'KT' END,
-            '스마트폰',
-            CASE MOD(i, 2) WHEN 0 THEN '아이폰 15 Pro ' || i ELSE '갤럭시 S24 울트라 ' || i END,
-            CASE MOD(i, 2) WHEN 0 THEN 'Apple' ELSE 'Samsung' END,
-            1000000 + (i * 20000),
-            CASE WHEN i <= 20 THEN 'HOT' WHEN i <= 25 THEN 'CRAWL' ELSE 'NORMAL' END,
-            'https://www.apple.com/iphone' || i,
-            SYSDATE - (i/48)
-        );
-    END LOOP;
-
-    -- 3. 가전/생활 카테고리 (10개)
-    FOR i IN 31..40 LOOP
-        INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, BRAND, PROD_PRICE, BOARD_TYPE, ORIGIN_URL, REG_DATE)
-        VALUES (
-            'LIFE_' || i,
-            'SSG',
-            '생활가전',
-            '다이슨 에어랩 멀티 스타일러 ' || i,
-            'Dyson',
-            500000 + (i * 10000),
-            'NORMAL',
-            'https://www.ssg.com/item/dyson' || i,
-            SYSDATE - (i/12)
-        );
-    END LOOP;
-
-    -- 4. 기타/실시간 크롤링 데이터 (10개)
-    FOR i IN 41..50 LOOP
-        INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, BRAND, PROD_PRICE, BOARD_TYPE, ORIGIN_URL, REG_DATE)
-        VALUES (
-            'CRAWL_' || i,
-            'CRAWLER',
-            '기타',
-            '실시간 핫딜 정보 상품 ' || i,
-            'ETC',
-            10000 * i,
-            'CRAWL',
-            'https://hotdeal.com/item' || i,
-            SYSDATE - (i/100)
-        );
-    END LOOP;
-
-    COMMIT;
-END;
+COMMIT;
 
 -- 데이터 확인
 SELECT COUNT(*) FROM Common_Product;
