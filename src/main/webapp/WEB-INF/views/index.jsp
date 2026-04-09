@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="${path}/resources/css/views/index.css">
 
 <div class="main-content">
-	<h2>Price-Rader.Mall 에 오신 것을 환영합니다!</h2>
+	<h2>득템 헌터에 오신 것을 환영합니다!</h2>
 	<div class="search-ticker-wrapper">
 		<form action="${path}/dashboard/search" method="get"
 			style="flex: 6; display: flex; align-items: center;">
@@ -26,9 +26,20 @@
 		<div class="ticker-box">
     <ul id="mainTicker">
         <c:forEach var="low" items="${lowestList}">
-            <li>
+            <%-- 로그 확인 결과: 모두 소문자(id, type, title, price)로 들어옴 --%>
+            <c:set var="lowId" value="${low.id}" />
+            <c:set var="lowType" value="${low.type}" />
+            <c:set var="lowTitle" value="${low.title}" />
+            <c:set var="lowPrice" value="${low.price}" />
+
+            <%-- [핵심 수정] lowType이 소문자 'HOT'인지 체크하도록 수정 --%>
+            <li onclick="location.href='${path}/dashboard/detail?${lowType == 'HOT' ? 'dealId' : 'prodId'}=${lowId}'" 
+                style="cursor: pointer;">
                 <span class="live-tag">[최저가경신]</span> 
-                ${low.title} - 역대 최저가 ₩<fmt:formatNumber value="${low.price}" pattern="#,###" />
+                <c:out value="${lowTitle}" /> - 
+                <span style="color: #e74c3c; font-weight: bold;">
+                    역대 최저가 ₩<fmt:formatNumber value="${lowPrice}" pattern="#,###" />
+                </span>
             </li>
         </c:forEach>
     </ul>
@@ -89,21 +100,29 @@
 		<%-- 우측: 급락순위 리스트 (index.jsp 소스 중간쯤) --%>
 <div class="drop-rank-list">
     <c:forEach var="drop" items="${dropList}" varStatus="status">
-        <%-- 기존 내용을 지우고 아래 코드로 교체 --%>
+        <%-- 1. ID 값 추출 (대문자 ID 또는 소문자 id 중 존재하는 것 선택) --%>
+        <c:set var="targetId" value="${not empty drop.ID ? drop.ID : drop.id}" />
+        
+        <%-- 2. TYPE 값 추출 (대문자 TYPE 또는 소문자 type) --%>
+        <c:set var="targetType" value="${not empty drop.TYPE ? drop.TYPE : drop.type}" />
+        
+        <%-- 3. 나머지 필드도 동일하게 처리 --%>
+        <c:set var="targetTitle" value="${not empty drop.TITLE ? drop.TITLE : drop.title}" />
+        <c:set var="targetDropRate" value="${not empty drop.DROPRATE ? drop.DROPRATE : (not empty drop.dropRate ? drop.dropRate : 0)}" />
+
         <div class="rank-list-item" 
-     <%-- type이 'HOT'이면 dealId 파라미터를, 아니면 prodId 파라미터를 사용 --%>
-     onclick="location.href='${path}/dashboard/detail?${drop.type == 'HOT' ? 'dealId' : 'prodId'}=${drop.id}'"
-     style="cursor:pointer;">
-    
-    <span class="rank-num">${status.count}</span>
-    <span class="rank-name">${drop.title}</span>
-    <span class="rank-drop">${drop.dropRate}% ↓</span>
-</div>
+             onclick="location.href='${path}/dashboard/detail?${targetType == 'HOT' ? 'dealId' : 'prodId'}=${targetId}'"
+             style="cursor:pointer;">
+            
+            <span class="rank-num">${status.count}</span>
+            <span class="rank-name"><c:out value="${targetTitle}" /></span>
+            <span class="rank-drop">${targetDropRate}% ↓</span>
+            
+        </div>
     </c:forEach>
     
-    <%-- 혹시 리스트가 비었을 때 --%>
     <c:if test="${empty dropList}">
-        <div style="padding: 20px; text-align: center; color: #999;">급락 상품이 없습니다.</div>
+        <div style="padding: 20px; text-align: center; color: #999;">급락 상품 데이터가 없습니다.</div>
     </c:if>
 </div>
 

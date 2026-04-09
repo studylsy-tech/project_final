@@ -161,14 +161,19 @@
 </select>
 
 <select id="getLowestPriceDeals" resultType="map">
-    SELECT t.TITLE as "title", t.CURRENT_PRICE as "price"
-    FROM TB_HOTDEAL_TRACKER t
-    WHERE t.CURRENT_PRICE = (
-        SELECT MIN(PRICE) 
-        FROM TB_PRICE_HISTORY h 
-        WHERE h.DEAL_ID = t.DEAL_ID
+    SELECT * FROM (
+        SELECT 
+            t.DEAL_ID as "id",        t.TITLE as "title", 
+            t.CURRENT_PRICE as "price",
+            'HOT' as "type"           FROM TB_HOTDEAL_TRACKER t
+        WHERE t.CURRENT_PRICE = (
+            SELECT MIN(PRICE) 
+            FROM TB_PRICE_HISTORY h 
+            WHERE h.DEAL_ID = t.DEAL_ID
+        )
+        ORDER BY t.LAST_UPDATE_DATE DESC
     )
-    AND ROWNUM &lt;= 5
+    WHERE ROWNUM &lt;= 5
 </select>
 <select id="getCombinedDropRank" resultType="map">
     SELECT * FROM (

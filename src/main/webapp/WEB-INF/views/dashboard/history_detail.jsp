@@ -53,7 +53,7 @@
             <div class="divider"></div>
 
             <div class="price-box">
-                <span class="price-label">목표가(시작가)</span>
+                <span class="price-label">목표가</span>
                 <span class="price-value target-p">
                     ₩<fmt:formatNumber value="${targP}" pattern="#,###" />
                 </span>

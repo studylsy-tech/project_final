@@ -40,26 +40,35 @@
     padding-top: 20px;
     margin-top: 10px;
 }
- 
+
 .price-box {
     display: flex;
     flex-direction: column;
 }
- 
+
 .price-label {
     color: #666;
     font-size: 13px;
     margin-bottom: 6px;
 }
- 
+
 .price-value {
     font-size: 22px;
     font-weight: 800;
 }
- 
-.current-p { color: #e74c3c; }
-.target-p  { color: #26a69a; }
- 
+
+/* ❌ 기존: .current-p { color: #e74c3c; } (빨간색)
+   ✅ 변경: 현재가는 아예 관련 없는 색 (보라색 계열) */
+.current-p {
+    color: #9c27b0; 
+}
+
+/* ❌ 기존: .target-p  { color: #26a69a; } (초록색)
+   ✅ 변경: 목표가를 빨간색으로 */
+.target-p {
+    color: #e74c3c; 
+}
+
 .divider {
     border-left: 1px solid #e1e4e8;
     height: 35px;
