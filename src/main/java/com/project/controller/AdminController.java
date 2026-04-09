@@ -124,17 +124,47 @@ public class AdminController {
     @ResponseBody
     public Map<String, Object> startPriceUpdate(@RequestParam String target) {
         Map<String, Object> result = new HashMap<>();
+        
+        // [추가] 시작 로그
+        System.out.println("\n========== [수집 엔진 가동] ==========");
+        System.out.println("▶ 실행 대상: " + target);
+        System.out.println("▶ 실행 시간: " + new java.util.Date());
+        
         try {
             int updatedCount = 0;
+            
+            // 핫딜 상품 처리
             if ("HOT".equals(target) || "ALL".equals(target)) {
-                updatedCount += hotDealService.fetchAndRecordHotDeals(); 
+                System.out.println("------------------------------------");
+                System.out.println("[진행] 핫딜(HotDeal) 가격 업데이트 시작...");
+                int hotCount = hotDealService.fetchAndRecordHotDeals(); 
+                System.out.println("[완료] 핫딜 업데이트 건수: " + hotCount + "건");
+                updatedCount += hotCount;
             }
+            
+            // 일반 상품 처리
             if ("NORMAL".equals(target) || "ALL".equals(target)) {
-                updatedCount += hotDealService.fetchAndRecordNormalProducts();
+                System.out.println("------------------------------------");
+                System.out.println("[진행] 일반 상품(Normal) 가격 업데이트 시작...");
+                int normalCount = hotDealService.fetchAndRecordNormalProducts();
+                System.out.println("[완료] 일반 상품 업데이트 건수: " + normalCount + "건");
+                updatedCount += normalCount;
             }
+            
+            System.out.println("------------------------------------");
+            System.out.println("★ 전체 업데이트 최종 완료: " + updatedCount + "건");
+            System.out.println("====================================\n");
+
             result.put("status", "success");
             result.put("count", updatedCount);
+            
         } catch (Exception e) {
+            // [추가] 에러 발생 시 상세 로그
+            System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            System.err.println("!! [오류 발생] 사유: " + e.getMessage());
+            e.printStackTrace();
+            System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            
             result.put("status", "error");
             result.put("message", e.getMessage());
         }

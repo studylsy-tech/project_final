@@ -184,50 +184,35 @@ function setSchedule(target, interval) {
 }
 
 // 수치 새로고침 Ajax
-function refreshData(type) {
+// 1. 함수 이름을 버튼에 적힌 refreshStats와 일치시킵니다.
+function refreshStats(type) {
     $.ajax({
         url: "${path}/admin/refreshStats.do",
         type: "GET",
+        data: { type: type }, 
         success: function(data) {
-            $("#totalCount").text(data.TOTALCOUNT);
-            $("#lastTime").text(data.TOTALLASTSYNC);
-            $("#hotdealCount").text(data.HOTDEALCOUNT);
-            $("#hotdealTime").text(data.HOTDEALLASTSYNC);
-            $("#commonCount").text(data.NORMALCOUNT);
-            $("#commonTime").text(data.NORMALLASTSYNC);
-        }
-    });
-}
-function refreshData(type) {
-    $.ajax({
-        url: "${path}/admin/refreshStats.do",
-        type: "GET",
-        data: { type: type }, // 현재 클릭한 섹션 타입 전송
-        success: function(data) {
-            console.log("받은 데이터:", data); // 여기서 키 값을 확인하세요 (대문자인지 소문자인지)
+            console.log("받은 데이터:", data);
 
-            // 만약 MyBatis가 대문자로 준다면 아래와 같이 작성
-            if (data.TOTALCOUNT !== undefined) {
-                $("#totalCount").text(data.TOTALCOUNT);
-                $("#lastTime").text(data.TOTALLASTSYNC);
-                $("#hotdealCount").text(data.HOTDEALCOUNT);
-                $("#hotdealTime").text(data.HOTDEALLASTSYNC);
-                $("#commonCount").text(data.NORMALCOUNT);
-                $("#commonTime").text(data.NORMALLASTSYNC);
-            } else {
-                // 소문자로 온다면 아래와 같이 작성
-                $("#totalCount").text(data.totalCount);
-                $("#lastTime").text(data.totalLastSync);
-                $("#hotdealCount").text(data.hotdealCount);
-                $("#hotdealTime").text(data.hotdealLastSync);
-                $("#commonCount").text(data.normalCount);
-                $("#commonTime").text(data.normalLastSync);
-            }
+            // MyBatis가 대문자로 주는 경우를 대비한 안전한 할당
+            const totalCount = data.TOTALCOUNT || data.totalCount;
+            const lastTime = data.TOTALLASTSYNC || data.totalLastSync;
+            const hotdealCount = data.HOTDEALCOUNT || data.hotdealCount;
+            const hotdealTime = data.HOTDEALLASTSYNC || data.hotdealLastSync;
+            const commonCount = data.NORMALCOUNT || data.normalCount;
+            const commonTime = data.NORMALLASTSYNC || data.normalLastSync;
+
+            if(totalCount !== undefined) $("#totalCount").text(totalCount);
+            if(lastTime !== undefined) $("#lastTime").text(lastTime);
+            if(hotdealCount !== undefined) $("#hotdealCount").text(hotdealCount);
+            if(hotdealTime !== undefined) $("#hotdealTime").text(hotdealTime);
+            if(commonCount !== undefined) $("#commonCount").text(commonCount);
+            if(commonTime !== undefined) $("#commonTime").text(commonTime);
             
             alert(type + " 데이터가 최신 상태로 갱신되었습니다.");
         },
-        error: function() {
-            alert("데이터를 가져오는 중 오류가 발생했습니다.");
+        error: function(xhr) {
+            console.error("에러 코드:", xhr.status);
+            alert("데이터를 가져오는 중 오류가 발생했습니다. (에러코드: " + xhr.status + ")");
         }
     });
 }

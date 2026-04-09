@@ -77,7 +77,7 @@
 
 /* 핫딜 제목 박스 */
 .hotdeal-header {
-    flex: 7.5;
+    flex: 7.5; /* 75% */
     background: #f0f4f9;
     padding: 20px 25px 16px 25px;
     border-radius: 12px 12px 0 0;
@@ -94,7 +94,7 @@
 
 /* 급락순위 제목 박스 */
 .drop-rank-header {
-    flex: 2.5;
+    flex: 2.5; /* 25% */
     background: #FDFBF0;
     padding: 20px 22px 16px 22px;
     border-radius: 12px 12px 0 0;
@@ -103,11 +103,11 @@
 }
 
 .drop-rank-header h3 {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 800;
     color: #2196f3;
     white-space: nowrap;
-    letter-spacing: 4px;
+    letter-spacing: 0;
     margin: 0;
 }
 
@@ -116,13 +116,13 @@
     display: flex;
     gap: 20px;
     align-items: stretch;
-    width: 100%; /* 전체 너비 고정 */
 }
 
 /* 핫딜 상품 박스 (왼쪽) */
 .hotdeal-body {
-    flex: 7.5;
+    flex: 7.5;  /* ← 핫딜 헤더와 동일하게! */
     min-width: 0; /* 내부 요소가 영역을 늘리는 것 방지 */
+    max-width: 75%;  
     background: #fff;
     padding: 20px 25px;
     border-radius: 0 0 12px 12px;
@@ -189,8 +189,7 @@
 /* ===== 급락순위 리스트 박스 — 높이 핫딜과 동일하게 stretch ===== */
 /* 급락순위 리스트 박스 (오른쪽) */
 .drop-rank-list {
-    flex: 2.5;
-    flex-basis: 25%; /* 너비 비중을 명시적으로 설정 */
+    flex: 2.5 ;  /* 급락 헤더와 동일하게! */
     min-width: 0;    /* [매우 중요] 내부 긴 텍스트가 영역을 뚫고 나가는 것 방지 */
     background: #FDFBF0;
     padding: 15px 20px;
@@ -200,7 +199,7 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    overflow: hidden; /* 영역 밖으로 나가는 것 차단 */
+    overflow: visible; /* ← hidden을 visible로 변경! */
 }
 /* 개별 아이템 행 */
 .rank-list-item {
@@ -255,7 +254,7 @@
 .ticker-box {
     flex: 4;
     overflow: hidden;
-    height: 40px;
+    height: 40px; /* 또는 30px - 하나로 통일 */
     position: relative;
 }
 
@@ -292,12 +291,7 @@
     margin: 0 10px;
 }
 
-/* 티커 박스: 한 줄만 보이도록 높이 제한 및 숨김 처리 */
-.ticker-box {
-    height: 30px; /* 한 줄 높이 */
-    overflow: hidden;
-    position: relative;
-}
+
 
 #mainTicker {
     list-style: none;
