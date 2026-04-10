@@ -92,7 +92,6 @@
 		</dependency>
 
 
-
 		<!-- Servlet -->
 		<!-- https://mvnrepository.com/artifact/javax.servlet/javax.servlet-api -->
 		<dependency>
@@ -216,7 +215,15 @@
     <artifactId>ojdbc11</artifactId>
     <version>21.1.0.0</version>
 </dependency>
+
+	<!-- 선생님께서 알려준 전화번호 인증 관련 사이트 -->
+	<dependency>
+	    <groupId>net.nurigo</groupId>
+	    <artifactId>sdk</artifactId>
+	    <version>4.3.0</version>
+	</dependency>
 	</dependencies>
+	
 	<build>
 		<plugins>
 			<plugin>
