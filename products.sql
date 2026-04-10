@@ -41,7 +41,7 @@ DELETE FROM PRICE_HISTORY;
 DELETE FROM Common_Product;
 
 BEGIN
-    -- [1] IT/가전/PC (하락폭이 커서 연출하기 좋음)
+    -- [1] IT/가전/PC (하락폭 연출용 비싼 가격 세팅)
     INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
     VALUES ('HOT_PC_01', '네이버', 'PC', '마이크로소프트 서피스 프로 12 Plus', 2300000, 'HOT');
     
@@ -60,7 +60,7 @@ BEGIN
     INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
     VALUES ('HOT_APP_03', '오늘의집', '가전', '필립스 전자동 커피머신 EP1220/19', 580000, 'HOT');
 
-    -- [2] 식품류 (리스트에 많았던 품목)
+    -- [2] 식품류
     INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
     VALUES ('HOT_FOOD_01', '롯데온', '식품', '암꽃게 1kg 4-6미', 50000, 'HOT');
     
@@ -72,15 +72,6 @@ BEGIN
     
     INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
     VALUES ('HOT_FOOD_04', '지마켓', '식품', '청정원 순창 초고추장 1kg 3통', 22000, 'HOT');
-    
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
-    VALUES ('HOT_FOOD_05', '11번가', '식품', '토레타 340ml 24개', 24000, 'HOT');
-    
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
-    VALUES ('HOT_FOOD_06', '롯데온', '식품', '코카콜라 제로 350ml 24캔', 32000, 'HOT');
-    
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
-    VALUES ('HOT_FOOD_07', '지마켓', '식품', '배홍동 8개 + 안성탕면 5개 + 짜파게티 5개', 28000, 'HOT');
 
     -- [3] 생활/의류/기타
     INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
@@ -90,16 +81,7 @@ BEGIN
     VALUES ('HOT_LIFE_02', '지마켓', '생활용품', '지오다노 장우산', 30000, 'HOT');
     
     INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
-    VALUES ('HOT_LIFE_03', '지마켓', '생활용품', '렛츠클린 다용도 건티슈 대형 200매', 14000, 'HOT');
-    
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
     VALUES ('HOT_CLOTH_01', '지마켓', '의류', '푸마 단목양말 10켤레', 28000, 'HOT');
-    
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
-    VALUES ('HOT_CLOTH_02', 'SSG', '의류', '레노마 봄 여름 프리미엄 정장', 180000, 'HOT');
-    
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
-    VALUES ('HOT_CLOTH_03', '롯데온', '의류', '폴햄 기본 캐쥬얼 니트', 25000, 'HOT');
     
     INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE)
     VALUES ('HOT_ETC_01', 'SSG', 'PC', '로지텍 G304 무선 게이밍 마우스', 75000, 'HOT');
@@ -107,49 +89,6 @@ BEGIN
     COMMIT;
 END;
 /
-BEGIN
-    -- 식품/생필품
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_001', 'USER', '식품', '삼다수 2L 12병', 12500, 'NORMAL', '광동');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_002', 'USER', '식품', '신라면 20봉 번들', 15800, 'NORMAL', '농심');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_003', 'USER', '생활', '다우니 컨센트레이트 에이프릴 프레쉬 1L 3개', 18900, 'NORMAL', 'P&G');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_004', 'USER', '생활', '깨끗한나라 순수 소프트 화장지 30m 30롤', 16500, 'NORMAL', '깨끗한나라');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_005', 'USER', '식품', '햇반 210g 24개입', 21000, 'NORMAL', 'CJ제일제당');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_006', 'USER', '의류', '길단 6.1oz 긴팔 무지티', 8900, 'NORMAL', '길단');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_007', 'USER', '의류', '나이키 에브리데이 쿠션 크루 삭스 3팩', 15000, 'NORMAL', '나이키');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_008', 'USER', '생활', '페리오 토탈세븐 치약 160g 4개', 9900, 'NORMAL', 'LG생활건강');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_009', 'USER', '식품', '서울우유 멸균우유 1L 10팩', 24500, 'NORMAL', '서울우유');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_010', 'USER', '식품', '동원참치 살코기 100g 8캔', 14800, 'NORMAL', '동원');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_011', 'USER', '가전', '필립스 헤어드라이어 3000 시리즈', 29000, 'NORMAL', '필립스');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_012', 'USER', 'PC', '로지텍 K120 유선 키보드', 12000, 'NORMAL', '로지텍');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_013', 'USER', '생활', '질레트 스킨텍 면도날 8입', 32000, 'NORMAL', '질레트');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_014', 'USER', '식품', '카누 미니 아메리카노 100T', 19500, 'NORMAL', '맥심');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_015', 'USER', '식품', '스팸 클래식 200g 6캔', 18000, 'NORMAL', 'CJ제일제당');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_016', 'USER', 'PC', '샌디스크 CZ48 USB 3.0 64GB', 8500, 'NORMAL', '샌디스크');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_017', 'USER', '식품', '짜파게티 5봉 번들', 4850, 'NORMAL', '농심');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_018', 'USER', '생활', '리스테린 쿨민트 750ml 2개', 13000, 'NORMAL', '존슨앤존슨');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_019', 'USER', '의류', '유니클로 에어리즘 크루넥 T', 14900, 'NORMAL', '유니클로');
-    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, BRAND)
-    VALUES ('NORM_020', 'USER', '식품', '불닭볶음면 큰컵 6개', 9600, 'NORMAL', '삼양');
-END;
 /
 BEGIN
     -- 식품/생필품
@@ -195,6 +134,7 @@ BEGIN
     VALUES ('NORM_020', 'USER', '식품', '불닭볶음면 큰컵 6개', 9600, 'NORMAL', '삼양');
 END;
 /
+
 BEGIN
     INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, ORIGIN_URL)
     VALUES ('CRWL_001', 'COUPANG', '디지털', 'Apple 아이폰 15 Pro 256GB 내추럴 티타늄', 1550000, 'CRAWL', 'https://coupang.com/vp/products/1');
@@ -238,6 +178,29 @@ BEGIN
     VALUES ('CRWL_020', 'NAVER', '생활', '오랄비 iO 시리즈 9 전동칫솔', 285000, 'CRAWL', 'https://smartstore.naver.com/oralb/1');
 END;
 /
+BEGIN
+    -- [1] LG 울트라기어 모니터 (역대급 할인가 연출)
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, ORIGIN_URL)
+    VALUES ('DROP_001', '쿠팡', 'PC', 'LG전자 울트라기어 27GP850 나노IPS 1ms', 429000, 'DROP', 'https://coupang.com/vp/products/drop1');
+
+    -- [2] 소니 노이즈캔슬링 헤드셋 (가격 급락 연출)
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, ORIGIN_URL)
+    VALUES ('DROP_002', '네이버', '음향', '소니 WH-1000XM5 노이즈캔슬링 헤드셋', 345000, 'DROP', 'https://smartstore.naver.com/bose/drop2');
+
+    -- [3] 다이슨 에어랩 (선물용 인기 품목)
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, ORIGIN_URL)
+    VALUES ('DROP_003', 'SSG', '가전', '다이슨 에어랩 멀티 스타일러 앤 드라이어', 498000, 'DROP', 'https://ssg.com/item/drop3');
+
+    -- [4] 갤럭시 버즈3 프로 (신형 할인 연출)
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, ORIGIN_URL)
+    VALUES ('DROP_004', '11번가', '음향', '삼성전자 갤럭시 버즈3 프로 화이트', 218000, 'DROP', 'https://11st.co.kr/products/drop4');
+
+    -- [5] 닌텐도 스위치 OLED (스테디셀러)
+    INSERT INTO Common_Product (PROD_CODE, SOURCE, CATEGORY, PROD_NAME, PROD_PRICE, BOARD_TYPE, ORIGIN_URL)
+    VALUES ('DROP_005', '지마켓', '게임', '닌텐도 스위치 OLED 모델 화이트', 368000, 'DROP', 'https://gmarket.co.kr/item/drop5');
+
+    COMMIT;
+END;
 -- 4. 위 상품들의 '비싼 가격'을 과거 이력으로 1회 강제 저장
 INSERT INTO PRICE_HISTORY (PROD_ID, PRICE, REG_DATE)
 SELECT PROD_ID, PROD_PRICE, SYSDATE - 1 FROM Common_Product;
@@ -250,5 +213,6 @@ SELECT * FROM (SELECT * FROM Common_Product ORDER BY REG_DATE DESC) WHERE ROWNUM
 SELECT * FROM PRICE_HISTORY;
 SELECT * FROM PRICE_HISTORY WHERE PROD_ID = 117;
 SELECT * FROM Common_Product;
-SELECT IMAGE_URL FROM Common_Product WHERE PROD_ID = 81;
+SELECT IMAGE_URL FROM Common_Product WHERE PROD_ID = 81;.
+SELECT * FROM PRICE_HISTORY WHERE PROD_ID = 81;
 COMMIT;

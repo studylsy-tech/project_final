@@ -5,30 +5,37 @@
 
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 
-<%-- 1. 데이터 소스 통합 로직 (상단 배치) --%>
+
+<%-- 1. 데이터 소스 통합 로직 (타입별 필드명 고정) --%>
 <c:choose>
     <c:when test="${not empty product}">
-        <%-- 일반 상품(Dashboard) 케이스 --%>
+        <%-- 일반 상품(com.project.model.ProductDTO) 케이스 --%>
         <c:set var="title" value="${product.name}" />
         <c:set var="currP" value="${product.price}" />
         <c:set var="targP" value="${product.targetPrice}" />
         <c:set var="mall" value="${product.communityName}" />
         <c:set var="uDate" value="${product.regDate}" />
         <c:set var="link" value="${product.originUrl}" />
-        <c:set var="isProduct" value="true" /> <%-- [추가] 일반 상품 구분자 --%>
+        <c:set var="isProduct" value="true" />
     </c:when>
-    <c:otherwise>
-        <%-- 핫딜(HotDeal) 케이스 --%>
+    
+    <c:when test="${not empty deal}">
+        <%-- 핫딜 상품(com.project.model.HotDealDTO) 케이스 --%>
+        <%-- HotDealDTO에는 title과 currentPrice 필드가 확실히 있으므로 이것만 사용 --%>
         <c:set var="title" value="${deal.title}" />
         <c:set var="currP" value="${deal.currentPrice}" />
-        
-        <%-- [수정] 핫딜은 목표가(빨간선)를 안 보이게 하려고 0으로 설정합니다 --%>
         <c:set var="targP" value="0" /> 
-        
         <c:set var="mall" value="${deal.mallName}" />
         <c:set var="uDate" value="${deal.lastUpdateDate}" />
         <c:set var="link" value="${deal.originUrl}" />
-        <c:set var="isProduct" value="false" /> <%-- [추가] 핫딜 구분자 --%>
+        <c:set var="isProduct" value="false" />
+    </c:when>
+    
+    <c:otherwise>
+        <%-- 예외 상황 처리 --%>
+        <c:set var="title" value="데이터를 불러올 수 없습니다." />
+        <c:set var="currP" value="0" />
+        <c:set var="targP" value="0" />
     </c:otherwise>
 </c:choose>
 

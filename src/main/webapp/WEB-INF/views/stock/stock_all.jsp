@@ -34,10 +34,14 @@
             </c:when>
             <c:otherwise>
                 <c:forEach var="s" items="${stockList}">
-    <%-- 상세 페이지 URL 분기 처리 --%>
-    <c:url var="detailUrl" value="${s.boardType eq 'HOT' ? '/hotdeal/detail' : '/dashboard/detail'}">
-        <c:param name="${s.boardType eq 'HOT' ? 'dealId' : 'prodId'}" value="${s.prodId}" />
-    </c:url>
+    <%-- 상세 페이지 URL 분기 처리 수정 --%>
+<c:url var="detailUrl" value="/dashboard/detail">
+    <%-- 
+       boardType이 HOT이면 dealId라는 이름으로 ID를 넘기고, 
+       아니면(NORMAL, DROP 등) prodId라는 이름으로 ID를 넘깁니다.
+    --%>
+    <c:param name="${s.boardType eq 'HOT' ? 'dealId' : 'prodId'}" value="${s.prodId}" />
+</c:url>
 <%-- [수정] onclick 경로에 ${path} 추가하여 절대 경로 보장 --%>
 <div class="stock-card" 
      onclick="event.stopPropagation(); location.href='${detailUrl}';" 

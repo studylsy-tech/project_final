@@ -87,4 +87,6 @@ public interface ProductMapper {
 	ProductDTO getProductSummary(int prodId);
 
 	void updateProductPrice(ProductDTO product);
+
+	ProductDTO read(Integer prodId);
 }
