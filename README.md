@@ -1,7 +1,7 @@
 🚀 Price-Rader.MALL (득템)
-      **"당신의 쇼핑 시간을 0초로, 가격 추적은 득템 레이더에게 맡기세요"**
+      ** "당신의 쇼핑 시간을 0초로, 가격 추적은 득템 레이더에게 맡기세요" **
 
-      실시간 커뮤니티 핫딜 수집 및 알고리즘 기반 상품 가격 추적 플랫폼입니다
+      ** 실시간 커뮤니티 핫딜 수집 및 알고리즘 기반 상품 가격 추적 플랫폼입니다 **
       
 
 📌 프로젝트 소개 (About Us)
@@ -16,18 +16,16 @@
       **개발자:** 대규모 데이터 크롤링과 실시간 데이터 처리에 관심 있는 엔지니어
 
       
-
 🛠 Tech Stack Overview
-Category                     Technology                         Details
-Backend                      Java 11, Spring Framework          Core Logic & API Development
-Persistence                  MyBatis, Oracle DB                 Data Mapping & RDBMS (HikariCP)
-Web Scraping                 JSoup, Selenium                    Static/Dynamic Data Collection
-Frontend                     HTML5, CSS3, JavaScript            Web Standard UI Development
-Libraries                    jQuery, Bootstrap                  DOM Manipulation & Responsive Design
-DevOps                       Git, GitHub                        Version Control & Collaboration
-Environment                  STS 3, Apache Tomcat 9.0           IDE & Web Application Server
-
-
+ | Category | Technology | Details |
+| :--- | :--- | :--- |
+| Backend | Java 11, Spring Framework | Core Logic & API Development |
+| Persistence | MyBatis, Oracle DB | Data Mapping & RDBMS |
+| Web Scraping | JSoup, Selenium | Static/Dynamic Data Collection |
+| Frontend | HTML5, CSS3, JavaScript | Web Standard UI Development |
+| Libraries | jQuery, Bootstrap | DOM Manipulation |
+| DevOps | Git, GitHub | Version Control |
+| Environment | STS 3, Apache Tomcat 9.0 | IDE & WAS |     
 
 
 ✨ 핵심 기능 (Key Features)
@@ -79,14 +77,15 @@ Customers: Smart shoppers seeking to eliminate the fatigue of manual price compa
 Developers: Engineers interested in large-scale data crawling and real-time data processing.
 
 🛠 Tech Stack Overview
-Category                     Technology                          Details
-Backend                      Java 11,Spring Framework            Core Logic & API Development
-Persistence                  MyBatis, Oracle DB                  Data Mapping & RDBMS (HikariCP)
-Web Scraping                 JSoup, Selenium                     Static/Dynamic Data Collection
-Frontend                     HTML5, CSS3, JavaScript             Web Standard UI Development
-Libraries                    jQuery, Bootstrap                   DOM Manipulation & Responsive Design
-DevOps                       Git, GitHub                         Version Control & Collaboration
-Environment                  STS 3, Apache Tomcat 9.0            IDE & Web Application Server
+| Category | Technology | Details |
+| :--- | :--- | :--- |
+| Backend | Java 11, Spring Framework | Core Logic & API Development |
+| Persistence | MyBatis, Oracle DB | Data Mapping & RDBMS |
+| Web Scraping | JSoup, Selenium | Static/Dynamic Data Collection |
+| Frontend | HTML5, CSS3, JavaScript | Web Standard UI Development |
+| Libraries | jQuery, Bootstrap | DOM Manipulation |
+| DevOps | Git, GitHub | Version Control |
+| Environment | STS 3, Apache Tomcat 9.0 | IDE & WAS |
 
 ✨ Key Features
 🛍 For Customers
