@@ -98,8 +98,14 @@
         TITLE, CONTENT, WRITER, BOARD_TYPE, PARENT_NO, IS_REPLY, STATUS, FILE_STR, ORG_FILENAME
     )
     VALUES (
-        #{title}, #{content}, #{writer}, #{board_type}, #{parent_no}, #{is_reply}, 'Y', #{file_str}, #{org_filename}
-    )
+        #{title}, 
+        #{content}, 
+        #{writer}, 
+        #{board_type}, 
+        #{parent_no}, 
+        #{is_reply}, 
+        'Y', 
+        #{file_str, jdbcType=CLOB},      #{org_filename, jdbcType=VARCHAR} )
 </insert>
 
     <update id="updateCount" parameterType="int">
@@ -113,15 +119,25 @@
     SELECT * FROM (
         SELECT rownum rnum, a.* FROM (
             SELECT 
-                NOTICE_NO as notice_no, 
-                TITLE as title, 
-                WRITER as writer,
-                COUNT as count, 
-                STATUS as status,
-                TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
+                NOTICE_NO as notice_no, TITLE as title, WRITER as writer,
+                COUNT as count, STATUS as status, IS_REPLY as is_reply,
+                PARENT_NO as parent_no, TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
             FROM BOARD
             WHERE BOARD_TYPE = 'QNA' AND STATUS = 'Y'
-            ORDER BY NOTICE_NO DESC
+            <choose>
+                <when test="sortType == 'count'">
+                    ORDER BY COUNT DESC, NOTICE_NO DESC
+                </when>
+                <when test="sortType == 'latest'">
+                    ORDER BY NOTICE_NO DESC
+                </when>
+                <otherwise>
+                    ORDER BY 
+                        (CASE WHEN PARENT_NO = 0 THEN NOTICE_NO ELSE PARENT_NO END) DESC,
+                        IS_REPLY ASC,
+                        NOTICE_NO ASC
+                </otherwise>
+            </choose>
         ) a WHERE rownum &lt;= #{pageEnd}
     ) WHERE rnum &gt;= #{pageStart}
 </select>

@@ -19,27 +19,7 @@
     </if>
 </sql>
 
-<select id="getSearchList" resultType="com.project.model.ProductDTO">
-        SELECT 
-            PROD_ID as prodId,
-            PROD_CODE as prodCode,
-            PROD_NAME as name,       
-            PROD_PRICE as price,     
-            BRAND as brand,
-            IMAGE_URL as imageUrl,   
-            SOURCE as source,        
-            BOARD_TYPE as boardType, 
-            REG_DATE as regDate
-        FROM Common_Product 
-        WHERE 1=1
-        <choose>
-            <when test="boardType == 'DROP'"> AND BOARD_TYPE = 'DROP' </when>
-            <when test="boardType == 'LOW'"> AND BOARD_TYPE = 'HOT' </when>
-        </choose>
-        <include refid="search"></include>
-        ORDER BY PROD_ID DESC
-        OFFSET #{pageStart} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
-    </select>
+
 
 <select id="getHotDealSearchList" resultType="com.project.model.HotDealDTO">
     SELECT 
@@ -76,14 +56,28 @@
         </choose>
     </if>
 </select>
-	<select id="getSearchCount" resultType="int">
-        SELECT COUNT(*) 
-        FROM Common_Product 
-        WHERE 1=1
-        <choose>
-            <when test="boardType == 'DROP'"> AND BOARD_TYPE = 'DROP' </when>
-            <when test="boardType == 'LOW'"> AND BOARD_TYPE = 'HOT' </when>
-        </choose>
-        <include refid="search"></include>
-    </select>
+	<select id="getSearchList" resultType="com.project.model.ProductDTO">
+    SELECT 
+        PROD_ID as prodId,
+        PROD_CODE as prodCode,
+        PROD_NAME as name,       
+        PROD_PRICE as price,     
+        BRAND as brand,
+        IMAGE_URL as imageUrl,   
+        SOURCE as source,        
+        BOARD_TYPE as boardType, 
+        REG_DATE as regDate
+    FROM Common_Product 
+    WHERE BOARD_TYPE = 'DROP'
+    <include refid="search"></include>
+    ORDER BY PROD_ID DESC
+    OFFSET #{pageStart} ROWS FETCH NEXT #{perPageNum} ROWS ONLY
+</select>
+
+<select id="getSearchCount" resultType="int">
+    SELECT COUNT(*) 
+    FROM Common_Product 
+    WHERE BOARD_TYPE = 'DROP'
+    <include refid="search"></include>
+</select>
 </mapper>

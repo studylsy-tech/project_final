@@ -11,7 +11,7 @@ public class Criteria {
 	
 	private int page;		
 	private int perPageNum;	
-	
+
 	public Criteria() {
 		this(1,10);
 	}
@@ -44,5 +44,10 @@ public class Criteria {
 	
 	public int getStartRow() {
 		return (this.page - 1) * perPageNum;
+	}
+
+	public void setSortType(String string) {
+		// TODO Auto-generated method stub
+		
 	}
 }

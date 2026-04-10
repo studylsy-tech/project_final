@@ -57,6 +57,12 @@ public class BoardController {
  // 2. Q&A 목록 조회
     @GetMapping("/qna")
     public String qnaList(SearchCriteria scri, Model model) {
+        // sortType이 없거나 비어있을 경우 기본값으로 "default" 설정
+    	if (scri.getSortType() == null || scri.getSortType().isEmpty()) {
+            scri.setSortType("default"); // "default"라고 명시
+        }
+    	// 2. 서비스 호출 전에 scri를 다시 한 번 확인 (디버깅용)
+        System.out.println("최종 정렬값: " + scri.getSortType());
         scri.setBoardType("QNA");
         scri.calcPageRange();
         int totalCount = boardService.getBoardCount(scri);
@@ -65,7 +71,7 @@ public class BoardController {
         pageMaker.setCri(scri);
         pageMaker.setTotalCount(totalCount);
         
-        List<BoardDTO> list = boardService.selectBoardListPaging(scri);
+        List<BoardDTO> list = boardService.selectQnaListPaging(scri);
         model.addAttribute("list", list);
         model.addAttribute("pageMaker", pageMaker);
         

@@ -19,11 +19,16 @@ public class PageMaker {
 	private boolean last;			// 마지막 페이지 이동 가능 여부
 	private boolean prev;			// 이전 페이지 블럭 존재 여부
 	private boolean next;			// 마지막 페이지 블럭 존재 여부
-	
+	private String sortType;
 	protected Criteria criteria;		// 요청 페이지 , 한번에 보여줄 게시물 수
 	
 	public PageMaker() {
-		this(new Criteria(),0, 10);
+	    Criteria criteria = new Criteria();
+	    criteria.setSortType("default");
+	    this.criteria = criteria;
+	    this.totalCount = 0;
+	    this.displayPageNum = 10;
+	    calcPaging();
 	}
 	
 	public PageMaker(Criteria criteria, int totalCount, int displayPageNum) {
@@ -89,6 +94,7 @@ public class PageMaker {
 	            .queryParam("perPageNum", criteria.getPerPageNum())
 	            .queryParam("searchType", ((SearchCriteria)criteria).getSearchType())
 	            .queryParam("keyword", ((SearchCriteria)criteria).getKeyword())
+	            .queryParam("sortType", ((SearchCriteria)criteria).getSortType()) // sortType 추가
 	            .build();
 	    return uriComponents.toUriString();
 	}
@@ -96,4 +102,11 @@ public class PageMaker {
 	    this.criteria = cri;
 	    calcPaging();
 	}
+	public String getSortType() {
+        return sortType;
+    }
+
+    public void setSortType(String sortType) {
+        this.sortType = sortType;
+    }
 }

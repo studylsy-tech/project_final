@@ -20,6 +20,7 @@ import com.project.util.SearchPageMaker;
 
 @Controller
 @RequestMapping("/stock")
+
 public class StockController {
 
     @Autowired
@@ -30,6 +31,7 @@ public class StockController {
     // 1. 전체 상품 검색 (Common_Product 전체)
  // StockController.java
     @GetMapping("/all")
+    
     public String searchAll(@ModelAttribute("scri") SearchCriteria scri, Model model) throws Exception {
         // 분석 페이지용 boardType이 섞이지 않도록 명시적 초기화 (필요 시)
         if ("HOTDEAL".equals(scri.getBoardType())) {
