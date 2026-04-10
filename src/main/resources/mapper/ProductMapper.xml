@@ -44,37 +44,29 @@
     <select id="listSearch" parameterType="com.project.util.SearchCriteria" resultType="com.project.model.ProductDTO">
     SELECT * FROM (
         SELECT rownum rnum, a.* FROM (
-            SELECT 
-                PROD_ID as prodId,
-                PROD_NAME as name,
-                PROD_PRICE as price,
-                IMAGE_URL as imageUrl,
-                ORIGIN_URL as originUrl,
-                SOURCE as source,        BOARD_TYPE as boardType,
-                REG_DATE as regDate
-            FROM Common_Product
-            WHERE 1=1
-            <if test="searchType == 'name'.toString()">
-                AND PROD_NAME LIKE '%'||#{keyword}||'%'
-            </if>
+            SELECT * FROM (
+                SELECT 
+                    PROD_ID as prodId, PROD_NAME as name, PROD_PRICE as price,
+                    IMAGE_URL as imageUrl, ORIGIN_URL as originUrl, SOURCE as source, 
+                    BOARD_TYPE as boardType, REG_DATE as regDate
+                FROM Common_Product
+                WHERE 1=1
+                <if test='searchType == "title"'>
+                    AND PROD_NAME LIKE '%'||#{keyword}||'%'
+                </if>
 
-            UNION ALL
+                UNION ALL
 
-            SELECT
-                DEAL_ID as prodId,
-                TITLE as name,
-                CURRENT_PRICE as price,
-                IMAGE_URL as imageUrl,
-                ORIGIN_URL as originUrl,
-                COMMUNITY_NAME as source,
-                'HOT' as boardType,
-                LAST_UPDATE_DATE as regDate
-            FROM TB_HOTDEAL_TRACKER
-            WHERE 1=1
-            <if test="searchType == 'name'.toString()">
-                AND TITLE LIKE '%'||#{keyword}||'%'
-            </if>
-
+                SELECT
+                    DEAL_ID as prodId, TITLE as name, CURRENT_PRICE as price,
+                    IMAGE_URL as imageUrl, ORIGIN_URL as originUrl, COMMUNITY_NAME as source,
+                    'HOT' as boardType, LAST_UPDATE_DATE as regDate
+                FROM TB_HOTDEAL_TRACKER
+                WHERE 1=1
+                <if test='searchType == "title"'>
+                    AND TITLE LIKE '%'||#{keyword}||'%'
+                </if>
+            )
             ORDER BY regDate DESC
         ) a WHERE rownum &lt;= #{pageEnd}
     ) WHERE rnum &gt;= #{pageStart}
@@ -84,13 +76,13 @@
     SELECT (
         SELECT COUNT(*) FROM Common_Product
         WHERE 1=1
-        <if test="searchType == 'name'.toString()">
+        <if test='searchType == "title"'>
             AND PROD_NAME LIKE '%'||#{keyword}||'%'
         </if>
     ) + (
         SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
         WHERE 1=1
-        <if test="searchType == 'name'.toString()">
+        <if test='searchType == "title"'>
             AND TITLE LIKE '%'||#{keyword}||'%'
         </if>
     ) FROM DUAL
