@@ -286,4 +286,22 @@ public class MemberController {
         }
     }
     
+    @GetMapping("/kakaoLogin")
+    public String kakaoLogin(@RequestParam("code") String code, HttpSession session) {
+        System.out.println("인가 코드 수신 성공: " + code);
+
+        // [원래는 여기서 카카오와 통신해서 유저 정보를 가져와야 함]
+        // 테스트를 위해 임시로 유저 객체를 만들어서 세션에 넣어봅시다.
+        
+        MemberDTO kakaoUser = new MemberDTO();
+        kakaoUser.setNickname("카카오유저"); 
+        kakaoUser.setMemberType(2); // 정회원
+        
+        // 이 부분이 핵심! 세션에 도장을 찍어줘야 로그인이 유지됩니다.
+        session.setAttribute("loginUser", kakaoUser); 
+        session.setMaxInactiveInterval(604800); // 7일 유지
+
+        return "redirect:/"; // 메인으로 가면 이제 '로그아웃' 버튼이 보일 거예요!
+    }
+    
 }

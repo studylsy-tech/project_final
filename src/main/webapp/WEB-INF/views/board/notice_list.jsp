@@ -99,11 +99,12 @@
     </div>
 
     <%-- 관리자 권한 확인 및 등록 버튼 --%>
-<c:if test="${loginUser.memberType == 0}">        <div class="board-footer" style="text-align: right; margin-top: 20px;">
-            <a href="${path}/board/write?type=NOTICE" class="btn-dark">공지등록</a>
-        </div>
-    </c:if>
-</div>
+	<c:if test="${loginUser.memberType == 0}">        
+			<div class="board-footer" style="text-align: right; margin-top: 20px;">
+	            <a href="${path}/board/write?type=NOTICE" class="btn-dark">공지등록</a>
+	        </div>
+	    </c:if>
+	</div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>

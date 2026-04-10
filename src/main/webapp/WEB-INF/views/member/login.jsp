@@ -30,6 +30,9 @@
 			    <label for="rememberMe">로그인 상태 유지</label>
 			</div>
             <button type="submit" class="login-btn">로그인</button>
+            <div class="social-login-container" style="margin-top: 15px; text-align: center;">
+			    <a href="https://kauth.kakao.com/oauth/authorize?client_id=3e0fb4323a817291be8ec169ce046597&redirect_uri=http://localhost:8080/fin_project/member/kakaoLogin&response_type=code">카카오 로그인</a>
+			</div>
         </form>
 
         <div class="login-links">
