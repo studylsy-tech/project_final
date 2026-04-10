@@ -124,7 +124,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-	// [추가] 정렬 링크 클릭 이벤트
+	// 정렬 링크 클릭 이벤트
     $(document).on("click", ".sort-link", function(e) {
         e.preventDefault();
         
