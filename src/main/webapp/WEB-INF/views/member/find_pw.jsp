@@ -3,33 +3,31 @@
 <c:set var="path" value="${pageContext.request.contextPath}" />
 
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
-<link rel="stylesheet" href="${path}/resources/css/views/member/find_pw.css?v=999">
-
 <link rel="stylesheet" href="${path}/resources/css/views/member/find_pw.css">
 
-<div class="find-pw-container">
-    <h3>비밀번호 찾기</h3>
-    
-    <div id="find_pw_step1">
-        <div class="input-group">
-            <label for="phone">휴대폰 번호</label>
-            <input type="text" id="phone" placeholder="- 없이 숫자만 입력">
-        </div>
+<div class="find-pw-body"> <div class="form-card"> <h1>비밀번호 찾기</h1>
         
-        <div class="input-group">
-            <label for="email">이메일 주소</label>
-            <input type="email" id="email" placeholder="example@email.com">
+        <div id="find_pw_step1">
+            <div class="field-group">
+                <label for="phone">휴대폰 번호</label>
+                <input type="text" id="phone" placeholder="- 없이 숫자만 입력">
+            </div>
+            
+            <div class="field-group">
+                <label for="email">이메일 주소</label>
+                <input type="email" id="email" placeholder="example@email.com">
+            </div>
+            
+            <button type="button" id="send_code_btn" class="btn-submit">인증번호 받기</button>
         </div>
-        
-        <button type="button" id="send_code_btn" class="btn-primary">인증번호 받기</button>
-    </div>
 
-    <div id="auth_area" style="display:none;">
-        <p class="auth-title">이메일을 확인하여 인증번호를 입력해주세요.</p>
-        <div class="input-group">
-            <input type="text" id="auth_code" placeholder="인증번호 6자리 입력">
+        <div id="auth_area" style="display:none;">
+            <p class="auth-title">이메일을 확인하여 인증번호를 입력해주세요.</p>
+            <div class="field-group">
+                <input type="text" id="auth_code" placeholder="인증번호 6자리 입력">
+            </div>
+            <button type="button" id="verify_btn" class="btn-submit">인증 확인</button>
         </div>
-        <button type="button" id="verify_btn" class="btn-primary">인증 확인</button>
     </div>
 </div>
 	
