@@ -9,8 +9,7 @@
 <link rel="stylesheet" href="${path}/resources/css/stock/stock_common.css">
 
 <%-- 현재 접속 경로 저장 --%>
-<c:set var="currentUri" value="${requestScope['javax.servlet.forward.request_uri']}" />
-
+<c:set var="currentUri" value="${path}/stock/all" />
 <div class="board-wrapper">
     <h2>전체 상품</h2>
 
@@ -35,18 +34,18 @@
             </c:when>
             <c:otherwise>
                 <c:forEach var="s" items="${stockList}">
-                    <%-- 상세 페이지 URL 분기 처리 --%>
-                    <c:url var="detailUrl" value="${s.boardType eq 'HOT' ? '/hotdeal/detail' : '/dashboard/detail'}">
-                        <c:param name="${s.boardType eq 'HOT' ? 'dealId' : 'prodId'}" value="${s.prodId}" />
-                    </c:url>
-
-                    <div class="stock-card" onclick="location.href='${detailUrl}'">
-                        <%-- 이미지 영역: CSS 규격 적용 --%>
-                        <div class="prod-img-wrapper">
-                            <img src="${not empty s.imageUrl ? s.imageUrl : path.concat('/resources/images/no-image.png')}" 
-                                 alt="${s.name}" 
-                                 onerror="this.src='${path}/resources/images/no-image.png';">
-                        </div>
+    <%-- 상세 페이지 URL 분기 처리 --%>
+    <c:url var="detailUrl" value="${s.boardType eq 'HOT' ? '/hotdeal/detail' : '/dashboard/detail'}">
+        <c:param name="${s.boardType eq 'HOT' ? 'dealId' : 'prodId'}" value="${s.prodId}" />
+    </c:url>
+<%-- [수정] onclick 경로에 ${path} 추가하여 절대 경로 보장 --%>
+<div class="stock-card" 
+     onclick="event.stopPropagation(); location.href='${detailUrl}';" 
+     style="cursor:pointer;">       <div class="prod-img-wrapper">
+            <img src="${not empty s.imageUrl ? s.imageUrl : path.concat('/resources/images/no-image.png')}" 
+                 alt="${s.name}" 
+                 onerror="this.src='${path}/resources/images/no-image.png';">
+        </div>
 
                         <%-- 정보 영역: 계층 구조 정렬 --%>
                         <div class="prod-info-wrapper">
@@ -111,18 +110,18 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(function() {
-        // 검색 실행 함수
-        function executeSearch() {
-            const uri = "${currentUri}";
-            const keyword = $('#keywordInput').val();
-            const searchType = $("#searchType").val();
-            
-            location.href = uri + "?page=1" 
-                          + "&perPageNum=${pageMaker.criteria.perPageNum}"
-                          + "&searchType=" + searchType
-                          + "&keyword=" + encodeURIComponent(keyword);
-        }
+$(function() {
+    function executeSearch() {
+        // [수정] 변수 uri를 현재 페이지의 명확한 엔드포인트로 고정
+        const uri = "${path}/stock/all";
+        const keyword = $('#keywordInput').val();
+        const searchType = $("#searchType").val();
+        
+        location.href = uri + "?page=1" 
+                      + "&perPageNum=${pageMaker.criteria.perPageNum}"
+                      + "&searchType=" + searchType
+                      + "&keyword=" + encodeURIComponent(keyword);
+    }
 
         // 검색 버튼 클릭 이벤트
         $('#searchBtn').on("click", function(event) {
