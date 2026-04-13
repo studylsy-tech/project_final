@@ -13,19 +13,19 @@
         };
     </script>
 </c:if>
-
+ 
 <script>
-    // 서버에서 받은 인증번호를 저장할 변수 (준회원, 정회원 구분)
+    // 인증번호 통합 관리 객체
     var authCodes = {
         semi: "",
-        full: ""
+        full: "",
+        sms: "" 
     };
 
     $(function() {
-        // 인증번호 발송 기능
+        // 이메일 인증번호 발송 
         $(".mail-btn").on("click", function() {
-            var type = $(this).data("type"); // 'semi' 또는 'full'
-            // 정회원 이메일 입력창 ID는 'email'이고 준회원은 'semi_email'인 점 체크!!!
+            var type = $(this).data("type");
             var emailSelector = (type === 'semi') ? "#semi_email" : "#email";
             var email = $(emailSelector).val();
 
@@ -40,9 +40,9 @@
                 data: { email: email },
                 success: function(data) {
                     if(data !== "error") {
-                        alert("인증번호가 발송되었습니다.");
-                        authCodes[type] = data; // 서버가 보낸 번호 저장
-                        $("#" + type + "_auth_area").show(); // 숨겨진 입력창 노출
+                        alert("이메일 인증번호가 발송되었습니다.");
+                        authCodes[type] = data; 
+                        $("#" + type + "_auth_area").show();
                     } else {
                         alert("메일 발송에 실패했습니다.");
                     }
@@ -50,27 +50,61 @@
             });
         });
 
-        // [2] 인증번호 확인 및 가입 버튼 활성화 기능
-        $(".verify-btn").on("click", function() {
+        // 휴대폰 인증번호 발송
+        $(".sms-send-btn").on("click", function() {
             var type = $(this).data("type");
-            var inputCode = $("#" + type + "_code").val(); // 사용자가 입력한 번호
-            var serverCode = authCodes[type]; // 서버에서 보냈던 번호
+            var phoneSelector = (type === 'semi') ? "#semi_phone" : "#full_phone";
+            var phone = $(phoneSelector).val();
+
+            if(!phone || phone.length < 10) {
+                alert("휴대폰 번호를 정확히 입력해주세요.");
+                return;
+            }
+
+            $.ajax({
+                url: "${path}/member/sendSMS", // 여기서 ${path}가 /fin_project를 만듭니다.
+                type: "POST",
+                data: { phone: phone },
+                success: function(data) {
+                    if(data !== "error") {
+                        alert("인증번호가 문자로 발송되었습니다.");
+                        authCodes.sms = data; 
+                        $("#" + type + "_sms_area").show();
+                    } else {
+                        alert("문자 발송에 실패했습니다.");
+                    }
+                },
+                error: function() {
+                    alert("서버 연결에 실패했습니다. (404/500 에러)");
+                }
+            });
+        });
+
+        // 모든 '인증확인' 버튼 클릭 시 (이메일 및 SMS 공용 처리)
+        $(document).on("click", ".verify-btn, .sms-verify-btn", function() {
+            var type = $(this).data("type");
+            var isSms = $(this).hasClass("sms-verify-btn");
+            
+            var inputCode = isSms ? $("#" + type + "_sms_code").val() : $("#" + type + "_code").val();
+            var serverCode = isSms ? authCodes.sms : authCodes[type];
 
             if(inputCode === serverCode && serverCode !== "") {
-                alert("인증 성공!");
+                alert("인증에 성공했습니다!");
                 
-                // 인증 완료 후 수정 방지
-                var emailSelector = (type === 'semi') ? "#semi_email" : "#email";
-                $(emailSelector).attr("readonly", true);
-                $("#" + type + "_code").attr("readonly", true);
+                // 해당 입력창 readonly 처리
+                if(isSms) {
+                    $("#" + type + "_phone").attr("readonly", true);
+                    $("#" + type + "_sms_code").attr("readonly", true);
+                } else {
+                    var emailSelector = (type === 'semi') ? "#semi_email" : "#email";
+                    $(emailSelector).attr("readonly", true);
+                    $("#" + type + "_code").attr("readonly", true);
+                }
                 
-                // 가입 버튼 활성화 (disabled 해제)
-                $("#" + type + "_submit").prop("disabled", false);
-                // 시각적으로 클릭 가능하게 변경
-                $("#" + type + "_submit").css("cursor", "pointer").css("opacity", "1");
+                // 가입 버튼 활성화 (이메일/휴대폰 둘 다 해야 할 경우 로직 추가 가능)
+                $("#" + type + "_submit").prop("disabled", false).css({"cursor": "pointer", "opacity": "1"});
             } else {
                 alert("인증번호가 일치하지 않습니다.");
-                $("#" + type + "_submit").prop("disabled", true);
             }
         });
     });
@@ -90,7 +124,15 @@
         <div class="form-group">
             <label for="semi_phone">휴대폰 번호</label>
             <input type="text" name="phone" id="semi_phone" placeholder="'-' 제외 번호만 입력" required>
+            <button type="button" class="sms-send-btn" data-type="semi">인증번호 받기</button>
         </div>
+        <div id="semi_sms_area" style="display: none; margin-top: 8px;">
+		    <div style="display: flex; gap: 8px; height: 48px;">
+		        <input type="text" id="semi_sms_code" placeholder="문자 인증번호 6자리" style="flex: 1; height: 100%;">
+		        <button type="button" class="sms-verify-btn" data-type="semi">번호확인</button>
+		    </div>
+		</div>
+		
         <div class="form-group">
             <label for="semi_pw">비밀번호</label>
             <input type="password" name="pw" id="semi_pw" required>
@@ -126,7 +168,14 @@
             <div class="form-group">
                 <label for="full_phone">휴대폰 번호 (아이디)</label>
                 <input type="text" name="phone" id="full_phone" placeholder="'-' 제외 번호만 입력" required>
+                <button type="button" class="sms-send-btn" data-type="full">인증번호 받기</button>
             </div>
+            <div id="full_sms_area" style="display: none; margin-top: 8px;">
+			    <div style="display: flex; gap: 8px; height: 48px;">
+			        <input type="text" id="full_sms_code" placeholder="문자 인증번호 6자리" style="flex: 1; height: 100%;">
+			        <button type="button" class="sms-verify-btn" data-type="full">번호확인</button>
+			    </div>
+			</div>
             <div class="form-group">
                 <label for="full_pw">비밀번호</label>
                 <input type="password" name="pw" id="full_pw" required>

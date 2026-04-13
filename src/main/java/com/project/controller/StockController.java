@@ -49,25 +49,35 @@ public class StockController {
     // 2. 급락 상품 검색 (BOARD_TYPE = 'DROP')
     @GetMapping("/drop")
     public String searchDrop(@ModelAttribute("scri") SearchCriteria scri, Model model) throws Exception {
-        scri.setBoardType("DROP");
-        List<ProductDTO> list = searchMapper.getSearchList(scri);
-        int totalCount = searchMapper.getSearchCount(scri);
+        // 1. 로그로 값이 오는지 확인
+        System.out.println("급락 검색 타입: " + scri.getSearchType());
+        System.out.println("급락 검색어: " + scri.getKeyword());
+
+        scri.setBoardType("DROP"); // 필요하다면 유지
+
+        // 2. productMapper를 호출하도록 변경! (이게 핵심입니다)
+        List<ProductDTO> list = productMapper.listSearch(scri); 
+        int totalCount = productMapper.listSearchCount(scri);
         
         model.addAttribute("stockList", list);
         model.addAttribute("pageMaker", new SearchPageMaker(scri, totalCount, 5));
-        return "stock/stock_drop"; // stock_drop.jsp
+        return "stock/stock_drop";
     }
 
-    // 3. 최저가 상품 검색 (BOARD_TYPE = 'HOT')
     @GetMapping("/low")
     public String searchLow(@ModelAttribute("scri") SearchCriteria scri, Model model) throws Exception {
-        scri.setBoardType("LOW"); // DB의 'HOT' 구분을 최저가(low)로 매핑
-        List<ProductDTO> list = searchMapper.getSearchList(scri);
-        int totalCount = searchMapper.getSearchCount(scri);
+        // 1. 로그를 찍어서 검색어가 잘 들어오는지 확인 (핵심!)
+        System.out.println("검색 타입: " + scri.getSearchType());
+        System.out.println("검색어: " + scri.getKeyword());
+
+        // 2. productMapper의 listSearch를 호출하도록 변경
+        // (사용자님이 열심히 고친 XML 쿼리가 이 메서드니까요!)
+        List<ProductDTO> list = productMapper.listSearch(scri); 
+        int totalCount = productMapper.listSearchCount(scri);
         
         model.addAttribute("stockList", list);
         model.addAttribute("pageMaker", new SearchPageMaker(scri, totalCount, 5));
-        return "stock/stock_low"; // stock_low.jsp
+        return "stock/stock_low";
     }
 
     // 4. 핫딜 분석 검색 (TB_HOTDEAL_TRACKER 테이블)

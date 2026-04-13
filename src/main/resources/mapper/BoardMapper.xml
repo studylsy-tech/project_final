@@ -98,19 +98,29 @@
 </select>
 
     <insert id="insertBoard" parameterType="com.project.model.BoardDTO">
-    INSERT INTO BOARD (
-        TITLE, CONTENT, WRITER, BOARD_TYPE, PARENT_NO, IS_REPLY, STATUS, FILE_STR, ORG_FILENAME
-    )
-    VALUES (
-        #{title}, 
-        #{content}, 
-        #{writer}, 
-        #{board_type}, 
-        #{parent_no}, 
-        #{is_reply}, 
-        'Y', 
-        #{file_str, jdbcType=CLOB},      #{org_filename, jdbcType=VARCHAR} )
-</insert>
+	    INSERT INTO BOARD (
+	        TITLE, 
+	        CONTENT, 
+	        WRITER, 
+	        BOARD_TYPE, 
+	        PARENT_NO, 
+	        IS_REPLY, 
+	        STATUS, 
+	        FILE_STR, 
+	        ORG_FILENAME
+	    )
+	    VALUES (
+	        #{title}, 
+	        #{content}, 
+	        #{writer}, 
+	        #{board_type}, 
+	        #{parent_no, jdbcType=INTEGER}, 
+	        #{is_reply, jdbcType=INTEGER}, 
+	        'Y', 
+	        #{file_str, jdbcType=CLOB}, 
+	        #{org_filename, jdbcType=VARCHAR}
+	    )
+	</insert>
 
     <update id="updateCount" parameterType="int">
         UPDATE BOARD SET COUNT = COUNT + 1 WHERE NOTICE_NO = #{notice_no}

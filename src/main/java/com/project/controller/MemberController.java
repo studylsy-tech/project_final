@@ -304,4 +304,19 @@ public class MemberController {
         return "redirect:/"; // 메인으로 가면 이제 '로그아웃' 버튼이 보일 거예요!
     }
     
+    @ResponseBody 
+    @PostMapping("/sendSMS") // <-- 여기를 /member/sendSMS에서 /sendSMS로 수정!
+    public String sendSMS(@RequestParam String phone, HttpSession session) {
+        
+        String randomCode = String.valueOf((int)(Math.random() * 899999) + 100000);
+
+        // 실제 문자 발송 (일단 콘솔로 확인)
+        // memberService.sendSms(phone, randomCode); 
+
+        System.out.println("수신번호: " + phone + " | 생성된 인증번호: " + randomCode);
+        
+        // 중요: JSP 스크립트에서 번호를 직접 비교하려면 randomCode를 그대로 리턴해야 합니다.
+        return randomCode; 
+    }
+    
 }

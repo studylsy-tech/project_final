@@ -44,44 +44,29 @@
     <select id="listSearch" parameterType="com.project.util.SearchCriteria" resultType="com.project.model.ProductDTO">
     SELECT * FROM (
         SELECT rownum rnum, a.* FROM (
-            SELECT 
-                PROD_ID as prodId,
-                PROD_NAME as name, 
-                PROD_PRICE as price,
-                IMAGE_URL as imageUrl,
-                ORIGIN_URL as originUrl,
-                SOURCE as source,
-                BOARD_TYPE as boardType,
-                REG_DATE as regDate
-            FROM Common_Product
-            WHERE 1=1
-            /* [추가] boardType 파라미터가 있을 때만 해당 타입으로 필터링 */
-            <if test="boardType != null and boardType != ''">
-                AND BOARD_TYPE = #{boardType}
-            </if>
-            <if test="searchType == 'title'.toString()">
-                AND PROD_NAME LIKE '%'||#{keyword}||'%'
-            </if>
+            SELECT * FROM (
+                SELECT 
+                    PROD_ID as prodId, PROD_NAME as name, PROD_PRICE as price,
+                    IMAGE_URL as imageUrl, ORIGIN_URL as originUrl, SOURCE as source, 
+                    BOARD_TYPE as boardType, REG_DATE as regDate
+                FROM Common_Product
+                WHERE 1=1
+                <if test='searchType == "title"'>
+                    AND PROD_NAME LIKE '%'||#{keyword}||'%'
+                </if>
 
-            UNION ALL
+                UNION ALL
 
-            /* 2. 핫딜 트래커 데이터 조회 */
-            SELECT
-                DEAL_ID as prodId,
-                TITLE as name,      CURRENT_PRICE as price,
-                IMAGE_URL as imageUrl,
-                ORIGIN_URL as originUrl,
-                COMMUNITY_NAME as source,
-                'HOT' as boardType,
-                LAST_UPDATE_DATE as regDate
-            FROM TB_HOTDEAL_TRACKER
-            WHERE 1=1
-            <if test="searchType == 'title'.toString()">
-                AND TITLE LIKE '%'||#{keyword}||'%'      </if>
-            <if test="searchType == 'url'.toString()">
-                AND ORIGIN_URL LIKE '%'||#{keyword}||'%'
-            </if>
-
+                SELECT
+                    DEAL_ID as prodId, TITLE as name, CURRENT_PRICE as price,
+                    IMAGE_URL as imageUrl, ORIGIN_URL as originUrl, COMMUNITY_NAME as source,
+                    'HOT' as boardType, LAST_UPDATE_DATE as regDate
+                FROM TB_HOTDEAL_TRACKER
+                WHERE 1=1
+                <if test='searchType == "title"'>
+                    AND TITLE LIKE '%'||#{keyword}||'%'
+                </if>
+            )
             ORDER BY regDate DESC
         ) a WHERE rownum &lt;= #{pageEnd}
     ) WHERE rnum &gt;= #{pageStart}
@@ -91,25 +76,13 @@
     SELECT (
         SELECT COUNT(*) FROM Common_Product
         WHERE 1=1
-        <if test="searchType == 'title'.toString()">
-            AND PROD_NAME LIKE '%'||#{keyword}||'%'
-        </if>
-        <if test="searchType == 'url'.toString()">
-            AND ORIGIN_URL LIKE '%'||#{keyword}||'%'
-        </if>
-        <if test="searchType == 'content'.toString()">
+        <if test='searchType == "title"'>
             AND PROD_NAME LIKE '%'||#{keyword}||'%'
         </if>
     ) + (
         SELECT COUNT(*) FROM TB_HOTDEAL_TRACKER
         WHERE 1=1
-        <if test="searchType == 'title'.toString()">
-            AND TITLE LIKE '%'||#{keyword}||'%'
-        </if>
-        <if test="searchType == 'url'.toString()">
-            AND ORIGIN_URL LIKE '%'||#{keyword}||'%'
-        </if>
-        <if test="searchType == 'content'.toString()">
+        <if test='searchType == "title"'>
             AND TITLE LIKE '%'||#{keyword}||'%'
         </if>
     ) FROM DUAL
