@@ -3,6 +3,14 @@
 
 <mapper namespace="com.project.dao.BoardMapper">
 
+	<sql id="search">
+        <if test="searchType != null">
+            <if test="searchType == 'title'"> AND TITLE LIKE '%'||#{keyword}||'%' </if>
+            <if test="searchType == 'content'"> AND CONTENT LIKE '%'||#{keyword}||'%' </if>
+            <if test="searchType == 'writer'"> AND WRITER LIKE '%'||#{keyword}||'%' </if>
+        </if>
+    </sql>
+
     <select id="getNoticeListPaging" resultType="com.project.model.BoardDTO">
 	    SELECT * FROM (
 	        SELECT rownum rnum, a.* FROM (
@@ -38,28 +46,24 @@
                 TO_CHAR(INDATE, 'YYYY-MM-DD') as indate
             FROM BOARD
             WHERE BOARD_TYPE = #{boardType} AND STATUS = 'Y'
-            
-            <choose>
-			    <when test='sortType != null and sortType == "count"'>
-			        ORDER BY COUNT DESC, NOTICE_NO DESC
-			    </when>
-			    <otherwise>
-			        ORDER BY NOTICE_NO DESC
-			    </otherwise>
-			</choose>
-            
+            <include refid="search" /> <choose>
+                <when test="sortType == 'count'">
+                    ORDER BY COUNT DESC, NOTICE_NO DESC
+                </when>
+                <otherwise>
+                    ORDER BY NOTICE_NO DESC
+                </otherwise>
+            </choose>
         ) a WHERE rownum &lt;= #{pageEnd}
     ) WHERE rnum &gt;= #{pageStart}
 </select>
 
 
     <select id="getBoardCount" resultType="int">
-    SELECT COUNT(*) FROM BOARD 
-    WHERE BOARD_TYPE = #{boardType}
-    <if test="status != null">
-        AND STATUS = #{status}
-    </if>
-</select>
+	    SELECT COUNT(*) FROM BOARD 
+	    WHERE BOARD_TYPE = #{boardType}
+	    AND STATUS = 'Y'
+	    <include refid="search" /> </select>
 
     <select id="getNoticeCount" resultType="int">
         SELECT COUNT(*) FROM BOARD 
