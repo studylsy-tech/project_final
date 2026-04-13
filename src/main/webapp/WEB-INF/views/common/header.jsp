@@ -5,6 +5,8 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+<link rel="icon" href="${path}/resources/images/Favicon01.png" type="image/png">
+
 <header class="main-header">
     <div class="header-logo dropdown-container">
         <a href="${path}/">득템</a>
