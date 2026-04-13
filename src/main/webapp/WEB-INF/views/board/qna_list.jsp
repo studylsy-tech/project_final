@@ -54,10 +54,10 @@
                         <tr>
                             <td>${board.notice_no}</td>
                             <td class="title-cell text-left">
-                                <%-- 답변글일 경우 들여쓰기 표시 --%>
-                                <c:if test="${board.is_reply == 1}">
-                                    <span class="reply-indent" style="margin-left: 15px;">└ [답변] </span>
-                                </c:if>
+                                <%-- 답변글(자식글)일 경우에만 들여쓰기 표시 --%>
+<c:if test="${board.parent_no > 0}">
+    <span class="reply-indent" style="margin-left: 15px;">└ </span>
+</c:if>
                                 <a href="${path}/board/detail?notice_no=${board.notice_no}">
                                     <c:out value="${board.title}" />
                                 </a>

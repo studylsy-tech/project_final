@@ -39,10 +39,10 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     @Override
     public void insertBoard(BoardDTO board) {
-        // 게시글(원문 또는 답변) 저장
         boardMapper.insertBoard(board);
         
-        // 작성된 게시글이 QNA 답변글(parent_no > 0)일 경우 부모 게시글의 상태 업데이트
+        // 이 메서드는 IS_REPLY를 1로 바꾸는 역할만 하므로 
+        // 제목 조작 코드만 제거했다면 이 로직은 살려둬야 '답변완료'가 뜹니다.
         if ("QNA".equals(board.getBoard_type()) && board.getParent_no() > 0) {
             boardMapper.updateReplyStatus(board.getParent_no());
         }
