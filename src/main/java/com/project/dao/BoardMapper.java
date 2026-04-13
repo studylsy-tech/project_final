@@ -34,4 +34,5 @@ public interface BoardMapper {
 
 	List<BoardDTO> selectQnaListPaging(SearchCriteria scri);
 	void updateReplyStatus(int parent_no);
+	void updateBoard(BoardDTO board);
 }
