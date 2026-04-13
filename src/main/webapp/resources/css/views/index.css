@@ -107,7 +107,7 @@
     font-weight: 800;
     color: #2196f3;
     white-space: nowrap;
-    letter-spacing: 0;
+    letter-spacing: 0.5em;
     margin: 0;
 }
 
@@ -209,6 +209,7 @@
     padding: 8px 0;
     border-bottom: 1px solid rgba(0,0,0,0.05);
     gap: 10px; /* 요소 간 간격 */
+    height:39px;
 }
 .rank-list-item:last-child {
     border-bottom: none;

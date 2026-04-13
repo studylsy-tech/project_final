@@ -56,6 +56,7 @@
 			<h3>✨✨  실시간 인기 핫딜  ✨✨</h3>
 		</div>
 		<div class="drop-rank-header">
+			
 			<h3>📉 급락순위</h3>
 		</div>
 	</div>
