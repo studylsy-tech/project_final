@@ -31,7 +31,7 @@
         <button class="btn-engine delete" onclick="deleteAllDeals()">데이터 초기화</button>
     </div>
 </div>
-
+<div style="height: 100px;"></div>
 <script>
 function deleteAllDeals() {
     if (!confirm("모든 핫딜 데이터를 삭제하시겠습니까?")) return;

@@ -108,5 +108,8 @@ public class BoardServiceImpl implements BoardService {
         return boardMapper.selectQnaListPaging(scri);
     }
 
-	
+    @Override
+    public void updateBoard(BoardDTO board) {
+        boardMapper.updateBoard(board);
+    }
 }

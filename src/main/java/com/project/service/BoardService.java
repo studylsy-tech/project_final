@@ -22,4 +22,5 @@ public interface BoardService {
 	int getNoticeCount();
 	List<BoardDTO> getNoticeListPaging(Criteria cri);
 	List<BoardDTO> getQnaListPaging(Criteria cri);
+	void updateBoard(BoardDTO board);
 }

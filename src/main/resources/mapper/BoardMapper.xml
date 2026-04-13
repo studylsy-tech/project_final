@@ -160,4 +160,14 @@
     SET IS_REPLY = 1 
     WHERE NOTICE_NO = #{parent_no}
 </update>
+<update id="updateBoard">
+    UPDATE board 
+    SET title = #{title},
+        content = #{content}
+        <if test="file_str != null">
+        , file_str = #{file_str}
+        , org_filename = #{org_filename}
+        </if>
+    WHERE notice_no = #{notice_no}
+</update>
 </mapper>

@@ -1,0 +1,152 @@
+/* 게시판 타이틀 영역 */
+.board-title-area {
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #333;
+}
+
+.board-title-area h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+/* 게시판 테이블 스타일 */
+.board-table {
+    width: 100%;
+    border-top: 1px solid #333;
+    margin-bottom: 20px;
+}
+
+.board-table th {
+    width: 180px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-bottom: 1px solid #ddd;
+    font-weight: 600;
+    color: #444;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.board-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 입력창 공통 스타일 */
+.form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #333;
+}
+
+.form-control[readonly] {
+    background-color: #f0f0f0;
+    color: #777;
+    cursor: not-allowed;
+}
+
+/* 텍스트 영역 */
+textarea.form-control {
+    resize: none;
+    line-height: 1.6;
+}
+
+/* 파일 업로드 및 기존 파일 정보 영역 */
+.file-info-area {
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    background-color: #f4f4f4;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #666;
+}
+
+.file-info-area span {
+    font-weight: 600;
+    color: #333;
+    margin-right: 10px;
+}
+
+input[type="file"].form-control {
+    padding: 7px;
+    background: #fff;
+    cursor: pointer;
+}
+
+.file-notice {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #e74c3c;
+}
+
+/* 하단 버튼 영역 */
+.board-footer {
+    margin-top: 40px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-dark {
+    display: inline-block;
+    padding: 12px 40px;
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #333;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.3s;
+}
+
+.btn-dark:hover {
+    background-color: #555;
+    border-color: #555;
+}
+
+.btn-secondary {
+    display: inline-block;
+    padding: 12px 40px;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ccc;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #f5f5f5;
+    border-color: #999;
+}
+
+/* 반응형 모바일 대응 */
+@media (max-width: 768px) {
+    .board-table th {
+        width: 100px;
+        padding: 10px;
+        font-size: 13px;
+    }
+    .btn-dark, .btn-secondary {
+        padding: 10px 20px;
+        flex: 1;
+    }
+}

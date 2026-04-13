@@ -201,4 +201,35 @@ public class BoardController {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
                 .body(fileBytes);
     }
+ // 7. 게시글 수정 페이지 이동
+    @GetMapping("/modify")
+    public String modifyForm(@RequestParam("notice_no") int notice_no, Model model, HttpSession session) {
+        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
+        BoardDTO board = boardService.selectBoardDetail(notice_no);
+        
+        // 권한 체크 (작성자 본인 혹은 관리자)
+        if (loginUser == null || (!loginUser.getNickname().equals(board.getWriter()) && loginUser.getMemberType() != 0)) {
+            return "redirect:/board/notice";
+        }
+        
+        model.addAttribute("board", board);
+        return "board/modify"; // modify.jsp 필요
+    }
+
+    // 8. 게시글 수정 처리
+    @PostMapping("/modify")
+    public String updateBoard(BoardDTO board, HttpSession session) throws Exception {
+        // 파일 처리 로직 (기존 write 로직 활용)
+        MultipartFile file = board.getUploadFile();
+        if (file != null && !file.isEmpty()) {
+            byte[] fileBytes = file.getBytes();
+            String encodedString = Base64.getEncoder().encodeToString(fileBytes);
+            board.setFile_str(encodedString);
+            board.setOrg_filename(file.getOriginalFilename());
+        }
+
+        boardService.updateBoard(board); // 서비스 메서드 호출
+        
+        return "redirect:/board/detail?notice_no=" + board.getNotice_no();
+    }
 }

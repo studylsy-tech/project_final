@@ -1,4 +1,4 @@
-# 🚀 Price-Rader.MALL (득템)
+# 🚀 득템헌터
 > **"당신의 쇼핑 시간을 0초로, 가격 추적은 득템 레이더에게 맡기세요"**
 > 
 > 실시간 커뮤니티 핫딜 수집 및 알고리즘 기반 상품 가격 추적 플랫폼입니다.
@@ -6,7 +6,7 @@
 ---
 
 ## 📌 프로젝트 소개 (About Us)
-Price-Rader.MALL은 정보의 비대칭을 해결하고 소비자에게 최적의 구매 타이밍을 제시하기 위해 기획되었습니다. 
+득템헌터는 정보의 비대칭을 해결하고 소비자에게 최적의 구매 타이밍을 제시하기 위해 기획되었습니다. 
 주요 커뮤니티의 핫딜 정보를 실시간으로 수집하고, 고유의 가격 분석 알고리즘을 통해 '진짜 할인'을 포착합니다.
 
 ### 🎯 주요 타겟
@@ -64,10 +64,10 @@ Price-Rader.MALL은 정보의 비대칭을 해결하고 소비자에게 최적�
 
 ---
 
-© 2026 Price-Rader.MALL. All Rights Reserved.
+© 2026 득템헌터. All Rights Reserved.
 
 
-# 🚀 Price-Rader.MALL (Deuk-Tem)
+# 🚀 득템헌터 (Deuk-Tem)
 > **"Reduce your shopping time to zero. Leave the price tracking to the Deuk-Tem Radar."**
 >
 > A real-time community hot-deal aggregation and algorithm-based price tracking platform.
@@ -75,7 +75,7 @@ Price-Rader.MALL은 정보의 비대칭을 해결하고 소비자에게 최적�
 ---
 
 ## 📌 1. Project Overview (About Us)
-Price-Rader.MALL was designed to resolve information asymmetry in the market and provide consumers with optimal purchasing timing. 
+득템헌터 was designed to resolve information asymmetry in the market and provide consumers with optimal purchasing timing. 
 By collecting hot-deal information from major communities in real-time, 
 we capture "genuine discounts" through our proprietary price analysis algorithm.
 
