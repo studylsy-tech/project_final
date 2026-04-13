@@ -18,8 +18,7 @@ public class SearchCriteria extends Criteria {
     private int pageStart;        // 시작 행 번호
     private int pageEnd;          // 끝 행 번호
     
-    private String sortType = "latest"; 		  // 정렬 타입을 위한 필드
-    
+    private String sortType;
     public SearchCriteria(int page, int perPageNum, String searchType, String keyword) {
         super(page, perPageNum);
         this.searchType = searchType;

@@ -99,8 +99,7 @@ public class BoardServiceImpl implements BoardService {
 
     @Override
     public List<BoardDTO> selectQnaListPaging(SearchCriteria scri) {
-        // TODO Auto-generated method stub
-        return null;
+        return boardMapper.selectQnaListPaging(scri);
     }
 
 	

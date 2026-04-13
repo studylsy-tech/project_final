@@ -13,18 +13,26 @@ CREATE TABLE MEMBERS (
     CREATED_AT   DATE DEFAULT SYSDATE      -- 가입일
 );
 
--- 관리자 계정 생성 (MEMBER_TYPE: 0)
+-- 1. 최고 관리자 계정 생성 (MEMBER_TYPE: 0)
 INSERT INTO MEMBERS (PHONE, PW, NAME, NICKNAME, EMAIL, ADDRESS, MEMBER_TYPE) 
-VALUES ('01099999999', '12345', '관리자', '최고관리자', 'admin@test.com', '서울특별시 강남구', 0);
+VALUES ('01099999999', '12345', '최고관리자', '마스터', 'admin@test.com', '서울특별시 강남구', 0);
 INSERT INTO MEMBERS (PHONE, PW, NAME, NICKNAME, EMAIL, ADDRESS, MEMBER_TYPE) 
-VALUES ('0', '0', '관리자', '관리자', 'admin2@test.com', '서울특별시 강남구', 0);
+VALUES ('0', '0', '최고관리자2', '마스터2', 'admin3@test.com', '서울특별시 강남구2', 0);
 
--- 테스트용 계정
+-- 2. 일반 관리자용 부계정 (PHONE을 '0'으로 설정 시 테스트 환경에 따라 문제가 생길 수 있어 형식을 맞춤)
 INSERT INTO MEMBERS (PHONE, PW, NAME, NICKNAME, EMAIL, ADDRESS, MEMBER_TYPE) 
-VALUES ('1', '1', '테스트', '테스터1', 'test@test.com', '비공개', 1);
+VALUES ('01000000000', '0000', '부관리자', '관리자1', 'admin2@test.com', '서울특별시 서초구', 0);
+INSERT INTO MEMBERS (PHONE, PW, NAME, NICKNAME, EMAIL, ADDRESS, MEMBER_TYPE) 
+VALUES ('2', '2', '부관리자', '관리자1', 'admin4@test.com', '서울특별시 서초구', 0);
+
+-- 3. 테스트용 일반 회원 (MEMBER_TYPE: 1)
+INSERT INTO MEMBERS (PHONE, PW, NAME, NICKNAME, EMAIL, ADDRESS, MEMBER_TYPE) 
+VALUES ('01012345678', '1111', '홍길동', '길동이', 'user@test.com', '경기도 성남시', 1);
+INSERT INTO MEMBERS (PHONE, PW, NAME, NICKNAME, EMAIL, ADDRESS, MEMBER_TYPE) 
+VALUES ('1', '1', '홍길동2', '길동이2', 'user2@test.com', '경기도 성남시', 1);
 
 -- 변경사항 확정
 COMMIT;
 
--- 회원 목록 전체 조회
+-- 조회
 SELECT * FROM MEMBERS;

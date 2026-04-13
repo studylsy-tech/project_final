@@ -25,12 +25,17 @@
 	
 	<!-- 시간순/조회순 영역 -->
 	<div class="sort-area">
-	    <a href="javascript:void(0);" class="sort-link" data-sort="latest" 
-	       style="${pageMaker.cri.sortType == 'latest' || empty pageMaker.cri.sortType ? 'font-weight:bold; color:#000;' : 'color:#999;'}">최신순</a>
-	    <span style="margin: 0 5px; color: #ddd;">|</span>
-	    <a href="javascript:void(0);" class="sort-link" data-sort="count" 
-	       style="${pageMaker.cri.sortType == 'count' ? 'font-weight:bold; color:#000;' : 'color:#999;'}">조회순</a>
-	</div>
+    <a href="javascript:void(0);" class="sort-link" data-sort="default" 
+   style="${empty pageMaker.cri.sortType or pageMaker.cri.sortType eq 'default' ? 'font-weight:bold; color:#000;' : 'color:#999;'}">기본순</a>
+    <span style="margin: 0 5px; color: #ddd;">|</span>
+    
+    <a href="javascript:void(0);" class="sort-link" data-sort="latest" 
+       style="${pageMaker.cri.sortType == 'latest' ? 'font-weight:bold; color:#000;' : 'color:#999;'}">최신순</a>
+    <span style="margin: 0 5px; color: #ddd;">|</span>
+    
+    <a href="javascript:void(0);" class="sort-link" data-sort="count" 
+       style="${pageMaker.cri.sortType == 'count' ? 'font-weight:bold; color:#000;' : 'color:#999;'}">조회순</a>
+</div>
 	
     <table class="board-table">
         <thead>
@@ -124,20 +129,18 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 $(document).ready(function() {
-	// 정렬 링크 클릭 이벤트
+    // 1. 정렬 링크(기본순, 최신순, 조회순) 클릭 이벤트
     $(document).on("click", ".sort-link", function(e) {
         e.preventDefault();
         
-        const sortType = $(this).data("sort");
+        const sortType = $(this).data("sort"); // "" 또는 "latest" 또는 "count"
         const searchType = $("#searchType").val();
         const keyword = $('#keywordInput').val();
-        const perPageNum = "${pageMaker.cri.perPageNum}";
         const contextPath = "${path}";
 
-        // 현재 Q&A 페이지 주소로 정렬 값(sortType)을 들고 이동
         let url = contextPath + "/board/qna"
                 + "?page=1"
-                + "&perPageNum=" + (perPageNum || 10)
+                + "&perPageNum=${pageMaker.cri.perPageNum}"
                 + "&searchType=" + searchType
                 + "&keyword=" + encodeURIComponent(keyword)
                 + "&sortType=" + sortType;
@@ -145,32 +148,32 @@ $(document).ready(function() {
         location.href = url;
     });
 
-    // 검색 버튼 클릭 시에도 현재 정렬(sortType)을 유지하도록 수정
+    // 2. 검색 버튼 클릭 이벤트
     $(document).on("click", "#searchBtn", function(e) {
         e.preventDefault();
         
-        const sortType = "${pageMaker.cri.sortType}"; // 현재 정렬 기준 가져오기
+        const sortType = "${pageMaker.cri.sortType}"; // 현재 정렬 유지
         const keyword = $('#keywordInput').val();
         const searchType = $("#searchType").val();
         const contextPath = "${path}";
 
-        let url = contextPath + "/board/qna" // /search/list 대신 /board/qna로 통일 권장
+        let url = contextPath + "/board/qna"
                 + "?page=1"
                 + "&perPageNum=${pageMaker.cri.perPageNum}"
                 + "&searchType=" + searchType
                 + "&keyword=" + encodeURIComponent(keyword)
-                + "&sortType=" + (sortType || 'latest');
+                + "&sortType=" + sortType;
 
         location.href = url;
     });
 
-    // 엔터키 지원
+    // 3. 엔터키 지원
     $(document).on("keydown", "#keywordInput", function(e) {
         if (e.keyCode === 13) {
             $("#searchBtn").click();
         }
     });
-});
+}); // document.ready 종료
 </script>
 
 <%@ include file="/WEB-INF/views/common/footer.jsp" %>

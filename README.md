@@ -6,7 +6,8 @@
 ---
 
 ## 📌 프로젝트 소개 (About Us)
-Price-Rader.MALL은 정보의 비대칭을 해결하고 소비자에게 최적의 구매 타이밍을 제시하기 위해 기획되었습니다. 주요 커뮤니티의 핫딜 정보를 실시간으로 수집하고, 고유의 가격 분석 알고리즘을 통해 '진짜 할인'을 포착합니다.
+Price-Rader.MALL은 정보의 비대칭을 해결하고 소비자에게 최적의 구매 타이밍을 제시하기 위해 기획되었습니다. 
+주요 커뮤니티의 핫딜 정보를 실시간으로 수집하고, 고유의 가격 분석 알고리즘을 통해 '진짜 할인'을 포착합니다.
 
 ### 🎯 주요 타겟
 - **고객:** 최저가 검색에 피로감을 느끼는 스마트 쇼퍼
@@ -15,20 +16,16 @@ Price-Rader.MALL은 정보의 비대칭을 해결하고 소비자에게 최적�
 ---
 
 ## 🛠 기술 스택 (Tech Stack)
+  | Category | Technology | Details |
+| :--- | :--- | :--- |
+| **Backend** | **Java 11, Spring Framework** | Core Logic & API Development |
+| **Persistence** | **MyBatis, Oracle DB** | Data Mapping & RDBMS (HikariCP) |
+| **Web Scraping** | **JSoup, Selenium** | Static/Dynamic Data Collection |
+| **Frontend** | **HTML5, CSS3, JavaScript** | Web Standard UI Development |
+| **Libraries** | **jQuery, Bootstrap** | DOM Manipulation & Responsive Design |
+| **DevOps** | **Git, GitHub** | Version Control & Collaboration |
+| **Environment** | **STS 3, Apache Tomcat 9.0** | IDE & Web Application Server |
 
-### Backend
-- **Core:** Java 11, Spring Framework
-- **Persistence:** MyBatis, Oracle DB (JDBC/HikariCP)
-- **Library:** JSoup, Selenium (Dynamic Web Scraping)
-
-### Frontend
-- **UI/UX:** HTML5, CSS3, JavaScript, jQuery
-- **Design:** Bootstrap, Responsive Web Design
-
-### Dev Ops
-- **IDE:** STS (Spring Tool Suite) 3
-- **Server:** Apache Tomcat 9.0
-- **Version Control:** Git, GitHub
 
 ---
 
@@ -59,7 +56,8 @@ Price-Rader.MALL은 정보의 비대칭을 해결하고 소비자에게 최적�
 ---
 
 ## 👤 팀 정보 및 역할 (Team & Role)
-- **Developer:** SoShim (소심)
+- **Head Developer:** 이승엽
+- **Developers:** 권유정, 윤명지, 박소심 
 - **Main Role:** - 백엔드 인프라 설계 및 Footer/Inquiry 시스템 구축
   - 실시간 가격 변동 데이터베이스 스키마 설계 및 관리
   - 1:1 고객 문의 시스템 로직 구현
@@ -68,77 +66,76 @@ Price-Rader.MALL은 정보의 비대칭을 해결하고 소비자에게 최적�
 
 © 2026 Price-Rader.MALL. All Rights Reserved.
 
-© 2026 Price-Rader.MALL. All Rights Reserved.
 
-🚀 Price-Rader.MALL (Deuk-Tem)
-"Reduce your shopping time to zero. Leave the price tracking to the Deuk-Tem Radar."
+# 🚀 Price-Rader.MALL (Deuk-Tem)
+> **"Reduce your shopping time to zero. Leave the price tracking to the Deuk-Tem Radar."**
+>
+> A real-time community hot-deal aggregation and algorithm-based price tracking platform.
 
-A real-time community hot-deal aggregation and algorithm-based price tracking platform.
+---
 
-📌 Project Overview (About Us)
-Price-Rader.MALL was designed to resolve information asymmetry in the market and provide consumers with the optimal purchasing timing.
+## 📌 1. Project Overview (About Us)
+Price-Rader.MALL was designed to resolve information asymmetry in the market and provide consumers with optimal purchasing timing. 
+By collecting hot-deal information from major communities in real-time, 
+we capture "genuine discounts" through our proprietary price analysis algorithm.
 
-By collecting hot-deal information from major communities in real-time, we capture "genuine discounts" through our proprietary price analysis algorithm.
+### 🎯 Target Audience
+- **Customers:** Smart shoppers seeking to eliminate the fatigue of manual price comparisons.
+- **Developers:** Engineers interested in large-scale data crawling and real-time data processing.
 
-🎯 Target Audience
-Customers: Smart shoppers seeking to eliminate the fatigue of manual price comparisons.
+---
 
-Developers: Engineers interested in large-scale data crawling and real-time data processing.
+## 🛠 2. Tech Stack Overview
 
-🛠 Tech Stack Overview
 | Category | Technology | Details |
 | :--- | :--- | :--- |
-| Backend | Java 11, Spring Framework | Core Logic & API Development |
-| Persistence | MyBatis, Oracle DB | Data Mapping & RDBMS |
-| Web Scraping | JSoup, Selenium | Static/Dynamic Data Collection |
-| Frontend | HTML5, CSS3, JavaScript | Web Standard UI Development |
-| Libraries | jQuery, Bootstrap | DOM Manipulation |
-| DevOps | Git, GitHub | Version Control |
-| Environment | STS 3, Apache Tomcat 9.0 | IDE & WAS |
+| **Backend** | **Java 11, Spring Framework** | Core Logic & API Development |
+| **Persistence** | **MyBatis, Oracle DB** | Data Mapping & RDBMS (HikariCP) |
+| **Web Scraping** | **JSoup, Selenium** | Static/Dynamic Data Collection |
+| **Frontend** | **HTML5, CSS3, JavaScript** | Web Standard UI Development |
+| **Libraries** | **jQuery, Bootstrap** | DOM Manipulation & Responsive Design |
+| **DevOps** | **Git, GitHub** | Version Control & Collaboration |
+| **Environment** | **STS 3, Apache Tomcat 9.0** | IDE & Web Application Server |
 
-✨ Key Features
-🛍 For Customers
-Real-time Popular Hot-Deals: Integrated curation of hot-deals from major communities (Ppomppu, Dogdrip, FM Korea, etc.).
+---
 
-Price Drop Ranking System: Prioritizes products with the highest discount rates compared to previous prices.
+## ✨ 3. Key Features
 
-Live Status Board: Provides real-time notifications via a top banner whenever an all-time low price is reached.
+### 🛍 For Customers
+- **Real-time Popular Hot-Deals:** Integrated curation of hot-deals from major communities (Ppomppu, Dogdrip, FM Korea, etc.).
+- **Price Drop Ranking System:** Prioritizes products with the highest discount rates compared to previous prices.
+- **Live Status Board:** Provides real-time notifications via a top banner whenever an all-time low price is reached.
 
-💻 For Developers
-Hybrid Crawling Engine: Implementation of collection logic supporting both static (JSoup) and dynamic (Selenium) pages.
+### 💻 For Developers
+- **Hybrid Crawling Engine:** Implementation of collection logic supporting both static (JSoup) and dynamic (Selenium) pages.
+- **Data Standardization:** Management of diverse community data by normalizing it into a single standardized schema.
+- **System Optimization:** Server tuning to resolve bottlenecks during large-scale data loading.
 
-Data Standardization: Management of diverse community data by normalizing it into a single standardized schema.
+---
 
-System Optimization: Server tuning to resolve bottlenecks during large-scale data loading.
+## 🔍 4. Troubleshooting
 
-🔍 Troubleshooting
-⚠️ Tomcat Timeout Issue
-Issue: A 45-second timeout error occurred during server startup due to project expansion and library loading delays.
+### ⚠️ Tomcat Timeout Issue
+- **Issue:** A 45-second timeout error occurred during server startup due to project expansion and library loading delays.
+- **Solution:** Secured a stable deployment environment by increasing the `Start timeout` to 180 seconds in the `Servers` configuration.
 
-Solution: Secured a stable deployment environment by increasing the Start timeout to 180 seconds in the Servers configuration.
+### ⚠️ Data Consistency
+- **Issue:** Risk of data loss when the UI structure of targeted crawling sites changes.
+- **Solution:** Enhanced data collection success rates by designing flexible, selector-based parsing logic
+-               and reinforcing exception-handling routines.
 
-⚠️ Data Consistency
-Issue: Risk of data loss when the UI structure of targeted crawling sites changes.
+---
 
-Solution: Enhanced data collection success rates by designing flexible, selector-based parsing logic and reinforcing exception-handling routines.
+## 👤 5. Team & Role
+- **Head Developer:** Lee Seung-yeop
+- **Developers:** Kwon Yu-jeong, Yoon Myeong-ji, Park So-shim
+- **Main Role (SoShim):** - Designed backend infrastructure and developed Footer/Inquiry systems.
+  - Designed and managed the database schema for real-time price fluctuations.
+  - Implemented logic for the 1:1 customer inquiry system.
 
-👤 Team & Role
-Head Developer: Lee Seung-yeop
-
-Developers: Kwon Yu-jeong, Yoon Myeong-ji, Park So-shim
-
-Main Role:
-         Designed backend infrastructure and developed Footer/Inquiry systems.
-
-         Designed and managed the database schema for real-time price fluctuations.
-
-         mplemented logic for the 1:1 customer inquiry system.
-         
+---
 
 © 2026 Price-Rader.MALL. All Rights Reserved.
-
-
-
 
 
 

@@ -87,7 +87,6 @@
         </if>
     ) FROM DUAL
 </select>
-
     
 
 <select id="getProductDetail" parameterType="int" resultType="com.project.model.ProductDTO">
