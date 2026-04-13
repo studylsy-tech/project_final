@@ -1,138 +1,57 @@
-/* 1. 전체 레이아웃 (푸터 바닥 고정 유지) */
-html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-body {
+/* 1. 컨텐츠 영역 확보 (푸터 밀어내기 핵심) */
+.mypage-wrapper {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-    background-color: #f8f9fa; /* 배경색을 살짝 깔아주면 카드가 더 돋보입니다 */
-    color: #333;
-}
-
-/* 2. 메인 컨테이너 */
-.mypage-wrapper {
-    flex: 1; /* 푸터를 바닥으로 밀어냄 */
-    width: 90%; 
-    max-width: 1000px; /* 너무 넓지 않게 조정 */
+    min-height: 70vh; /* 화면 높이의 70%는 무조건 컨텐츠 영역으로 확보 */
+    width: 90% !important;
+    max-width: 1100px;
     margin: 40px auto !important;
-    padding-bottom: 60px; /* 푸터와의 간격 확보 */
+    padding-bottom: 80px; /* 마지막 카드와 푸터 사이의 확실한 여백 */
+    box-sizing: border-box;
 }
 
-/* 3. 메인 타이틀 박스 */
-.mypage-header {
-    background: linear-gradient(135deg, #fffde7 0%, #ffffff 100%);
-    border: 1px solid #fff59d; /* 테두리 두께 줄임 (세련되게) */
-    border-radius: 12px;
-    padding: 20px 30px;
-    margin-bottom: 30px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-.main-title {
-    font-size: 24px; /* 34px -> 24px로 축소 */
-    font-weight: 700;
-    color: #1a2a44;
-    margin: 0;
-}
-
-/* 4. 섹션 헤더 및 상태 패널 */
-.section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin-bottom: 20px;
-    padding: 0 5px;
-}
-
-.section-header h2 {
-    font-size: 20px; /* 26px -> 20px */
-    margin: 0;
-    color: #444;
-}
-
-.status-panel {
-    display: flex;
-    align-items: baseline;
-    gap: 20px;
-}
-
-.status-panel span {
-    font-size: 15px; /* 19px -> 15px */
-    font-weight: 500;
-}
-
-#count-hotdeal {
-    font-size: 22px; /* 28px -> 22px */
-    font-weight: 800;
-    color: #2196f3;
-}
-
-/* 5. 핫딜 트래커 카드 */
+/* 2. 카드 내부 정렬 및 크기 최적화 */
 .engine-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 30px 40px; /* 60px -> 30px로 줄여 컴팩트하게 */
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    transition: transform 0.2s ease;
+    padding: 35px 45px; /* 너무 뚱뚱하지 않게 조절 */
+    background: #ffffff;
+    border: 1px solid #e1e4e8;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-top: 20px;
 }
 
-.engine-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(162, 155, 254, 0.2);
-    border-color: #a29bfe; /* 호버 시에만 보라색 강조 */
+/* 3. 폰트 사이즈 표준화 (가독성 향상) */
+.main-title {
+    font-size: 26px; /* 34px -> 26px */
+    font-weight: 700;
 }
 
 .site-name {
-    font-size: 18px; /* 26px -> 18px */
+    font-size: 19px; /* 26px -> 19px */
     font-weight: 700;
-    color: #2c3e50;
-    display: block;
-    margin-bottom: 5px;
+    color: #333;
 }
 
 .engine-card p {
-    font-size: 14px; /* 19px -> 14px */
+    font-size: 15px; /* 19px -> 15px */
     color: #666;
-    margin: 0;
-    line-height: 1.5;
+    margin-top: 8px;
 }
 
-/* 6. 버튼 스타일 */
-.card-actions {
-    display: flex;
-    gap: 10px;
-}
-
+/* 4. 버튼 사이즈 조정 */
 .btn-engine {
-    padding: 10px 20px; /* 크기 최적화 */
-    font-size: 14px;   /* 20px -> 14px */
+    padding: 12px 25px;
+    font-size: 15px;
     font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    border: none;
-    transition: 0.2s;
+    border-radius: 8px;
 }
 
-.btn-engine.start { background: #2196f3; color: #fff; }
-.btn-engine.delete { background: #f44336; color: #fff; }
-.btn-engine:hover { opacity: 0.9; }
-
-/* 7. 푸터 (바닥 고정 및 여백 최적화) */
-.footer {
+/* 5. 푸터 (common/footer.jsp에 스타일이 없다면 추가) */
+footer, .footer {
+    margin-top: auto; /* flex 구조에서 바닥으로 밀기 */
+    padding: 40px 0;
     background-color: #2c3e50;
-    color: #bdc3c7;
-    padding: 25px 0;
-    width: 100%;
-    text-align: center;
-    font-size: 13px;
-    border-top: 1px solid rgba(255,255,255,0.1);
 }
