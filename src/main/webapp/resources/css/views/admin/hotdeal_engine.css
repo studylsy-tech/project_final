@@ -1,4 +1,4 @@
-/* 1. 전체 레이아웃 (푸터 바닥 고정용) */
+/* 1. 전체 레이아웃 (푸터 바닥 고정 유지) */
 html, body {
     height: 100%;
     margin: 0;
@@ -9,122 +9,114 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    font-family: 'Pretendard', sans-serif; /* 깔끔한 폰트 권장 */
+    font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    background-color: #f8f9fa; /* 배경색을 살짝 깔아주면 카드가 더 돋보입니다 */
+    color: #333;
 }
 
-/* 2. 메인 컨테이너 (여백 및 균형) */
+/* 2. 메인 컨테이너 */
 .mypage-wrapper {
-    flex: 1;
-    width: 70% !important; /* 글씨가 커졌으므로 70%로 조정하여 여유 확보 */
-    max-width: 1100px;
-    margin: 50px auto !important;
-    box-sizing: border-box;
-    padding-bottom: 40px; 
+    flex: 1; /* 푸터를 바닥으로 밀어냄 */
+    width: 90%; 
+    max-width: 1000px; /* 너무 넓지 않게 조정 */
+    margin: 40px auto !important;
+    padding-bottom: 60px; /* 푸터와의 간격 확보 */
 }
 
-/* 3. 메인 타이틀 박스 (레몬 그라데이션 & 테두리) */
+/* 3. 메인 타이틀 박스 */
 .mypage-header {
-    /* 배경에 은은한 레몬 그라데이션 */
     background: linear-gradient(135deg, #fffde7 0%, #ffffff 100%);
-    /* 테두리는 border-image 대신 선명한 실선으로 (레이아웃 붕괴 방지) */
-    border: 3px solid #fff59d; 
-    border-radius: 15px;
-    padding: 30px 45px;
-    margin-bottom: 40px;
-    box-shadow: 0 4px 15px rgba(255, 245, 157, 0.3);
-    display: flex;
-    align-items: center;
+    border: 1px solid #fff59d; /* 테두리 두께 줄임 (세련되게) */
+    border-radius: 12px;
+    padding: 20px 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .main-title {
-    font-size: 34px;
-    font-weight: 850;
+    font-size: 24px; /* 34px -> 24px로 축소 */
+    font-weight: 700;
     color: #1a2a44;
     margin: 0;
-    letter-spacing: -1px;
 }
 
-/* 4. 실시간 수집 현황 (우측 정렬 및 강조) */
+/* 4. 섹션 헤더 및 상태 패널 */
 .section-header {
     display: flex;
-    justify-content: space-between; /* 제목과 현황을 양 끝으로 배분 */
-    align-items: center;
-    margin-bottom: 25px;
-    padding: 0 10px;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    padding: 0 5px;
 }
 
 .section-header h2 {
-    font-size: 26px;
+    font-size: 20px; /* 26px -> 20px */
     margin: 0;
+    color: #444;
 }
 
 .status-panel {
     display: flex;
-    align-items: center;
-    gap: 30px; /* 항목 간 간격 시원하게 */
+    align-items: baseline;
+    gap: 20px;
 }
 
 .status-panel span {
-    font-size: 19px;
-    font-weight: 600;
+    font-size: 15px; /* 19px -> 15px */
+    font-weight: 500;
 }
 
-#db-status { color: green; }
 #count-hotdeal {
-    font-size: 28px;
-    font-weight: 900;
+    font-size: 22px; /* 28px -> 22px */
+    font-weight: 800;
     color: #2196f3;
 }
 
-/* 5. 핫딜 트래커 카드 (상하 확대) */
+/* 5. 핫딜 트래커 카드 */
 .engine-card {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 60px 50px; /* 상하 60px로 듬직하게 */
+    padding: 30px 40px; /* 60px -> 30px로 줄여 컴팩트하게 */
     background: #fff;
-    
-    
-    /* 1. 보라색 반짝이 테두리 (2px 실선) */
-    border: 2px solid #a29bfe; 
-    
-    /* 2. 보라색 네온 광채 (반짝이는 효과의 핵심) */
-    box-shadow: 0 0 15px rgba(162, 155, 254, 0.4); 
-    
-    border-radius: 20px;
-    margin-top: 30px;
-    transition: all 0.3s ease;
-    
-    
-   /*  border: 1px solid #e1e4e8;
-    border-radius: 16px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.05); */ 
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    transition: transform 0.2s ease;
+}
+
+.engine-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(162, 155, 254, 0.2);
+    border-color: #a29bfe; /* 호버 시에만 보라색 강조 */
 }
 
 .site-name {
-    font-size: 26px;
-    font-weight: 800;
+    font-size: 18px; /* 26px -> 18px */
+    font-weight: 700;
     color: #2c3e50;
+    display: block;
+    margin-bottom: 5px;
 }
 
 .engine-card p {
-    font-size: 19px;
-    color: #555;
-    margin-top: 10px;
-    line-height: 1.6;
+    font-size: 14px; /* 19px -> 14px */
+    color: #666;
+    margin: 0;
+    line-height: 1.5;
 }
 
-/* 6. 버튼 스타일 (글씨 크게) */
+/* 6. 버튼 스타일 */
 .card-actions {
     display: flex;
-    gap: 15px;
+    gap: 10px;
 }
 
 .btn-engine {
-    padding: 18px 35px;
-    font-size: 20px;
-    font-weight: 700;
-    border-radius: 10px;
+    padding: 10px 20px; /* 크기 최적화 */
+    font-size: 14px;   /* 20px -> 14px */
+    font-weight: 600;
+    border-radius: 6px;
     cursor: pointer;
     border: none;
     transition: 0.2s;
@@ -132,23 +124,15 @@ body {
 
 .btn-engine.start { background: #2196f3; color: #fff; }
 .btn-engine.delete { background: #f44336; color: #fff; }
-.btn-refresh { 
-    padding: 8px 15px;
-    font-size: 16px;
-    cursor: pointer;
-    background: #eee;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
+.btn-engine:hover { opacity: 0.9; }
 
-
-/* 7. 푸터 (납작하고 넓게 바닥 고정) */
+/* 7. 푸터 (바닥 고정 및 여백 최적화) */
 .footer {
     background-color: #2c3e50;
-    color: #ecf0f1;
-    padding: 30px 0;
+    color: #bdc3c7;
+    padding: 25px 0;
     width: 100%;
-    margin-top: auto; flex:1과 함께 작동하여 바닥 고정 
     text-align: center;
-    font-size: 14px;
-} 
+    font-size: 13px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
