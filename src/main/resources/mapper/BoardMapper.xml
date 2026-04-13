@@ -155,4 +155,9 @@
         ) a WHERE rownum &lt;= #{pageEnd}
     ) WHERE rnum &gt;= #{pageStart}
 </select>
+<update id="updateReplyStatus" parameterType="int">
+    UPDATE BOARD 
+    SET IS_REPLY = 1 
+    WHERE NOTICE_NO = #{parent_no}
+</update>
 </mapper>

@@ -39,7 +39,13 @@ public class BoardServiceImpl implements BoardService {
     @Transactional
     @Override
     public void insertBoard(BoardDTO board) {
-    	boardMapper.insertBoard(board);
+        // 게시글(원문 또는 답변) 저장
+        boardMapper.insertBoard(board);
+        
+        // 작성된 게시글이 QNA 답변글(parent_no > 0)일 경우 부모 게시글의 상태 업데이트
+        if ("QNA".equals(board.getBoard_type()) && board.getParent_no() > 0) {
+            boardMapper.updateReplyStatus(board.getParent_no());
+        }
     }
 
     @Override

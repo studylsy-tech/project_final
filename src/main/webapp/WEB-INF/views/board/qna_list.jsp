@@ -65,20 +65,19 @@
                             <td>${board.writer}</td>
                             <td>
                                 <c:choose>
-                                    <c:when test="${board.is_reply == 1}">
-                                        <span class="badge-status bg-gray">답변글</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <c:choose>
-                                            <c:when test="${board.reply_count > 0}">
-                                                <span class="badge-status bg-success" style="color: green;">답변완료</span>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <span class="badge-status bg-danger" style="color: red;">미답변</span>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:otherwise>
-                                </c:choose>
+    <c:when test="${board.parent_no > 0}">
+        <%-- 부모 번호가 있다면 이건 답글 자체임 --%>
+        <span class="badge-status bg-gray">답변글</span>
+    </c:when>
+    <c:when test="${board.is_reply == 1}">
+        <%-- 부모 번호가 0인데 is_reply가 1이라면 답변이 달린 원문임 --%>
+        <span class="badge-status bg-success" style="color: green;">답변완료</span>
+    </c:when>
+    <c:otherwise>
+        <%-- 그 외에는 아직 답변이 없는 원문 --%>
+        <span class="badge-status bg-danger" style="color: red;">미답변</span>
+    </c:otherwise>
+</c:choose>
                             </td>
                             <td>${board.indate}</td>
                         </tr>
