@@ -20,7 +20,7 @@
         <div class="admin-wrapper">
             <div class="admin-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <h3 class="settings-title">공지사항 관리</h3>
-                <button class="btn-primary" onclick="location.href='${path}/board/write'">신규 등록</button>
+                <button class="btn-primary" onclick="location.href='${path}/board/write?type=NOTICE'">신규 등록</button>
             </div>
 
             <div class="panel-card">

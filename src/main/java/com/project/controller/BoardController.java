@@ -88,36 +88,18 @@ public class BoardController {
         if (loginUser == null) return "redirect:/member/login";
         
         String uri = request.getRequestURI();
-        if (uri.contains("qnaWrite") || type == null) {
+        
+        // 수정: type 파라미터가 명시적으로 'NOTICE'인 경우를 제외하고만 QNA로 설정
+        if (uri.contains("qnaWrite") || (type == null || type.isEmpty())) {
             type = "QNA";
         }
         
-        // 공지사항 작성 시 관리자(0) 권한 체크
         if ("NOTICE".equals(type) && loginUser.getMemberType() != 0) {
             return "redirect:/board/notice";
         }
         
         model.addAttribute("board_type", type);
         return "board/write";
-    }
-
-    // 4. Q&A 답변 작성 페이지 이동 (관리자 전용)
-    @GetMapping("/qnaReply")
-    public String qnaReplyForm(@RequestParam("notice_no") int notice_no, 
-                               Model model, 
-                               HttpSession session) {
-        MemberDTO loginUser = (MemberDTO) session.getAttribute("loginUser");
-        
-        // 관리자(0) 권한 체크
-        if (loginUser == null || loginUser.getMemberType() != 0) {
-            return "redirect:/board/qna";
-        }
-
-        BoardDTO parentBoard = boardService.selectBoardDetail(notice_no);
-        model.addAttribute("parentBoard", parentBoard);
-        model.addAttribute("board_type", "QNA");
-        
-        return "board/reply"; 
     }
 
  // 5. 게시글 작성 처리 (파일 처리 로직 추가)
